@@ -27,7 +27,7 @@ export function fmtTime(iso: string) {
 /** Shuttle loop departure times, e.g. 18:00 → 18:45 every 15 min. */
 export function shuttleLoops(start: string, end: string, intervalMin: number): string[] {
   const toMin = (t: string) => {
-    const [h, m] = t.split(":").map(Number);
+    const [h = 0, m = 0] = t.split(":").map(Number);
     return h * 60 + m;
   };
   const out: string[] = [];
@@ -39,7 +39,7 @@ export function shuttleLoops(start: string, end: string, intervalMin: number): s
 }
 
 export function fmtClock(t: string) {
-  const [h, m] = t.split(":").map(Number);
+  const [h = 0, m = 0] = t.split(":").map(Number);
   const ampm = h >= 12 ? "PM" : "AM";
   return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${ampm}`;
 }

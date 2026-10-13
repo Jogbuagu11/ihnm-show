@@ -111,10 +111,10 @@ function Account() {
 type Res = NonNullable<ReturnType<typeof useMine>["data"]>["res"][number];
 type Sb = NonNullable<ReturnType<typeof useMine>["data"]>["shuttles"][number];
 
-function TicketCard({ r, shuttle, onChange }: { r: Res; shuttle?: Sb; onChange: () => void }) {
+function TicketCard({ r, shuttle, onChange }: { r: Res; shuttle: Sb | undefined; onChange: () => void }) {
   const t = r.taping!;
   const loops = shuttleLoops(t.shuttle_start, t.shuttle_end, t.shuttle_interval_min);
-  const [loop, setLoop] = useState(shuttle?.loop_time ?? loops[0]);
+  const [loop, setLoop] = useState<string>(shuttle?.loop_time ?? loops[0] ?? "18:00");
   const [dir, setDir] = useState(shuttle?.direction ?? "both");
   const tonight = new Date(t.starts_at).toDateString() === new Date().toDateString();
 

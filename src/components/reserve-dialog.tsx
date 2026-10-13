@@ -44,9 +44,9 @@ export function ReserveDialog({ taping, trigger }: { taping: TapingWithAvail; tr
     setBusy(true);
     try {
       if (type === "group") {
-        const parsed = groupSchema.safeParse({ ...g, email: user.email, phone: g.phone || undefined, notes: g.notes || undefined });
+        const parsed = groupSchema.safeParse({ ...g, email: user.email ?? "", phone: g.phone || undefined, notes: g.notes || undefined });
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);
-        const { error } = await supabase.from("group_requests").insert({ ...parsed.data, taping_id: taping.id, user_id: user.id });
+        const { error } = await supabase.from("group_requests").insert({ ...parsed.data, phone: parsed.data.phone ?? null, notes: parsed.data.notes ?? null, taping_id: taping.id, user_id: user.id });
         if (error) throw error;
         toast.success("Group request sent! We'll confirm once a producer approves it.");
       } else {
