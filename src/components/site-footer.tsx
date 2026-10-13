@@ -28,10 +28,10 @@ export function SiteFooter() {
     { icon: Facebook, label: "Facebook" },
   ];
   return (
-    <footer className="mt-24 bg-walnut text-walnut-foreground">
+    <footer className="mt-24 bg-stage text-stage-foreground border-t border-gold/40">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3">
         <div>
-          <p className="font-display text-3xl">IHNM <span className="text-gold">Show</span></p>
+          <p className="display-lg">IHNM <span className="italic-gold">Show</span></p>
           <p className="mt-2 text-sm opacity-80">Scripture. History. Today's Headlines.</p>
           <p className="mt-4 flex items-center gap-2 text-sm"><MapPin className="size-4 text-gold" /> {LOCATION}</p>
         </div>
@@ -39,7 +39,7 @@ export function SiteFooter() {
           <p className="eyebrow text-gold">Follow</p>
           <div className="mt-4 flex gap-3">
             {socials.map(({ icon: Icon, label }) => (
-              <a key={label} href="#" aria-label={label} className="flex size-10 items-center justify-center rounded-full border border-walnut-foreground/30 hover:bg-walnut-foreground/10">
+              <a key={label} href="#" aria-label={label} className="flex size-10 items-center justify-center rounded-full border border-stage-foreground/30 hover:bg-stage-foreground/10">
                 <Icon className="size-4" />
               </a>
             ))}
@@ -49,7 +49,7 @@ export function SiteFooter() {
           <p className="eyebrow text-gold">Ticket drops</p>
           <p className="mt-2 text-sm opacity-80">Be first to know when new tapings open.</p>
           <div className="mt-4 flex gap-2">
-            <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" className="border-walnut-foreground/30 bg-walnut-foreground/10 text-walnut-foreground placeholder:text-walnut-foreground/60" />
+            <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" className="border-stage-foreground/30 bg-stage-foreground/10 text-stage-foreground placeholder:text-stage-foreground/60" />
             <Button variant="gold" disabled={busy}>Join</Button>
           </div>
         </form>
