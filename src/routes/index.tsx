@@ -43,7 +43,7 @@ function Home() {
         <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-14 pt-10 lg:grid-cols-12 lg:pt-16">
           <div className="flex items-center justify-between lg:col-span-12">
             <OnAir label="Now taping · Season 1" />
-            <p className="hidden font-mono text-xs uppercase tracking-[0.25em] text-stage-foreground/60 sm:block">Studio A — San Jose</p>
+            <p className="hidden font-mono text-xs uppercase tracking-[0.25em] text-stage-foreground/80 sm:block">Studio A — San Jose</p>
           </div>
           <div className="relative z-10 lg:col-span-7 lg:pt-10">
             <h1 className="display-xl">

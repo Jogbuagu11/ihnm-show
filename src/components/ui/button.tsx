@@ -17,7 +17,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         gold: "bg-gold-gradient text-gold-foreground shadow-glow hover:brightness-110 hover:-translate-y-px rounded-full font-semibold tracking-wide",
-        hero: "rounded-full border border-stage-foreground/40 text-stage-foreground hover:border-gold hover:text-gold font-semibold",
+        hero: "rounded-full border border-stage-foreground/45 bg-stage-foreground/10 text-stage-foreground hover:border-gold hover:bg-stage-foreground/20 hover:text-gold font-semibold",
         pill: "rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold",
       },
       size: {

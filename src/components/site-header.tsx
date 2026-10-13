@@ -22,11 +22,11 @@ export function SiteHeader() {
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           {links.map((l) => (
-            <Link key={l.to} to={l.to} className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/70 hover:text-gold" activeProps={{ className: "text-gold" }}>
+            <Link key={l.to} to={l.to} className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/90 hover:text-gold" activeProps={{ className: "text-gold" }}>
               {l.label}
             </Link>
           ))}
-          {isStaff && <Link to="/crew" className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/70 hover:text-gold">Crew</Link>}
+          {isStaff && <Link to="/crew" className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/90 hover:text-gold">Crew</Link>}
           <Button asChild variant="gold" size="sm" className="h-9 px-4">
             <Link to={user ? "/account" : "/auth"}>{user ? "My Tickets" : "Sign in"}</Link>
           </Button>

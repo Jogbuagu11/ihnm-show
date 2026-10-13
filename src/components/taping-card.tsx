@@ -16,7 +16,7 @@ export function TapingCard({ t, featured = false }: { t: TapingWithAvail; featur
         <div className="flex w-24 shrink-0 flex-col items-center justify-center border-r border-dashed border-gold/60 bg-stage py-6 text-stage-foreground">
           <span className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-gold">{month}</span>
           <span className="font-display text-5xl leading-none">{day}</span>
-          <span className="mt-1 font-mono text-[0.6rem] uppercase tracking-widest opacity-70">{wk.slice(0, 3)}</span>
+          <span className="mt-1 font-mono text-[0.6rem] uppercase tracking-widest opacity-90">{wk.slice(0, 3)}</span>
         </div>
         <div className="flex-1 p-6">
           <p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">{fmtTime(t.starts_at)} · {LOCATION}</p>
