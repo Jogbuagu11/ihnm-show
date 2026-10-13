@@ -42,7 +42,7 @@ function Crew() {
   useEffect(() => {
     if (!tid && tapings.length) {
       const upcoming = tapings.find((t) => new Date(t.starts_at) > new Date(Date.now() - 6 * 3600e3));
-      setTid((upcoming ?? tapings[tapings.length - 1]).id);
+      setTid((upcoming ?? tapings[tapings.length - 1])?.id ?? "");
     }
   }, [tapings, tid]);
 

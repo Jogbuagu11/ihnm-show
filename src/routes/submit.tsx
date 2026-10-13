@@ -48,7 +48,7 @@ function Submit() {
   async function send(e: React.FormEvent) {
     e.preventDefault();
     const parsed = schema.safeParse({ ...form, email: form.email || user?.email || "" });
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) return toast.error(parsed.error.issues[0]?.message ?? "Please check the form");
     setBusy(true);
     const { error } = await supabase.from("submissions").insert({ ...parsed.data, kind, user_id: user?.id ?? null });
     setBusy(false);
