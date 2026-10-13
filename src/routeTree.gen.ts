@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ShuttleRouteImport } from './routes/shuttle'
+import { Route as SubmitRouteImport } from './routes/submit'
+import { Route as TicketsRouteImport } from './routes/tickets'
+import { Route as WatchRouteImport } from './routes/watch'
+import { Route as WatchSlugRouteImport } from './routes/watch_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShuttleRoute = ShuttleRouteImport.update({
+  id: '/shuttle',
+  path: '/shuttle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitRoute = SubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TicketsRoute = TicketsRouteImport.update({
+  id: '/tickets',
+  path: '/tickets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WatchRoute = WatchRouteImport.update({
+  id: '/watch',
+  path: '/watch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WatchSlugRoute = WatchSlugRouteImport.update({
+  id: '/watch_/$slug',
+  path: '/watch/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/shuttle': typeof ShuttleRoute
+  '/submit': typeof SubmitRoute
+  '/tickets': typeof TicketsRoute
+  '/watch': typeof WatchRoute
+  '/watch/$slug': typeof WatchSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/shuttle': typeof ShuttleRoute
+  '/submit': typeof SubmitRoute
+  '/tickets': typeof TicketsRoute
+  '/watch': typeof WatchRoute
+  '/watch/$slug': typeof WatchSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/shuttle': typeof ShuttleRoute
+  '/submit': typeof SubmitRoute
+  '/tickets': typeof TicketsRoute
+  '/watch': typeof WatchRoute
+  '/watch_/$slug': typeof WatchSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/shuttle'
+    | '/submit'
+    | '/tickets'
+    | '/watch'
+    | '/watch/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/shuttle'
+    | '/submit'
+    | '/tickets'
+    | '/watch'
+    | '/watch/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/shuttle'
+    | '/submit'
+    | '/tickets'
+    | '/watch'
+    | '/watch_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  ShuttleRoute: typeof ShuttleRoute
+  SubmitRoute: typeof SubmitRoute
+  TicketsRoute: typeof TicketsRoute
+  WatchRoute: typeof WatchRoute
+  WatchSlugRoute: typeof WatchSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shuttle': {
+      id: '/shuttle'
+      path: '/shuttle'
+      fullPath: '/shuttle'
+      preLoaderRoute: typeof ShuttleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit': {
+      id: '/submit'
+      path: '/submit'
+      fullPath: '/submit'
+      preLoaderRoute: typeof SubmitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tickets': {
+      id: '/tickets'
+      path: '/tickets'
+      fullPath: '/tickets'
+      preLoaderRoute: typeof TicketsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/watch': {
+      id: '/watch'
+      path: '/watch'
+      fullPath: '/watch'
+      preLoaderRoute: typeof WatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/watch_/$slug': {
+      id: '/watch_/$slug'
+      path: '/watch/$slug'
+      fullPath: '/watch/$slug'
+      preLoaderRoute: typeof WatchSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  ShuttleRoute: ShuttleRoute,
+  SubmitRoute: SubmitRoute,
+  TicketsRoute: TicketsRoute,
+  WatchRoute: WatchRoute,
+  WatchSlugRoute: WatchSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
