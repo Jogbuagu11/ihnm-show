@@ -17,6 +17,7 @@ import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as TicketsRouteImport } from './routes/tickets'
 import { Route as WatchRouteImport } from './routes/watch'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
 import { Route as WatchSlugRouteImport } from './routes/watch_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -58,6 +59,11 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCrewRoute = AuthenticatedCrewRouteImport.update({
+  id: '/crew',
+  path: '/crew',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const WatchSlugRoute = WatchSlugRouteImport.update({
   id: '/watch_/$slug',
   path: '/watch/$slug',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/crew': typeof AuthenticatedCrewRoute
   '/watch/$slug': typeof WatchSlugRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/crew': typeof AuthenticatedCrewRoute
   '/watch/$slug': typeof WatchSlugRoute
 }
 export interface FileRoutesById {
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/crew': typeof AuthenticatedCrewRoute
   '/watch_/$slug': typeof WatchSlugRoute
 }
 export interface FileRouteTypes {
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/tickets'
     | '/watch'
     | '/account'
+    | '/crew'
     | '/watch/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/tickets'
     | '/watch'
     | '/account'
+    | '/crew'
     | '/watch/$slug'
   id:
     | '__root__'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/tickets'
     | '/watch'
     | '/_authenticated/account'
+    | '/_authenticated/crew'
     | '/watch_/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -199,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/crew': {
+      id: '/_authenticated/crew'
+      path: '/crew'
+      fullPath: '/crew'
+      preLoaderRoute: typeof AuthenticatedCrewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/watch_/$slug': {
       id: '/watch_/$slug'
       path: '/watch/$slug'
@@ -211,10 +230,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedCrewRoute: typeof AuthenticatedCrewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedCrewRoute: AuthenticatedCrewRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
