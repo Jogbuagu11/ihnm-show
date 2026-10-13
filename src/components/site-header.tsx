@@ -15,19 +15,19 @@ export function SiteHeader() {
   const { user, isStaff } = useAuth();
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-gold/30 bg-stage/95 text-stage-foreground backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link to="/" className="font-display text-2xl font-semibold tracking-tight text-walnut">
-          IHNM <span className="text-gold">Show</span>
+        <Link to="/" className="font-display text-2xl tracking-tight">
+          IHNM <span className="italic-gold">Show</span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           {links.map((l) => (
-            <Link key={l.to} to={l.to} className="text-sm font-medium text-muted-foreground hover:text-foreground" activeProps={{ className: "text-foreground" }}>
+            <Link key={l.to} to={l.to} className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/70 hover:text-gold" activeProps={{ className: "text-gold" }}>
               {l.label}
             </Link>
           ))}
-          {isStaff && <Link to="/crew" className="text-sm font-medium text-muted-foreground hover:text-foreground">Crew</Link>}
-          <Button asChild variant="pill" size="sm" className="h-9 px-4">
+          {isStaff && <Link to="/crew" className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/70 hover:text-gold">Crew</Link>}
+          <Button asChild variant="gold" size="sm" className="h-9 px-4">
             <Link to={user ? "/account" : "/auth"}>{user ? "My Tickets" : "Sign in"}</Link>
           </Button>
         </nav>
@@ -36,12 +36,12 @@ export function SiteHeader() {
         </button>
       </div>
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-border px-4 py-3 md:hidden" onClick={() => setOpen(false)}>
+        <nav className="flex flex-col gap-1 border-t border-gold/30 px-4 py-3 font-display text-2xl md:hidden" onClick={() => setOpen(false)}>
           {links.map((l) => (
-            <Link key={l.to} to={l.to} className="rounded-lg px-3 py-2 font-medium hover:bg-muted">{l.label}</Link>
+            <Link key={l.to} to={l.to} className="rounded-lg px-3 py-2 font-medium hover:text-gold">{l.label}</Link>
           ))}
-          {isStaff && <Link to="/crew" className="rounded-lg px-3 py-2 font-medium hover:bg-muted">Crew Portal</Link>}
-          <Link to={user ? "/account" : "/auth"} className="rounded-lg px-3 py-2 font-semibold text-walnut hover:bg-muted">
+          {isStaff && <Link to="/crew" className="rounded-lg px-3 py-2 font-medium hover:text-gold">Crew Portal</Link>}
+          <Link to={user ? "/account" : "/auth"} className="rounded-lg px-3 py-2 font-semibold italic text-gold">
             {user ? "My Tickets" : "Sign in"}
           </Link>
         </nav>
