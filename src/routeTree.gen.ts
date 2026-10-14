@@ -16,12 +16,14 @@ import { Route as FilmingConsentRouteImport } from './routes/filming-consent'
 import { Route as GiveRouteImport } from './routes/give'
 import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RentRouteImport } from './routes/rent'
 import { Route as ShuttleRouteImport } from './routes/shuttle'
 import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TicketsRouteImport } from './routes/tickets'
 import { Route as WatchRouteImport } from './routes/watch'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedBookingsRouteImport } from './routes/_authenticated/bookings'
 import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
 import { Route as AuthenticatedFinanceRouteImport } from './routes/_authenticated/finance'
 import { Route as ReleaseTokenRouteImport } from './routes/release.$token'
@@ -62,6 +64,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RentRoute = RentRouteImport.update({
+  id: '/rent',
+  path: '/rent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShuttleRoute = ShuttleRouteImport.update({
   id: '/shuttle',
   path: '/shuttle',
@@ -90,6 +97,11 @@ const WatchRoute = WatchRouteImport.update({
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBookingsRoute = AuthenticatedBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCrewRoute = AuthenticatedCrewRouteImport.update({
@@ -125,12 +137,14 @@ export interface FileRoutesByFullPath {
   '/give': typeof GiveRoute
   '/merch': typeof MerchRoute
   '/privacy': typeof PrivacyRoute
+  '/rent': typeof RentRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/bookings': typeof AuthenticatedBookingsRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/release/$token': typeof ReleaseTokenRoute
@@ -144,12 +158,14 @@ export interface FileRoutesByTo {
   '/give': typeof GiveRoute
   '/merch': typeof MerchRoute
   '/privacy': typeof PrivacyRoute
+  '/rent': typeof RentRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/bookings': typeof AuthenticatedBookingsRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/release/$token': typeof ReleaseTokenRoute
@@ -165,12 +181,14 @@ export interface FileRoutesById {
   '/give': typeof GiveRoute
   '/merch': typeof MerchRoute
   '/privacy': typeof PrivacyRoute
+  '/rent': typeof RentRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/bookings': typeof AuthenticatedBookingsRoute
   '/_authenticated/crew': typeof AuthenticatedCrewRoute
   '/_authenticated/finance': typeof AuthenticatedFinanceRoute
   '/release/$token': typeof ReleaseTokenRoute
@@ -186,12 +204,14 @@ export interface FileRouteTypes {
     | '/give'
     | '/merch'
     | '/privacy'
+    | '/rent'
     | '/shuttle'
     | '/submit'
     | '/terms'
     | '/tickets'
     | '/watch'
     | '/account'
+    | '/bookings'
     | '/crew'
     | '/finance'
     | '/release/$token'
@@ -205,12 +225,14 @@ export interface FileRouteTypes {
     | '/give'
     | '/merch'
     | '/privacy'
+    | '/rent'
     | '/shuttle'
     | '/submit'
     | '/terms'
     | '/tickets'
     | '/watch'
     | '/account'
+    | '/bookings'
     | '/crew'
     | '/finance'
     | '/release/$token'
@@ -225,12 +247,14 @@ export interface FileRouteTypes {
     | '/give'
     | '/merch'
     | '/privacy'
+    | '/rent'
     | '/shuttle'
     | '/submit'
     | '/terms'
     | '/tickets'
     | '/watch'
     | '/_authenticated/account'
+    | '/_authenticated/bookings'
     | '/_authenticated/crew'
     | '/_authenticated/finance'
     | '/release/$token'
@@ -246,6 +270,7 @@ export interface RootRouteChildren {
   GiveRoute: typeof GiveRoute
   MerchRoute: typeof MerchRoute
   PrivacyRoute: typeof PrivacyRoute
+  RentRoute: typeof RentRoute
   ShuttleRoute: typeof ShuttleRoute
   SubmitRoute: typeof SubmitRoute
   TermsRoute: typeof TermsRoute
@@ -307,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rent': {
+      id: '/rent'
+      path: '/rent'
+      fullPath: '/rent'
+      preLoaderRoute: typeof RentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shuttle': {
       id: '/shuttle'
       path: '/shuttle'
@@ -349,6 +381,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/bookings': {
+      id: '/_authenticated/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof AuthenticatedBookingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/crew': {
       id: '/_authenticated/crew'
       path: '/crew'
@@ -389,12 +428,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedBookingsRoute: typeof AuthenticatedBookingsRoute
   AuthenticatedCrewRoute: typeof AuthenticatedCrewRoute
   AuthenticatedFinanceRoute: typeof AuthenticatedFinanceRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedBookingsRoute: AuthenticatedBookingsRoute,
   AuthenticatedCrewRoute: AuthenticatedCrewRoute,
   AuthenticatedFinanceRoute: AuthenticatedFinanceRoute,
 }
@@ -410,6 +451,7 @@ const rootRouteChildren: RootRouteChildren = {
   GiveRoute: GiveRoute,
   MerchRoute: MerchRoute,
   PrivacyRoute: PrivacyRoute,
+  RentRoute: RentRoute,
   ShuttleRoute: ShuttleRoute,
   SubmitRoute: SubmitRoute,
   TermsRoute: TermsRoute,
