@@ -31,7 +31,7 @@ export function GuestHub({ taping }: { taping: Taping; tapings: Taping[] }) {
     const paths = [b.clip_1, b.clip_2, b.clip_3, b.clip_4, b.clip_5].filter(Boolean) as string[];
     if (!paths.length) return toast.error("Upload at least one clip first");
     const links: string[] = [];
-    for (const p of paths) { const { data } = await supabase.storage.from("finance").createSignedUrl(p, 7 * 864e2 * 100); if (data) links.push(data.signedUrl); }
+    for (const p of paths) { const { data } = await supabase.storage.from("finance").createSignedUrl(p, 7 * 86400); if (data) links.push(data.signedUrl); }
     await db.from("expert_bookings").update({ clips_sent_at: new Date().toISOString() }).eq("id", b.id);
     qc.invalidateQueries({ queryKey: ["fin", "expert_bookings"] });
     window.location.href = `mailto:${e.email}?subject=${encodeURIComponent("Your IHNM Show clip pack")}&body=${encodeURIComponent(`Hi ${e.name},\n\nHere are your clips to share (links work for 7 days):\n\n${links.join("\n\n")}\n\nPlease tag IHNM Show when you post!\n\nIHNM Show`)}`;
