@@ -29,6 +29,13 @@
       "when": 1791961351707,
       "tag": "0003_giver_email_match",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791962076958,
+      "tag": "0004_studio_rentals",
+      "breakpoints": true
     }
   ]
 }

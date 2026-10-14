@@ -18,3 +18,4 @@
 - Analytics are first-party: PageTracker in __root logs anonymous rows to page_views; only admins can read them.
 - Guest releases are signed through a public token link (/release/$token) using get_release/sign_release RPCs, so guests don't need an account.
 - Finance data (income, expenses, partners, sponsors, invoices, rentals, budgets, campaigns) is admin-only via has_role RLS; files go in the private "finance" bucket opened with signed URLs. The generic Crud component in src/components/finance drives every ledger tab.
+- Studio A rentals: pricing in public.rental_price() mirrored by quote() in src/lib/rentals.ts (keep in sync); bookings go through book_rental RPC which blocks taping days/overlaps and creates the balance invoice; triggers post paid deposits/balances/hour packs to income — keeps rental money flowing to Finance without double entry.
