@@ -27,7 +27,7 @@ export function Analytics() {
   const { data: settings } = useQuery(siteSettingsQuery);
 
   async function toggle(k: "giving_enabled" | "merch_enabled", v: boolean) {
-    const { error } = await supabase.from("site_settings").update({ [k]: v }).eq("id", 1);
+    const { error } = await supabase.from("site_settings").update(k === "giving_enabled" ? { giving_enabled: v } : { merch_enabled: v }).eq("id", 1);
     if (error) return toast.error(error.message);
     qc.invalidateQueries({ queryKey: ["site_settings"] });
   }
