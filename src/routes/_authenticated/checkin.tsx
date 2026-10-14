@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/checkin")({
-  validateSearch: (s: Record<string, unknown>) => ({ t: String(s.t ?? ""), c: String(s.c ?? "") }),
+  validateSearch: (s: Record<string, unknown>) => ({ t: String(s["t"] ?? ""), c: String(s["c"] ?? "") }),
   head: () => ({
     meta: [
       { title: "Self Check-in — IHNM Show" },
