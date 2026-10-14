@@ -1,3 +1,4 @@
+import { CodeOfConduct } from "@/components/code-of-conduct";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -143,9 +144,10 @@ export function ReserveDialog({ taping, trigger }: { taping: TapingWithAvail; tr
               </div>
             )}
 
+            <CodeOfConduct />
             <Label className="flex items-start gap-3 rounded-xl bg-muted p-3 text-sm font-normal leading-snug">
               <Checkbox checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" />
-              I agree to be filmed and recorded as part of the studio audience, and that footage may appear in IHNM Show broadcasts and online (<Link to="/filming-consent" target="_blank" className="underline">read the consent</Link>).
+              I agree to the audience code of conduct and to be filmed and recorded as part of the studio audience, and that footage may appear in IHNM Show broadcasts and online (<Link to="/filming-consent" target="_blank" className="underline">read the consent</Link>).
             </Label>
             <Button type="submit" variant="gold" size="lg" className="w-full" disabled={busy || !consent}>
               {type === "group" ? "Send group request" : full ? "Join waitlist" : "Reserve my seat"}

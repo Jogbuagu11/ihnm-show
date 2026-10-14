@@ -15,6 +15,10 @@ import { TapingsEditor } from "@/components/crew/tapings-editor";
 import { EpisodesEditor } from "@/components/crew/episodes-editor";
 import { Releases } from "@/components/crew/releases";
 import { Analytics } from "@/components/crew/analytics";
+import { VolunteersAdmin } from "@/components/crew/volunteers";
+import { Messages } from "@/components/crew/messages";
+import { GuestHub } from "@/components/crew/guest-hub";
+import { Inbox } from "@/components/crew/inbox";
 
 export const Route = createFileRoute("/_authenticated/crew")({
   head: () => ({
@@ -77,6 +81,10 @@ function Crew() {
           <TabsTrigger value="submissions">Submissions</TabsTrigger>
           <TabsTrigger value="tapings">Tapings</TabsTrigger>
           <TabsTrigger value="episodes">Episodes</TabsTrigger>
+          <TabsTrigger value="volunteers">Volunteers</TabsTrigger>
+          <TabsTrigger value="messages">Messages</TabsTrigger>
+          {roles.includes("admin") && <TabsTrigger value="guests">Guest Hub</TabsTrigger>}
+          {roles.includes("admin") && <TabsTrigger value="inbox">Inbox</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
         </TabsList>
         <TabsContent value="dashboard">{taping && <Dashboard taping={taping} />}</TabsContent>
@@ -87,6 +95,10 @@ function Crew() {
         <TabsContent value="submissions"><SubmissionsQueue tapings={tapings} /></TabsContent>
         <TabsContent value="tapings"><TapingsEditor tapings={tapings} /></TabsContent>
         <TabsContent value="episodes"><EpisodesEditor /></TabsContent>
+        <TabsContent value="volunteers">{taping && <VolunteersAdmin taping={taping} tapings={tapings} isAdmin={roles.includes("admin")} />}</TabsContent>
+        <TabsContent value="messages">{taping && <Messages taping={taping} />}</TabsContent>
+        {roles.includes("admin") && <TabsContent value="guests">{taping && <GuestHub taping={taping} tapings={tapings} />}</TabsContent>}
+        {roles.includes("admin") && <TabsContent value="inbox"><Inbox /></TabsContent>}
         {roles.includes("admin") && <TabsContent value="analytics"><Analytics /></TabsContent>}
       </Tabs>
     </div>
