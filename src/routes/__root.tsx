@@ -16,6 +16,7 @@ import { AuthProvider } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
+import { PageTracker } from "@/components/page-tracker";
 
 function NotFoundComponent() {
   return (
@@ -101,6 +102,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <div className="flex min-h-screen flex-col">
+          <PageTracker />
           <SiteHeader />
           <main className="flex-1">
             <Outlet />
