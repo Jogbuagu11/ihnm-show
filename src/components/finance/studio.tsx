@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usd, lastMonths } from "@/lib/finance";
-import { RENTAL_TYPES, type RentalSettings, type RentalType } from "@/lib/rentals";
+import { RENTAL_TYPES, pacificDays, type RentalSettings, type RentalType } from "@/lib/rentals";
 
 const TZ = "America/Los_Angeles";
 const dk = (d: Date | string) => new Date(d).toLocaleDateString("en-CA", { timeZone: TZ });
@@ -30,7 +30,7 @@ export function StudioAdmin() {
 
 function Calendar() {
   const { data: rentals = [] } = useTable("rentals");
-  const days = Array.from({ length: 42 }, (_, i) => new Date(Date.now() + i * 864e5));
+  const days = pacificDays(42);
   const { data: tapings = [] } = useQuery({
     queryKey: ["cal-tapings"],
     queryFn: async () => (await supabase.from("tapings").select("id,theme,starts_at").gte("starts_at", new Date().toISOString())).data ?? [],

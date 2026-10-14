@@ -62,3 +62,9 @@ export function pacific(date: string, time: string) {
   const asLocal = Date.UTC(g("year"), g("month") - 1, g("day"), g("hour") % 24, g("minute"));
   return new Date(guess.getTime() + (guess.getTime() - asLocal));
 }
+
+/** Next `n` Pacific calendar days as Dates at ~midday (DST-safe), starting `offset` days from today. */
+export function pacificDays(n: number, offset = 0) {
+  const [y, m, d] = new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }).split("-").map(Number) as [number, number, number];
+  return Array.from({ length: n }, (_, i) => new Date(Date.UTC(y, m - 1, d + offset + i, 20)));
+}

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { usd } from "@/lib/finance";
-import { DEFAULT_RENTAL_SETTINGS, RENTAL_TYPES, pacific, quote, type Addons, type RentalSettings, type RentalType } from "@/lib/rentals";
+import { DEFAULT_RENTAL_SETTINGS, RENTAL_TYPES, pacific, pacificDays, quote, type Addons, type RentalSettings, type RentalType } from "@/lib/rentals";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,7 @@ export function BookingForm() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const { data: s = DEFAULT_RENTAL_SETTINGS } = useRentalSettings();
-  const days = useMemo(() => Array.from({ length: 28 }, (_, i) => new Date(Date.now() + (i + 1) * 864e5)), []);
+  const days = useMemo(() => pacificDays(28, 1), []);
   const from = dayKey(days[0]!); const to = dayKey(days[days.length - 1]!);
   const { data: busy = [] } = useQuery({
     queryKey: ["studio-busy", from, to],
