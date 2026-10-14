@@ -637,6 +637,39 @@ export type Database = {
           },
         ]
       }
+      prayer_requests: {
+        Row: {
+          body: string
+          created_at: string
+          email: string | null
+          id: string
+          kind: string
+          name: string | null
+          share_on_air: boolean
+          status: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind?: string
+          name?: string | null
+          share_on_air?: boolean
+          status?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind?: string
+          name?: string | null
+          share_on_air?: boolean
+          status?: string
+        }
+        Relationships: []
+      }
       rental_inquiries: {
         Row: {
           admin_note: string | null
@@ -1158,6 +1191,24 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_invites: {
+        Row: {
+          created_at: string
+          email: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
       submissions: {
         Row: {
           content: string
@@ -1195,6 +1246,77 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "submissions_taping_id_fkey"
+            columns: ["taping_id"]
+            isOneToOne: false
+            referencedRelation: "tapings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      taping_door_codes: {
+        Row: {
+          code: string
+          taping_id: string
+        }
+        Insert: {
+          code?: string
+          taping_id: string
+        }
+        Update: {
+          code?: string
+          taping_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "taping_door_codes_taping_id_fkey"
+            columns: ["taping_id"]
+            isOneToOne: true
+            referencedRelation: "tapings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      taping_feedback: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+          reservation_id: string
+          taping_id: string
+          testimonial_ok: boolean
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          reservation_id: string
+          taping_id: string
+          testimonial_ok?: boolean
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          reservation_id?: string
+          taping_id?: string
+          testimonial_ok?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "taping_feedback_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: true
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "taping_feedback_taping_id_fkey"
             columns: ["taping_id"]
             isOneToOne: false
             referencedRelation: "tapings"
@@ -1397,6 +1519,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_staff: {
+        Args: { _email: string; _role: Database["public"]["Enums"]["app_role"] }
+        Returns: string
+      }
       book_rental: {
         Args: {
           _addons: Json
@@ -1429,6 +1555,7 @@ export type Database = {
         Args: { _approve: boolean; _req: string }
         Returns: undefined
       }
+      door_code: { Args: { _taping: string }; Returns: string }
       effective_capacity: { Args: { _taping: string }; Returns: number }
       flagged_attendees: {
         Args: { _taping: string }
@@ -1455,6 +1582,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      list_staff: {
+        Args: never
+        Returns: {
+          email: string
+          pending: boolean
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }[]
+      }
       mark_no_show: {
         Args: { _reservation: string; _undo?: boolean }
         Returns: undefined
@@ -1463,6 +1599,10 @@ export type Database = {
       no_show_count: { Args: { _user: string }; Returns: number }
       offer_open_seats: { Args: { _taping: string }; Returns: undefined }
       release_shift: { Args: { _shift: string }; Returns: undefined }
+      remove_staff: {
+        Args: { _email: string; _user: string }
+        Returns: undefined
+      }
       rental_price: {
         Args: {
           _addons: Json
@@ -1486,6 +1626,7 @@ export type Database = {
         Returns: Json
       }
       seats_taken: { Args: { _taping: string }; Returns: number }
+      self_check_in: { Args: { _code: string; _taping: string }; Returns: Json }
       set_sms_pref: {
         Args: { _opt: boolean; _phone: string; _reservation: string }
         Returns: undefined
