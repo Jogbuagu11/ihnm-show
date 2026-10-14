@@ -11,10 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FilmingConsentRouteImport } from './routes/filming-consent'
 import { Route as GiveRouteImport } from './routes/give'
 import { Route as MerchRouteImport } from './routes/merch'
+import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RentRouteImport } from './routes/rent'
 import { Route as ShuttleRouteImport } from './routes/shuttle'
@@ -39,9 +43,24 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FilmingConsentRoute = FilmingConsentRouteImport.update({
@@ -57,6 +76,11 @@ const GiveRoute = GiveRouteImport.update({
 const MerchRoute = MerchRouteImport.update({
   id: '/merch',
   path: '/merch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -132,10 +156,14 @@ const WatchSlugRoute = WatchSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
   '/merch': typeof MerchRoute
+  '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
   '/shuttle': typeof ShuttleRoute
@@ -153,10 +181,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
   '/merch': typeof MerchRoute
+  '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
   '/shuttle': typeof ShuttleRoute
@@ -176,10 +208,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
   '/merch': typeof MerchRoute
+  '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
   '/shuttle': typeof ShuttleRoute
@@ -199,10 +235,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/auth'
+    | '/contact'
+    | '/faq'
     | '/filming-consent'
     | '/give'
     | '/merch'
+    | '/partner'
     | '/privacy'
     | '/rent'
     | '/shuttle'
@@ -220,10 +260,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/auth'
+    | '/contact'
+    | '/faq'
     | '/filming-consent'
     | '/give'
     | '/merch'
+    | '/partner'
     | '/privacy'
     | '/rent'
     | '/shuttle'
@@ -242,10 +286,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
     | '/auth'
+    | '/contact'
+    | '/faq'
     | '/filming-consent'
     | '/give'
     | '/merch'
+    | '/partner'
     | '/privacy'
     | '/rent'
     | '/shuttle'
@@ -265,10 +313,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
   FilmingConsentRoute: typeof FilmingConsentRoute
   GiveRoute: typeof GiveRoute
   MerchRoute: typeof MerchRoute
+  PartnerRoute: typeof PartnerRoute
   PrivacyRoute: typeof PrivacyRoute
   RentRoute: typeof RentRoute
   ShuttleRoute: typeof ShuttleRoute
@@ -297,11 +349,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/filming-consent': {
@@ -323,6 +396,13 @@ declare module '@tanstack/react-router' {
       path: '/merch'
       fullPath: '/merch'
       preLoaderRoute: typeof MerchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -446,10 +526,14 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
   FilmingConsentRoute: FilmingConsentRoute,
   GiveRoute: GiveRoute,
   MerchRoute: MerchRoute,
+  PartnerRoute: PartnerRoute,
   PrivacyRoute: PrivacyRoute,
   RentRoute: RentRoute,
   ShuttleRoute: ShuttleRoute,
