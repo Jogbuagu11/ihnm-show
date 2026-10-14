@@ -62,6 +62,7 @@ export function SiteFooter() {
         <Link to="/about" className="hover:text-gold">About</Link>
         <Link to="/faq" className="hover:text-gold">Audience FAQ</Link>
         <Link to="/serve" className="hover:text-gold">Serve With Us</Link>
+        <Link to="/prayer" className="hover:text-gold">Prayer & Testimony</Link>
         <Link to="/partner" className="hover:text-gold">Partner With Us</Link>
         <Link to="/contact" className="hover:text-gold">Contact</Link>
         <Link to="/terms" className="hover:text-gold">Terms</Link>

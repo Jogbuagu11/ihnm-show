@@ -1,4 +1,5 @@
 import { TapingUpdates } from "@/components/taping-updates";
+import { ShowFeedback } from "@/components/show-feedback";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QRCodeSVG } from "qrcode.react";
@@ -197,6 +198,7 @@ function TicketCard({ r, shuttle, onChange }: { r: Res; shuttle: Sb | undefined;
         )}
       </div>
       <TapingUpdates tapingId={r.taping_id} reservationId={r.id} optIn={r.sms_opt_in} phone={r.sms_phone} onChange={onChange} />
+      {new Date(t.starts_at) < new Date() && <ShowFeedback reservationId={r.id} tapingId={r.taping_id} userId={r.user_id} />}
       <div className="flex justify-end border-t p-4">
         <AlertDialog>
           <AlertDialogTrigger asChild><Button variant="ghost" size="sm" className="text-destructive">Cancel reservation</Button></AlertDialogTrigger>

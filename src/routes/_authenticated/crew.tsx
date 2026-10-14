@@ -19,6 +19,10 @@ import { VolunteersAdmin } from "@/components/crew/volunteers";
 import { Messages } from "@/components/crew/messages";
 import { GuestHub } from "@/components/crew/guest-hub";
 import { Inbox } from "@/components/crew/inbox";
+import { StaffAdmin } from "@/components/crew/staff";
+import { DoorSign } from "@/components/crew/door-sign";
+import { FeedbackList } from "@/components/crew/feedback";
+import { PrayerInbox } from "@/components/crew/prayer";
 
 export const Route = createFileRoute("/_authenticated/crew")({
   head: () => ({
@@ -83,9 +87,13 @@ function Crew() {
           <TabsTrigger value="episodes">Episodes</TabsTrigger>
           <TabsTrigger value="volunteers">Volunteers</TabsTrigger>
           <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsTrigger value="door">Door QR</TabsTrigger>
+          <TabsTrigger value="feedback">Feedback</TabsTrigger>
+          <TabsTrigger value="prayer">Prayer</TabsTrigger>
           {roles.includes("admin") && <TabsTrigger value="guests">Guest Hub</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="inbox">Inbox</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
+          {roles.includes("admin") && <TabsTrigger value="team">Team</TabsTrigger>}
         </TabsList>
         <TabsContent value="dashboard">{taping && <Dashboard taping={taping} />}</TabsContent>
         <TabsContent value="checkin">{taping && <CheckIn taping={taping} />}</TabsContent>
@@ -97,9 +105,13 @@ function Crew() {
         <TabsContent value="episodes"><EpisodesEditor /></TabsContent>
         <TabsContent value="volunteers">{taping && <VolunteersAdmin taping={taping} tapings={tapings} isAdmin={roles.includes("admin")} />}</TabsContent>
         <TabsContent value="messages">{taping && <Messages taping={taping} />}</TabsContent>
+        <TabsContent value="door">{taping && <DoorSign taping={taping} />}</TabsContent>
+        <TabsContent value="feedback">{taping && <FeedbackList taping={taping} />}</TabsContent>
+        <TabsContent value="prayer"><PrayerInbox /></TabsContent>
         {roles.includes("admin") && <TabsContent value="guests">{taping && <GuestHub taping={taping} tapings={tapings} />}</TabsContent>}
         {roles.includes("admin") && <TabsContent value="inbox"><Inbox /></TabsContent>}
         {roles.includes("admin") && <TabsContent value="analytics"><Analytics /></TabsContent>}
+        {roles.includes("admin") && <TabsContent value="team"><StaffAdmin /></TabsContent>}
       </Tabs>
     </div>
   );
