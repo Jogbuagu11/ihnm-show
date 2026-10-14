@@ -19,3 +19,6 @@
 - Guest releases are signed through a public token link (/release/$token) using get_release/sign_release RPCs, so guests don't need an account.
 - Finance data (income, expenses, partners, sponsors, invoices, rentals, budgets, campaigns) is admin-only via has_role RLS; files go in the private "finance" bucket opened with signed URLs. The generic Crud component in src/components/finance drives every ledger tab.
 - Studio A rentals: pricing in public.rental_price() mirrored by quote() in src/lib/rentals.ts (keep in sync); bookings go through book_rental RPC which blocks taping days/overlaps and creates the balance invoice; triggers post paid deposits/balances/hour packs to income — keeps rental money flowing to Finance without double entry.
+- Roles: is_staff() and useAuth().isStaff count only admin/crew; "volunteer" is a non-staff role granted by join_volunteers RPC — keeps volunteers out of crew tools.
+- Shift claiming goes through claim_shift/release_shift RPCs (slot limits enforced in SQL); volunteer docs live in private "volunteer-docs" bucket under <user_id>/, readable by admins only.
+- Ticket-holder announcements are rows in taping_messages shown on My Tickets; SMS opt-in is stored on reservations, actual texting needs a provider connection.

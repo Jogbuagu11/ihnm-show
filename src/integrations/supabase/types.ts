@@ -56,14 +56,52 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          organization: string | null
+          phone: string | null
+          status: string
+          topic: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          organization?: string | null
+          phone?: string | null
+          status?: string
+          topic: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          organization?: string | null
+          phone?: string | null
+          status?: string
+          topic?: string
+        }
+        Relationships: []
+      }
       episodes: {
         Row: {
           aired_on: string
+          chat_url: string | null
           created_at: string
           description: string | null
           guests: string[]
           id: string
           kind: Database["public"]["Enums"]["episode_type"]
+          live_at: string | null
           slug: string
           sponsor_logo_url: string | null
           sponsor_name: string | null
@@ -75,11 +113,13 @@ export type Database = {
         }
         Insert: {
           aired_on?: string
+          chat_url?: string | null
           created_at?: string
           description?: string | null
           guests?: string[]
           id?: string
           kind?: Database["public"]["Enums"]["episode_type"]
+          live_at?: string | null
           slug: string
           sponsor_logo_url?: string | null
           sponsor_name?: string | null
@@ -91,11 +131,13 @@ export type Database = {
         }
         Update: {
           aired_on?: string
+          chat_url?: string | null
           created_at?: string
           description?: string | null
           guests?: string[]
           id?: string
           kind?: Database["public"]["Enums"]["episode_type"]
+          live_at?: string | null
           slug?: string
           sponsor_logo_url?: string | null
           sponsor_name?: string | null
@@ -137,6 +179,108 @@ export type Database = {
           receipt_path?: string | null
           spent_on?: string
           vendor?: string | null
+        }
+        Relationships: []
+      }
+      expert_bookings: {
+        Row: {
+          briefing: string | null
+          briefing_sent_at: string | null
+          clip_1: string | null
+          clip_2: string | null
+          clip_3: string | null
+          clip_4: string | null
+          clip_5: string | null
+          clips_sent_at: string | null
+          created_at: string
+          expert_id: string
+          id: string
+          posted: boolean
+          status: string
+          taping_id: string
+        }
+        Insert: {
+          briefing?: string | null
+          briefing_sent_at?: string | null
+          clip_1?: string | null
+          clip_2?: string | null
+          clip_3?: string | null
+          clip_4?: string | null
+          clip_5?: string | null
+          clips_sent_at?: string | null
+          created_at?: string
+          expert_id: string
+          id?: string
+          posted?: boolean
+          status?: string
+          taping_id: string
+        }
+        Update: {
+          briefing?: string | null
+          briefing_sent_at?: string | null
+          clip_1?: string | null
+          clip_2?: string | null
+          clip_3?: string | null
+          clip_4?: string | null
+          clip_5?: string | null
+          clips_sent_at?: string | null
+          created_at?: string
+          expert_id?: string
+          id?: string
+          posted?: boolean
+          status?: string
+          taping_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expert_bookings_expert_id_fkey"
+            columns: ["expert_id"]
+            isOneToOne: false
+            referencedRelation: "experts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expert_bookings_taping_id_fkey"
+            columns: ["taping_id"]
+            isOneToOne: false
+            referencedRelation: "tapings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experts: {
+        Row: {
+          created_at: string
+          email: string | null
+          field: string | null
+          id: string
+          name: string
+          notes: string | null
+          past_appearances: string | null
+          phone: string | null
+          topics: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          field?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          past_appearances?: string | null
+          phone?: string | null
+          topics?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          field?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          past_appearances?: string | null
+          phone?: string | null
+          topics?: string | null
         }
         Relationships: []
       }
@@ -716,6 +860,8 @@ export type Database = {
           qr_code: string
           question: string | null
           seats: number
+          sms_opt_in: boolean
+          sms_phone: string | null
           status: string
           taping_id: string
           ticket_type: Database["public"]["Enums"]["ticket_type"]
@@ -734,6 +880,8 @@ export type Database = {
           qr_code?: string
           question?: string | null
           seats?: number
+          sms_opt_in?: boolean
+          sms_phone?: string | null
           status?: string
           taping_id: string
           ticket_type?: Database["public"]["Enums"]["ticket_type"]
@@ -752,6 +900,8 @@ export type Database = {
           qr_code?: string
           question?: string | null
           seats?: number
+          sms_opt_in?: boolean
+          sms_phone?: string | null
           status?: string
           taping_id?: string
           ticket_type?: Database["public"]["Enums"]["ticket_type"]
@@ -760,6 +910,82 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "reservations_taping_id_fkey"
+            columns: ["taping_id"]
+            isOneToOne: false
+            referencedRelation: "tapings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shift_claims: {
+        Row: {
+          created_at: string
+          hours: number | null
+          id: string
+          shift_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          hours?: number | null
+          id?: string
+          shift_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          hours?: number | null
+          id?: string
+          shift_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shift_claims_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shifts: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          notes: string | null
+          role: string
+          slots: number
+          starts_at: string
+          taping_id: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          notes?: string | null
+          role: string
+          slots?: number
+          starts_at: string
+          taping_id: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          notes?: string | null
+          role?: string
+          slots?: number
+          starts_at?: string
+          taping_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shifts_taping_id_fkey"
             columns: ["taping_id"]
             isOneToOne: false
             referencedRelation: "tapings"
@@ -976,6 +1202,35 @@ export type Database = {
           },
         ]
       }
+      taping_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          taping_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          taping_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          taping_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "taping_messages_taping_id_fkey"
+            columns: ["taping_id"]
+            isOneToOne: false
+            referencedRelation: "tapings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tapings: {
         Row: {
           capacity: number
@@ -1057,6 +1312,45 @@ export type Database = {
         }
         Relationships: []
       }
+      volunteers: {
+        Row: {
+          availability: string | null
+          created_at: string
+          email: string
+          insurance_path: string | null
+          license_path: string | null
+          name: string
+          phone: string | null
+          roles: string[]
+          status: string
+          user_id: string
+        }
+        Insert: {
+          availability?: string | null
+          created_at?: string
+          email: string
+          insurance_path?: string | null
+          license_path?: string | null
+          name: string
+          phone?: string | null
+          roles?: string[]
+          status?: string
+          user_id: string
+        }
+        Update: {
+          availability?: string | null
+          created_at?: string
+          email?: string
+          insurance_path?: string | null
+          license_path?: string | null
+          name?: string
+          phone?: string | null
+          roles?: string[]
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
           created_at: string
@@ -1130,6 +1424,7 @@ export type Database = {
       cancel_my_rental: { Args: { _rental: string }; Returns: number }
       cancel_reservation: { Args: { _reservation: string }; Returns: undefined }
       check_in: { Args: { _code: string }; Returns: Json }
+      claim_shift: { Args: { _shift: string }; Returns: undefined }
       decide_group_request: {
         Args: { _approve: boolean; _req: string }
         Returns: undefined
@@ -1151,6 +1446,15 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      join_volunteers: {
+        Args: {
+          _availability: string
+          _name: string
+          _phone: string
+          _roles: string[]
+        }
+        Returns: undefined
+      }
       mark_no_show: {
         Args: { _reservation: string; _undo?: boolean }
         Returns: undefined
@@ -1158,6 +1462,7 @@ export type Database = {
       my_no_show_flag: { Args: never; Returns: boolean }
       no_show_count: { Args: { _user: string }; Returns: number }
       offer_open_seats: { Args: { _taping: string }; Returns: undefined }
+      release_shift: { Args: { _shift: string }; Returns: undefined }
       rental_price: {
         Args: {
           _addons: Json
@@ -1181,6 +1486,17 @@ export type Database = {
         Returns: Json
       }
       seats_taken: { Args: { _taping: string }; Returns: number }
+      set_sms_pref: {
+        Args: { _opt: boolean; _phone: string; _reservation: string }
+        Returns: undefined
+      }
+      shift_openings: {
+        Args: never
+        Returns: {
+          claimed: number
+          shift_id: string
+        }[]
+      }
       shuttle_availability: {
         Args: { _taping: string }
         Returns: {
@@ -1215,7 +1531,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "crew"
+      app_role: "admin" | "crew" | "volunteer"
       episode_type: "episode" | "sitdown" | "special"
       ticket_type: "general" | "vip" | "group"
     }
@@ -1345,7 +1661,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "crew"],
+      app_role: ["admin", "crew", "volunteer"],
       episode_type: ["episode", "sitdown", "special"],
       ticket_type: ["general", "vip", "group"],
     },

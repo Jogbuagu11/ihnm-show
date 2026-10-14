@@ -9,6 +9,7 @@ const links = [
   { to: "/tickets", label: "Tickets" },
   { to: "/shuttle", label: "Shuttle" },
   { to: "/submit", label: "Submit" },
+  { to: "/live", label: "Live" },
   { to: "/rent", label: "Rent Studio" },
 ] as const;
 
@@ -45,6 +46,7 @@ export function SiteHeader() {
           ))}
           {isStaff && <Link to="/crew" className="rounded-lg px-3 py-2 font-medium hover:text-gold">Crew Portal</Link>}
           {isAdmin && <Link to="/finance" className="rounded-lg px-3 py-2 font-medium hover:text-gold">Finance</Link>}
+          {roles.includes("volunteer") && <Link to="/volunteer" className="rounded-lg px-3 py-2 font-medium hover:text-gold">My Shifts</Link>}
           {user && <Link to="/bookings" className="rounded-lg px-3 py-2 font-medium hover:text-gold">My Bookings</Link>}
           <Link to={user ? "/account" : "/auth"} className="rounded-lg px-3 py-2 font-semibold italic text-gold">
             {user ? "My Tickets" : "Sign in"}

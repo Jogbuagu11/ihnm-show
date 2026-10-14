@@ -59,6 +59,11 @@ export function SiteFooter() {
         </form>
       </div>
       <nav aria-label="Legal and more" className="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-6 gap-y-2 px-4 pb-4 font-mono text-[0.7rem] uppercase tracking-[0.2em]">
+        <Link to="/about" className="hover:text-gold">About</Link>
+        <Link to="/faq" className="hover:text-gold">Audience FAQ</Link>
+        <Link to="/serve" className="hover:text-gold">Serve With Us</Link>
+        <Link to="/partner" className="hover:text-gold">Partner With Us</Link>
+        <Link to="/contact" className="hover:text-gold">Contact</Link>
         <Link to="/terms" className="hover:text-gold">Terms</Link>
         <Link to="/privacy" className="hover:text-gold">Privacy Policy</Link>
         <Link to="/filming-consent" className="hover:text-gold">Audience Filming Consent</Link>
