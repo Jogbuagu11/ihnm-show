@@ -15,6 +15,13 @@
       "when": 1791960779991,
       "tag": "0001_extras_releases_noshow_analytics",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791961157551,
+      "tag": "0002_finance_portal",
+      "breakpoints": true
     }
   ]
 }

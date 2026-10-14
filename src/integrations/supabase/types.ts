@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      budgets: {
+        Row: {
+          category: string
+          monthly_cents: number
+        }
+        Insert: {
+          category: string
+          monthly_cents?: number
+        }
+        Update: {
+          category?: string
+          monthly_cents?: number
+        }
+        Relationships: []
+      }
+      campaigns: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          goal_cents: number
+          id: string
+          name: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          goal_cents?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          goal_cents?: number
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       episodes: {
         Row: {
           aired_on: string
@@ -62,6 +104,57 @@ export type Database = {
           thumbnail?: string | null
           title?: string
           youtube_url?: string | null
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount_cents: number
+          category: string
+          created_at: string
+          id: string
+          memo: string | null
+          receipt_path: string | null
+          spent_on: string
+          vendor: string | null
+        }
+        Insert: {
+          amount_cents: number
+          category: string
+          created_at?: string
+          id?: string
+          memo?: string | null
+          receipt_path?: string | null
+          spent_on?: string
+          vendor?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          category?: string
+          created_at?: string
+          id?: string
+          memo?: string | null
+          receipt_path?: string | null
+          spent_on?: string
+          vendor?: string | null
+        }
+        Relationships: []
+      }
+      finance_settings: {
+        Row: {
+          fundraising_goal_cents: number
+          id: number
+          monthly_operating_cents: number
+        }
+        Insert: {
+          fundraising_goal_cents?: number
+          id?: number
+          monthly_operating_cents?: number
+        }
+        Update: {
+          fundraising_goal_cents?: number
+          id?: number
+          monthly_operating_cents?: number
         }
         Relationships: []
       }
@@ -159,6 +252,122 @@ export type Database = {
           },
         ]
       }
+      income: {
+        Row: {
+          amount_cents: number
+          campaign_id: string | null
+          created_at: string
+          id: string
+          invoice_id: string | null
+          memo: string | null
+          partner_id: string | null
+          received_on: string
+          sponsor_id: string | null
+          stream: string
+        }
+        Insert: {
+          amount_cents: number
+          campaign_id?: string | null
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          memo?: string | null
+          partner_id?: string | null
+          received_on?: string
+          sponsor_id?: string | null
+          stream: string
+        }
+        Update: {
+          amount_cents?: number
+          campaign_id?: string | null
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          memo?: string | null
+          partner_id?: string | null
+          received_on?: string
+          sponsor_id?: string | null
+          stream?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "income_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "income_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "income_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "income_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          amount_cents: number
+          client_name: string
+          created_at: string
+          description: string | null
+          due_on: string
+          email: string | null
+          id: string
+          issued_on: string
+          kind: string
+          number: string
+          paid_on: string | null
+          pay_url: string | null
+          status: string
+        }
+        Insert: {
+          amount_cents?: number
+          client_name: string
+          created_at?: string
+          description?: string | null
+          due_on?: string
+          email?: string | null
+          id?: string
+          issued_on?: string
+          kind?: string
+          number?: string
+          paid_on?: string | null
+          pay_url?: string | null
+          status?: string
+        }
+        Update: {
+          amount_cents?: number
+          client_name?: string
+          created_at?: string
+          description?: string | null
+          due_on?: string
+          email?: string | null
+          id?: string
+          issued_on?: string
+          kind?: string
+          number?: string
+          paid_on?: string | null
+          pay_url?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       newsletter_signups: {
         Row: {
           created_at: string
@@ -200,6 +409,115 @@ export type Database = {
           source?: string
         }
         Relationships: []
+      }
+      partners: {
+        Row: {
+          amount_cents: number
+          campaign_id: string | null
+          created_at: string
+          email: string | null
+          frequency: string
+          id: string
+          name: string
+          start_date: string
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          amount_cents?: number
+          campaign_id?: string | null
+          created_at?: string
+          email?: string | null
+          frequency?: string
+          id?: string
+          name: string
+          start_date?: string
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          campaign_id?: string | null
+          created_at?: string
+          email?: string | null
+          frequency?: string
+          id?: string
+          name?: string
+          start_date?: string
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partners_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rentals: {
+        Row: {
+          agreement_path: string | null
+          created_at: string
+          deposit_cents: number
+          deposit_paid: boolean
+          email: string | null
+          ends_at: string
+          id: string
+          invoice_id: string | null
+          notes: string | null
+          phone: string | null
+          rate_cents: number
+          rate_type: string
+          renter: string
+          starts_at: string
+          status: string
+        }
+        Insert: {
+          agreement_path?: string | null
+          created_at?: string
+          deposit_cents?: number
+          deposit_paid?: boolean
+          email?: string | null
+          ends_at: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          phone?: string | null
+          rate_cents?: number
+          rate_type?: string
+          renter: string
+          starts_at: string
+          status?: string
+        }
+        Update: {
+          agreement_path?: string | null
+          created_at?: string
+          deposit_cents?: number
+          deposit_paid?: boolean
+          email?: string | null
+          ends_at?: string
+          id?: string
+          invoice_id?: string | null
+          notes?: string | null
+          phone?: string | null
+          rate_cents?: number
+          rate_type?: string
+          renter?: string
+          starts_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rentals_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reservations: {
         Row: {
@@ -338,6 +656,96 @@ export type Database = {
           giving_enabled?: boolean
           id?: number
           merch_enabled?: boolean
+        }
+        Relationships: []
+      }
+      sponsor_deliverables: {
+        Row: {
+          clip_posted: boolean
+          created_at: string
+          episode_id: string | null
+          id: string
+          logo_shown: boolean
+          mention_made: boolean
+          notes: string | null
+          sponsor_id: string
+        }
+        Insert: {
+          clip_posted?: boolean
+          created_at?: string
+          episode_id?: string | null
+          id?: string
+          logo_shown?: boolean
+          mention_made?: boolean
+          notes?: string | null
+          sponsor_id: string
+        }
+        Update: {
+          clip_posted?: boolean
+          created_at?: string
+          episode_id?: string | null
+          id?: string
+          logo_shown?: boolean
+          mention_made?: boolean
+          notes?: string | null
+          sponsor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_deliverables_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "episodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sponsor_deliverables_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsors: {
+        Row: {
+          agreement_path: string | null
+          business: string
+          contact: string | null
+          created_at: string
+          email: string | null
+          end_date: string | null
+          id: string
+          package: string | null
+          price_cents: number
+          start_date: string | null
+          status: string
+        }
+        Insert: {
+          agreement_path?: string | null
+          business: string
+          contact?: string | null
+          created_at?: string
+          email?: string | null
+          end_date?: string | null
+          id?: string
+          package?: string | null
+          price_cents?: number
+          start_date?: string | null
+          status?: string
+        }
+        Update: {
+          agreement_path?: string | null
+          business?: string
+          contact?: string | null
+          created_at?: string
+          email?: string | null
+          end_date?: string | null
+          id?: string
+          package?: string | null
+          price_cents?: number
+          start_date?: string | null
+          status?: string
         }
         Relationships: []
       }
@@ -516,6 +924,7 @@ export type Database = {
         Args: { _direction: string; _loop: string; _reservation: string }
         Returns: undefined
       }
+      cancel_my_giving: { Args: { _partner: string }; Returns: undefined }
       cancel_reservation: { Args: { _reservation: string }; Returns: undefined }
       check_in: { Args: { _code: string }; Returns: Json }
       decide_group_request: {
