@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Generic, loosely-typed access for the admin ledger tables (all admin-only via RLS).
-type Row = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+type Row = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 type Q = { data: Row[] | null; error: { message: string } | null };
 type Builder = PromiseLike<Q> & { order: (c: string, o?: object) => Builder; eq: (c: string, v: unknown) => Builder };
 export const db = supabase as unknown as {
