@@ -17,3 +17,4 @@
 - Bookable capacity = effective_capacity() (capacity + overbook %) in SQL, mirrored by effectiveCapacity() in src/lib/show.ts — keep both in sync so the site and the seat rules agree.
 - Analytics are first-party: PageTracker in __root logs anonymous rows to page_views; only admins can read them.
 - Guest releases are signed through a public token link (/release/$token) using get_release/sign_release RPCs, so guests don't need an account.
+- Finance data (income, expenses, partners, sponsors, invoices, rentals, budgets, campaigns) is admin-only via has_role RLS; files go in the private "finance" bucket opened with signed URLs. The generic Crud component in src/components/finance drives every ledger tab.

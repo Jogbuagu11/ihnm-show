@@ -75,6 +75,7 @@ function Account() {
         </div>
         <Button variant="outline" className="rounded-full" onClick={signOut}>Sign out</Button>
       </div>
+      {user?.email && <MyGiving email={user.email} />}
 
       {data?.wait.map((w) => (
         <div key={w.id} className={`mt-6 rounded-2xl p-5 ${w.status === "offered" ? "border border-gold bg-secondary" : "bg-muted"}`}>
@@ -210,5 +211,34 @@ function TicketCard({ r, shuttle, onChange }: { r: Res; shuttle: Sb | undefined;
         </AlertDialog>
       </div>
     </div>
+  );
+}
+
+function MyGiving({ email }: { email: string }) {
+  const qc = useQueryClient();
+  const { data = [] } = useQuery({
+    queryKey: ["my-giving", email],
+    queryFn: async () => (await supabase.from("partners").select("id, amount_cents, frequency, status, start_date").ilike("email", email).neq("status", "canceled")).data ?? [],
+  });
+  if (!data.length) return null;
+  async function cancel(id: string) {
+    if (!window.confirm("Cancel this gift? You can restart any time.")) return;
+    const { error } = await supabase.rpc("cancel_my_giving", { _partner: id });
+    if (error) return toast.error(error.message);
+    toast.success("Your giving has been canceled. Thank you for your support!");
+    qc.invalidateQueries({ queryKey: ["my-giving"] });
+  }
+  return (
+    <section className="mt-8 rounded-3xl border border-gold/50 bg-secondary p-5">
+      <p className="eyebrow">My giving</p>
+      <ul className="mt-3 space-y-2">
+        {data.map((g) => (
+          <li key={g.id} className="flex items-center justify-between gap-3 text-sm">
+            <span>${(g.amount_cents / 100).toFixed(2)} {g.frequency === "monthly" ? "every month" : "one-time"} · <span className="capitalize">{g.status}</span></span>
+            {g.frequency === "monthly" && <Button size="sm" variant="outline" onClick={() => cancel(g.id)}>Cancel giving</Button>}
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
