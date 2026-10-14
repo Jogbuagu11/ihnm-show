@@ -17,10 +17,12 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FilmingConsentRouteImport } from './routes/filming-consent'
 import { Route as GiveRouteImport } from './routes/give'
+import { Route as LiveRouteImport } from './routes/live'
 import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RentRouteImport } from './routes/rent'
+import { Route as ServeRouteImport } from './routes/serve'
 import { Route as ShuttleRouteImport } from './routes/shuttle'
 import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -30,6 +32,7 @@ import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedBookingsRouteImport } from './routes/_authenticated/bookings'
 import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
 import { Route as AuthenticatedFinanceRouteImport } from './routes/_authenticated/finance'
+import { Route as AuthenticatedVolunteerRouteImport } from './routes/_authenticated/volunteer'
 import { Route as ReleaseTokenRouteImport } from './routes/release.$token'
 import { Route as TapingsIdRouteImport } from './routes/tapings.$id'
 import { Route as WatchSlugRouteImport } from './routes/watch_.$slug'
@@ -73,6 +76,11 @@ const GiveRoute = GiveRouteImport.update({
   path: '/give',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LiveRoute = LiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MerchRoute = MerchRouteImport.update({
   id: '/merch',
   path: '/merch',
@@ -91,6 +99,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const RentRoute = RentRouteImport.update({
   id: '/rent',
   path: '/rent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServeRoute = ServeRouteImport.update({
+  id: '/serve',
+  path: '/serve',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShuttleRoute = ShuttleRouteImport.update({
@@ -138,6 +151,11 @@ const AuthenticatedFinanceRoute = AuthenticatedFinanceRouteImport.update({
   path: '/finance',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedVolunteerRoute = AuthenticatedVolunteerRouteImport.update({
+  id: '/volunteer',
+  path: '/volunteer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ReleaseTokenRoute = ReleaseTokenRouteImport.update({
   id: '/release/$token',
   path: '/release/$token',
@@ -162,10 +180,12 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
+  '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
+  '/serve': typeof ServeRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
@@ -175,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/bookings': typeof AuthenticatedBookingsRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
+  '/volunteer': typeof AuthenticatedVolunteerRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
@@ -187,10 +208,12 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
+  '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
+  '/serve': typeof ServeRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
@@ -200,6 +223,7 @@ export interface FileRoutesByTo {
   '/bookings': typeof AuthenticatedBookingsRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
+  '/volunteer': typeof AuthenticatedVolunteerRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
@@ -214,10 +238,12 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
+  '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
+  '/serve': typeof ServeRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
@@ -227,6 +253,7 @@ export interface FileRoutesById {
   '/_authenticated/bookings': typeof AuthenticatedBookingsRoute
   '/_authenticated/crew': typeof AuthenticatedCrewRoute
   '/_authenticated/finance': typeof AuthenticatedFinanceRoute
+  '/_authenticated/volunteer': typeof AuthenticatedVolunteerRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch_/$slug': typeof WatchSlugRoute
@@ -241,10 +268,12 @@ export interface FileRouteTypes {
     | '/faq'
     | '/filming-consent'
     | '/give'
+    | '/live'
     | '/merch'
     | '/partner'
     | '/privacy'
     | '/rent'
+    | '/serve'
     | '/shuttle'
     | '/submit'
     | '/terms'
@@ -254,6 +283,7 @@ export interface FileRouteTypes {
     | '/bookings'
     | '/crew'
     | '/finance'
+    | '/volunteer'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
@@ -266,10 +296,12 @@ export interface FileRouteTypes {
     | '/faq'
     | '/filming-consent'
     | '/give'
+    | '/live'
     | '/merch'
     | '/partner'
     | '/privacy'
     | '/rent'
+    | '/serve'
     | '/shuttle'
     | '/submit'
     | '/terms'
@@ -279,6 +311,7 @@ export interface FileRouteTypes {
     | '/bookings'
     | '/crew'
     | '/finance'
+    | '/volunteer'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
@@ -292,10 +325,12 @@ export interface FileRouteTypes {
     | '/faq'
     | '/filming-consent'
     | '/give'
+    | '/live'
     | '/merch'
     | '/partner'
     | '/privacy'
     | '/rent'
+    | '/serve'
     | '/shuttle'
     | '/submit'
     | '/terms'
@@ -305,6 +340,7 @@ export interface FileRouteTypes {
     | '/_authenticated/bookings'
     | '/_authenticated/crew'
     | '/_authenticated/finance'
+    | '/_authenticated/volunteer'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch_/$slug'
@@ -319,10 +355,12 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   FilmingConsentRoute: typeof FilmingConsentRoute
   GiveRoute: typeof GiveRoute
+  LiveRoute: typeof LiveRoute
   MerchRoute: typeof MerchRoute
   PartnerRoute: typeof PartnerRoute
   PrivacyRoute: typeof PrivacyRoute
   RentRoute: typeof RentRoute
+  ServeRoute: typeof ServeRoute
   ShuttleRoute: typeof ShuttleRoute
   SubmitRoute: typeof SubmitRoute
   TermsRoute: typeof TermsRoute
@@ -391,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/live': {
+      id: '/live'
+      path: '/live'
+      fullPath: '/live'
+      preLoaderRoute: typeof LiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/merch': {
       id: '/merch'
       path: '/merch'
@@ -417,6 +462,13 @@ declare module '@tanstack/react-router' {
       path: '/rent'
       fullPath: '/rent'
       preLoaderRoute: typeof RentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/serve': {
+      id: '/serve'
+      path: '/serve'
+      fullPath: '/serve'
+      preLoaderRoute: typeof ServeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shuttle': {
@@ -482,6 +534,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFinanceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/volunteer': {
+      id: '/_authenticated/volunteer'
+      path: '/volunteer'
+      fullPath: '/volunteer'
+      preLoaderRoute: typeof AuthenticatedVolunteerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/release/$token': {
       id: '/release/$token'
       path: '/release/$token'
@@ -511,6 +570,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBookingsRoute: typeof AuthenticatedBookingsRoute
   AuthenticatedCrewRoute: typeof AuthenticatedCrewRoute
   AuthenticatedFinanceRoute: typeof AuthenticatedFinanceRoute
+  AuthenticatedVolunteerRoute: typeof AuthenticatedVolunteerRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -518,6 +578,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBookingsRoute: AuthenticatedBookingsRoute,
   AuthenticatedCrewRoute: AuthenticatedCrewRoute,
   AuthenticatedFinanceRoute: AuthenticatedFinanceRoute,
+  AuthenticatedVolunteerRoute: AuthenticatedVolunteerRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -532,10 +593,12 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   FilmingConsentRoute: FilmingConsentRoute,
   GiveRoute: GiveRoute,
+  LiveRoute: LiveRoute,
   MerchRoute: MerchRoute,
   PartnerRoute: PartnerRoute,
   PrivacyRoute: PrivacyRoute,
   RentRoute: RentRoute,
+  ServeRoute: ServeRoute,
   ShuttleRoute: ShuttleRoute,
   SubmitRoute: SubmitRoute,
   TermsRoute: TermsRoute,
