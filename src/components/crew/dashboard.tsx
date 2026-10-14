@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Taping } from "@/lib/queries";
+import { effectiveCapacity } from "@/lib/show";
 
 export function useTapingData(tapingId: string) {
   return useQuery({
     queryKey: ["crew", "taping", tapingId],
     queryFn: async () => {
-      const [r, w, s] = await Promise.all([
+      const [r, w, s, f] = await Promise.all([
         supabase.from("reservations").select("*").eq("taping_id", tapingId).order("full_name"),
         supabase.from("waitlist").select("*").eq("taping_id", tapingId).order("created_at"),
         supabase.from("shuttle_bookings").select("*, reservation:reservations(full_name, email, status)").eq("taping_id", tapingId).neq("status", "cancelled"),
+        supabase.rpc("flagged_attendees", { _taping: tapingId }),
       ]);
-      return { res: r.data ?? [], wait: w.data ?? [], shuttles: s.data ?? [] };
+      return { res: r.data ?? [], wait: w.data ?? [], shuttles: s.data ?? [], flagged: new Set((f.data ?? []).map((x) => x.user_id)) };
     },
   });
 }
@@ -19,12 +21,14 @@ export function useTapingData(tapingId: string) {
 export function Dashboard({ taping }: { taping: Taping }) {
   const { data } = useTapingData(taping.id);
   if (!data) return <p className="py-6 text-muted-foreground">Loading…</p>;
-  const active = data.res.filter((r) => r.status !== "cancelled");
+  const active = data.res.filter((r) => r.status !== "cancelled" && r.status !== "no_show");
   const seats = active.reduce((a, r) => a + r.seats, 0);
   const checked = active.filter((r) => r.status === "checked_in").reduce((a, r) => a + r.seats, 0);
   const vip = active.filter((r) => r.ticket_type === "vip").reduce((a, r) => a + r.seats, 0);
   const stats = [
-    { l: "Reserved", v: `${seats}/${taping.capacity}` },
+    { l: "Reserved", v: `${seats}/${effectiveCapacity(taping.capacity, taping.overbook_pct)}` },
+    { l: "Accessible seats", v: active.filter((r) => r.accessible_seating).length },
+    { l: "No-shows", v: data.res.filter((r) => r.status === "no_show").length },
     { l: "Waitlist", v: data.wait.filter((w) => w.status !== "claimed").length },
     { l: "VIP sales", v: `${vip} · $${((vip * taping.vip_price_cents) / 100).toFixed(0)}` },
     { l: "Checked in", v: checked },
@@ -32,7 +36,7 @@ export function Dashboard({ taping }: { taping: Taping }) {
   ];
   return (
     <div className="space-y-8 py-4">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((s) => (
           <div key={s.l} className="rounded-2xl bg-secondary p-4">
             <p className="text-xs text-muted-foreground">{s.l}</p>
@@ -46,7 +50,7 @@ export function Dashboard({ taping }: { taping: Taping }) {
           <ul className="mt-3 divide-y rounded-2xl border bg-card">
             {data.res.map((r) => (
               <li key={r.id} className="flex items-center justify-between gap-2 p-3 text-sm">
-                <span><span className="font-semibold">{r.full_name}</span> <span className="text-muted-foreground">· {r.ticket_type} · {r.seats}</span>{r.question && <span className="block text-xs text-muted-foreground">Q: {r.question}</span>}</span>
+                <span><span className="font-semibold">{r.full_name}</span> <span className="text-muted-foreground">· {r.ticket_type} · {r.seats}</span>{data.flagged.has(r.user_id) && <span className="ml-1 rounded-full bg-destructive/15 px-2 py-0.5 text-xs font-semibold text-destructive">Repeat no-show</span>}{r.accessible_seating && <span className="ml-1 rounded-full bg-secondary px-2 py-0.5 text-xs font-semibold">♿ Accessible</span>}{r.minor_names.length > 0 && <span className="block text-xs text-muted-foreground">Minors: {r.minor_names.join(", ")}</span>}{r.question && <span className="block text-xs text-muted-foreground">Q: {r.question}</span>}</span>
                 <span className={`rounded-full px-2 py-0.5 text-xs ${r.status === "checked_in" ? "bg-success/15 text-success" : r.status === "cancelled" ? "bg-muted text-muted-foreground" : "bg-blush text-blush-foreground"}`}>{r.status.replace("_", " ")}</span>
               </li>
             ))}

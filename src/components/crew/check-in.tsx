@@ -50,6 +50,13 @@ export function CheckIn({ taping }: { taping: Taping }) {
   }
   useEffect(() => () => { scannerRef.current?.stop().catch(() => {}); }, []);
 
+  async function noShow(id: string, undo = false) {
+    const { error } = await supabase.rpc("mark_no_show", { _reservation: id, _undo: undo });
+    if (error) return toast.error(error.message);
+    toast.success(undo ? "No-show undone" : "Marked as no-show");
+    refetch();
+  }
+  const pending = (data?.res ?? []).filter((r) => r.status === "confirmed" || r.status === "no_show");
   const matches = (data?.res ?? []).filter((r) => r.status !== "cancelled" && q.length > 1 && (r.full_name + r.email).toLowerCase().includes(q.toLowerCase()));
 
   return (
@@ -72,6 +79,21 @@ export function CheckIn({ taping }: { taping: Taping }) {
               {r.status === "checked_in" ? <span className="text-success">Checked in</span> : <Button size="sm" variant="pill" onClick={() => checkIn(r.qr_code)}>Check in</Button>}
             </li>
           ))}
+        </ul>
+      </div>
+      <div className="rounded-3xl border bg-card p-5 md:col-span-2">
+        <h3 className="text-xl font-semibold">Not checked in</h3>
+        <p className="text-sm text-muted-foreground">After doors close, mark anyone who didn't come. Two or more no-shows limits a guest to one reservation at a time.</p>
+        <ul className="mt-3 divide-y">
+          {pending.map((r) => (
+            <li key={r.id} className="flex items-center justify-between py-2 text-sm">
+              <span><span className="font-semibold">{r.full_name}</span> · {r.seats} seat{r.seats > 1 ? "s" : ""}</span>
+              {r.status === "no_show"
+                ? <Button size="sm" variant="ghost" onClick={() => noShow(r.id, true)}>Undo no-show</Button>
+                : <Button size="sm" variant="outline" onClick={() => noShow(r.id)}>Mark no-show</Button>}
+            </li>
+          ))}
+          {pending.length === 0 && <li className="py-2 text-sm text-muted-foreground">Everyone is checked in.</li>}
         </ul>
       </div>
     </div>

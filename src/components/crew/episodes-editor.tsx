@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const blank = { title: "", kind: "episode" as "episode" | "sitdown" | "special", youtube_url: "", guests: "", tags: "", description: "", aired_on: new Date().toISOString().slice(0, 10), thumbnail: "studio" };
+const blank = { title: "", kind: "episode" as "episode" | "sitdown" | "special", youtube_url: "", guests: "", tags: "", description: "", aired_on: new Date().toISOString().slice(0, 10), thumbnail: "studio", sponsor_name: "", sponsor_logo_url: "", sponsor_url: "" };
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 80);
 
 export function EpisodesEditor() {
@@ -24,11 +24,22 @@ export function EpisodesEditor() {
     const { error } = await supabase.from("episodes").insert({
       slug: `${slugify(f.title)}-${Date.now().toString(36).slice(-4)}`, title: f.title.trim(), kind: f.kind,
       youtube_url: f.youtube_url.trim() || null, description: f.description.trim() || null, aired_on: f.aired_on, thumbnail: f.thumbnail,
+      sponsor_name: f.sponsor_name.trim() || null, sponsor_logo_url: f.sponsor_logo_url.trim() || null, sponsor_url: f.sponsor_url.trim() || null,
       guests: f.guests.split(",").map((x) => x.trim()).filter(Boolean), tags: f.tags.split(",").map((x) => x.trim()).filter(Boolean),
     });
     if (error) return toast.error(error.message);
     toast.success("Episode added");
     setF(blank);
+    qc.invalidateQueries({ queryKey: ["episodes"] });
+  }
+  async function editSponsor(id: string, current: string | null) {
+    const name = window.prompt("Sponsor name (leave empty to remove)", current ?? "");
+    if (name === null) return;
+    const logo = name.trim() ? window.prompt("Sponsor logo image URL (optional)", "") : "";
+    const url = name.trim() ? window.prompt("Sponsor website (optional)", "") : "";
+    const { error } = await supabase.from("episodes").update({ sponsor_name: name.trim() || null, sponsor_logo_url: logo?.trim() || null, sponsor_url: url?.trim() || null }).eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Sponsor updated");
     qc.invalidateQueries({ queryKey: ["episodes"] });
   }
   async function remove(id: string) {
@@ -62,13 +73,21 @@ export function EpisodesEditor() {
           <div><Label>Topic tags (comma separated)</Label><Input value={f.tags} onChange={(e) => setF({ ...f, tags: e.target.value })} /></div>
         </div>
         <div><Label>Description</Label><Textarea value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} maxLength={2000} /></div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div><Label>Sponsor name</Label><Input value={f.sponsor_name} onChange={(e) => setF({ ...f, sponsor_name: e.target.value })} maxLength={100} /></div>
+          <div><Label>Sponsor logo URL</Label><Input value={f.sponsor_logo_url} onChange={(e) => setF({ ...f, sponsor_logo_url: e.target.value })} /></div>
+          <div><Label>Sponsor website</Label><Input value={f.sponsor_url} onChange={(e) => setF({ ...f, sponsor_url: e.target.value })} /></div>
+        </div>
         <Button variant="gold">Add to catalogue</Button>
       </form>
       <ul className="space-y-2">
         {data.map((e) => (
           <li key={e.id} className="flex items-center justify-between rounded-2xl bg-secondary p-3 text-sm">
             <span><span className="font-semibold">{e.title}</span><span className="block text-xs text-muted-foreground">{kindLabel[e.kind]} · {e.aired_on}</span></span>
-            <Button size="sm" variant="ghost" className="text-destructive" onClick={() => remove(e.id)}>Remove</Button>
+            <span className="flex gap-1">
+              <Button size="sm" variant="outline" onClick={() => editSponsor(e.id, e.sponsor_name)}>Sponsor</Button>
+              <Button size="sm" variant="ghost" className="text-destructive" onClick={() => remove(e.id)}>Remove</Button>
+            </span>
           </li>
         ))}
       </ul>

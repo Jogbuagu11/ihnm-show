@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Taping } from "@/lib/queries";
-import { fmtShortDate, TZ } from "@/lib/show";
+import { fmtShortDate, TZ, effectiveCapacity } from "@/lib/show";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +26,7 @@ function isoToPacific(iso: string) {
 const blank = {
   id: "", theme: "", description: "", starts: "", guests: "", capacity: 20, vip_seats: 4, vip_price: 20, group_enabled: true,
   shuttle_start: "18:00", shuttle_end: "18:45", shuttle_interval_min: 15, shuttle_seats_per_loop: 7,
+  overbook_pct: 30, sponsor_name: "", sponsor_logo_url: "", sponsor_url: "",
 };
 
 export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
@@ -39,6 +40,7 @@ export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
       id: t.id, theme: t.theme, description: t.description ?? "", starts: isoToPacific(t.starts_at), guests: t.guests.join(", "),
       capacity: t.capacity, vip_seats: t.vip_seats, vip_price: t.vip_price_cents / 100, group_enabled: t.group_enabled,
       shuttle_start: t.shuttle_start.slice(0, 5), shuttle_end: t.shuttle_end.slice(0, 5), shuttle_interval_min: t.shuttle_interval_min, shuttle_seats_per_loop: t.shuttle_seats_per_loop,
+      overbook_pct: t.overbook_pct, sponsor_name: t.sponsor_name ?? "", sponsor_logo_url: t.sponsor_logo_url ?? "", sponsor_url: t.sponsor_url ?? "",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -51,6 +53,7 @@ export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
       guests: f.guests.split(",").map((g) => g.trim()).filter(Boolean),
       capacity: f.capacity, vip_seats: f.vip_seats, vip_price_cents: Math.round(f.vip_price * 100), group_enabled: f.group_enabled,
       shuttle_start: f.shuttle_start, shuttle_end: f.shuttle_end, shuttle_interval_min: f.shuttle_interval_min, shuttle_seats_per_loop: f.shuttle_seats_per_loop,
+      overbook_pct: f.overbook_pct, sponsor_name: f.sponsor_name.trim() || null, sponsor_logo_url: f.sponsor_logo_url.trim() || null, sponsor_url: f.sponsor_url.trim() || null,
     };
     const { error } = f.id ? await supabase.from("tapings").update(row).eq("id", f.id) : await supabase.from("tapings").insert(row);
     if (error) return toast.error(error.message);
@@ -74,6 +77,8 @@ export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
           <div><Label>VIP seats</Label><Input type="number" min={0} value={f.vip_seats} onChange={set("vip_seats")} /></div>
           <div><Label>VIP price $</Label><Input type="number" min={0} value={f.vip_price} onChange={set("vip_price")} /></div>
         </div>
+        <div><Label>Over-booking (% extra free tickets)</Label><Input type="number" min={0} max={100} value={f.overbook_pct} onChange={set("overbook_pct")} />
+          <p className="mt-1 text-xs text-muted-foreground">Covers no-shows. {f.capacity} seats + {f.overbook_pct}% = {effectiveCapacity(f.capacity, f.overbook_pct)} tickets.</p></div>
         <Label className="flex items-center gap-3"><Switch checked={f.group_enabled} onCheckedChange={(v) => setF({ ...f, group_enabled: v })} /> Accept church group requests</Label>
         <p className="eyebrow pt-2">Shuttle loops</p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -81,6 +86,12 @@ export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
           <div><Label>Last</Label><Input type="time" value={f.shuttle_end} onChange={set("shuttle_end")} /></div>
           <div><Label>Every (min)</Label><Input type="number" min={5} value={f.shuttle_interval_min} onChange={set("shuttle_interval_min")} /></div>
           <div><Label>Seats/loop</Label><Input type="number" min={1} value={f.shuttle_seats_per_loop} onChange={set("shuttle_seats_per_loop")} /></div>
+        </div>
+        <p className="eyebrow pt-2">Sponsor (optional)</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div><Label>Sponsor name</Label><Input value={f.sponsor_name} onChange={set("sponsor_name")} maxLength={100} /></div>
+          <div><Label>Logo image URL</Label><Input value={f.sponsor_logo_url} onChange={set("sponsor_logo_url")} placeholder="https://…" /></div>
+          <div><Label>Website</Label><Input value={f.sponsor_url} onChange={set("sponsor_url")} placeholder="https://…" /></div>
         </div>
         <div className="flex gap-2">
           <Button variant="gold">{f.id ? "Save changes" : "Create taping"}</Button>
