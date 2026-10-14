@@ -12,7 +12,8 @@ const links = [
 ] as const;
 
 export function SiteHeader() {
-  const { user, isStaff } = useAuth();
+  const { user, isStaff, roles } = useAuth();
+  const isAdmin = roles.includes("admin");
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-gold/30 bg-stage/95 text-stage-foreground backdrop-blur">
@@ -27,6 +28,7 @@ export function SiteHeader() {
             </Link>
           ))}
           {isStaff && <Link to="/crew" className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/90 hover:text-gold">Crew</Link>}
+          {isAdmin && <Link to="/finance" className="font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/90 hover:text-gold">Finance</Link>}
           <Button asChild variant="gold" size="sm" className="h-9 px-4">
             <Link to={user ? "/account" : "/auth"}>{user ? "My Tickets" : "Sign in"}</Link>
           </Button>
@@ -41,6 +43,7 @@ export function SiteHeader() {
             <Link key={l.to} to={l.to} className="rounded-lg px-3 py-2 font-medium hover:text-gold">{l.label}</Link>
           ))}
           {isStaff && <Link to="/crew" className="rounded-lg px-3 py-2 font-medium hover:text-gold">Crew Portal</Link>}
+          {isAdmin && <Link to="/finance" className="rounded-lg px-3 py-2 font-medium hover:text-gold">Finance</Link>}
           <Link to={user ? "/account" : "/auth"} className="rounded-lg px-3 py-2 font-semibold italic text-gold">
             {user ? "My Tickets" : "Sign in"}
           </Link>

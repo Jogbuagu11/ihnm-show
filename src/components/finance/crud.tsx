@@ -129,9 +129,9 @@ export function Crud({ table, title, fields, columns, actions, order }: {
                   <>
                     <Label htmlFor={idf}>{fd.label}{fd.type === "money" && " ($)"}</Label>
                     {fd.type === "select" ? (
-                      <Select value={String(f[fd.k] ?? "")} onValueChange={(v) => setF({ ...f, [fd.k]: v })}>
+                      <Select value={String(f[fd.k] || "_none")} onValueChange={(v) => setF({ ...f, [fd.k]: v === "_none" ? "" : v })}>
                         <SelectTrigger id={idf}><SelectValue /></SelectTrigger>
-                        <SelectContent>{fd.options?.map((o) => <SelectItem key={optVal(o)} value={optVal(o)} className="capitalize">{optLabel(o).replace(/_/g, " ")}</SelectItem>)}</SelectContent>
+                        <SelectContent>{fd.options?.map((o) => <SelectItem key={optVal(o) || "_none"} value={optVal(o) || "_none"} className="capitalize">{optLabel(o).replace(/_/g, " ")}</SelectItem>)}</SelectContent>
                       </Select>
                     ) : fd.type === "textarea" ? (
                       <Textarea {...common} maxLength={2000} />

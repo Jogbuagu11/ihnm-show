@@ -1,3 +1,8 @@
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
 import { createFileRoute } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { EXPENSE_CATEGORIES, STREAMS, invoiceStatus, monthKey, needsRenewal, sumWhere, usd } from "@/lib/finance";
@@ -60,11 +65,15 @@ function useOpts(table: string, label: string) {
 
 function IncomeTab() {
   const campaigns = useOpts("campaigns", "name");
+  const partners = useOpts("partners", "name");
+  const sponsors = useOpts("sponsors", "business");
   const fields: Field[] = [
     { k: "stream", label: "Stream", type: "select", options: streamOpts },
     { k: "amount_cents", label: "Amount", type: "money", required: true },
     { k: "received_on", label: "Received", type: "date", def: new Date().toISOString().slice(0, 10) },
     { k: "campaign_id", label: "Campaign", type: "select", options: campaigns },
+    { k: "partner_id", label: "Partner (for donations)", type: "select", options: partners },
+    { k: "sponsor_id", label: "Sponsor", type: "select", options: sponsors },
     { k: "memo", label: "Memo (e.g. YouTube payout, merch sale)", wide: true },
   ];
   return <Crud table="income" title="income" order="received_on" fields={fields} columns={(r) => <><span className="font-semibold">{usd(r.amount_cents)}</span> · {STREAMS[r.stream as keyof typeof STREAMS] ?? r.stream}<span className="block text-xs text-muted-foreground">{d(r.received_on)}{r.memo ? ` · ${r.memo}` : ""}</span></>} />;
@@ -206,11 +215,6 @@ function BudgetEditor({ budgets }: { budgets: any[] }) {
     </ul>
   );
 }
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/components/ui/input";
 function BudgetRow({ category, cents }: { category: string; cents: number }) {
   const qc = useQueryClient();
   const [v, setV] = useState(String(cents / 100));

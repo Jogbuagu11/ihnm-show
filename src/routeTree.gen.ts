@@ -23,6 +23,7 @@ import { Route as TicketsRouteImport } from './routes/tickets'
 import { Route as WatchRouteImport } from './routes/watch'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
+import { Route as AuthenticatedFinanceRouteImport } from './routes/_authenticated/finance'
 import { Route as ReleaseTokenRouteImport } from './routes/release.$token'
 import { Route as TapingsIdRouteImport } from './routes/tapings.$id'
 import { Route as WatchSlugRouteImport } from './routes/watch_.$slug'
@@ -96,6 +97,11 @@ const AuthenticatedCrewRoute = AuthenticatedCrewRouteImport.update({
   path: '/crew',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFinanceRoute = AuthenticatedFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ReleaseTokenRoute = ReleaseTokenRouteImport.update({
   id: '/release/$token',
   path: '/release/$token',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
   '/crew': typeof AuthenticatedCrewRoute
+  '/finance': typeof AuthenticatedFinanceRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
   '/crew': typeof AuthenticatedCrewRoute
+  '/finance': typeof AuthenticatedFinanceRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/watch': typeof WatchRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/crew': typeof AuthenticatedCrewRoute
+  '/_authenticated/finance': typeof AuthenticatedFinanceRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch_/$slug': typeof WatchSlugRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/watch'
     | '/account'
     | '/crew'
+    | '/finance'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/watch'
     | '/account'
     | '/crew'
+    | '/finance'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/watch'
     | '/_authenticated/account'
     | '/_authenticated/crew'
+    | '/_authenticated/finance'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch_/$slug'
@@ -344,6 +356,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCrewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/finance': {
+      id: '/_authenticated/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof AuthenticatedFinanceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/release/$token': {
       id: '/release/$token'
       path: '/release/$token'
@@ -371,11 +390,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedCrewRoute: typeof AuthenticatedCrewRoute
+  AuthenticatedFinanceRoute: typeof AuthenticatedFinanceRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedCrewRoute: AuthenticatedCrewRoute,
+  AuthenticatedFinanceRoute: AuthenticatedFinanceRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
