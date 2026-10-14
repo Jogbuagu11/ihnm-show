@@ -24,6 +24,7 @@ import { Route as WatchRouteImport } from './routes/watch'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
 import { Route as ReleaseTokenRouteImport } from './routes/release.$token'
+import { Route as TapingsIdRouteImport } from './routes/tapings.$id'
 import { Route as WatchSlugRouteImport } from './routes/watch_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -100,6 +101,11 @@ const ReleaseTokenRoute = ReleaseTokenRouteImport.update({
   path: '/release/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TapingsIdRoute = TapingsIdRouteImport.update({
+  id: '/tapings/$id',
+  path: '/tapings/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WatchSlugRoute = WatchSlugRouteImport.update({
   id: '/watch_/$slug',
   path: '/watch/$slug',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AuthenticatedAccountRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/release/$token': typeof ReleaseTokenRoute
+  '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
 }
 export interface FileRoutesByTo {
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/account': typeof AuthenticatedAccountRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/release/$token': typeof ReleaseTokenRoute
+  '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
 }
 export interface FileRoutesById {
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/crew': typeof AuthenticatedCrewRoute
   '/release/$token': typeof ReleaseTokenRoute
+  '/tapings/$id': typeof TapingsIdRoute
   '/watch_/$slug': typeof WatchSlugRoute
 }
 export interface FileRouteTypes {
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/crew'
     | '/release/$token'
+    | '/tapings/$id'
     | '/watch/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/crew'
     | '/release/$token'
+    | '/tapings/$id'
     | '/watch/$slug'
   id:
     | '__root__'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/_authenticated/account'
     | '/_authenticated/crew'
     | '/release/$token'
+    | '/tapings/$id'
     | '/watch_/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   TicketsRoute: typeof TicketsRoute
   WatchRoute: typeof WatchRoute
   ReleaseTokenRoute: typeof ReleaseTokenRoute
+  TapingsIdRoute: typeof TapingsIdRoute
   WatchSlugRoute: typeof WatchSlugRoute
 }
 
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReleaseTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tapings/$id': {
+      id: '/tapings/$id'
+      path: '/tapings/$id'
+      fullPath: '/tapings/$id'
+      preLoaderRoute: typeof TapingsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/watch_/$slug': {
       id: '/watch_/$slug'
       path: '/watch/$slug'
@@ -375,6 +395,7 @@ const rootRouteChildren: RootRouteChildren = {
   TicketsRoute: TicketsRoute,
   WatchRoute: WatchRoute,
   ReleaseTokenRoute: ReleaseTokenRoute,
+  TapingsIdRoute: TapingsIdRoute,
   WatchSlugRoute: WatchSlugRoute,
 }
 export const routeTree = rootRouteImport
