@@ -75,6 +75,7 @@ function Account() {
         </div>
         <Button variant="outline" className="rounded-full" onClick={signOut}>Sign out</Button>
       </div>
+      {user?.email && <MyGiving email={user.email} />}
 
       {data?.wait.map((w) => (
         <div key={w.id} className={`mt-6 rounded-2xl p-5 ${w.status === "offered" ? "border border-gold bg-secondary" : "bg-muted"}`}>
@@ -213,11 +214,11 @@ function TicketCard({ r, shuttle, onChange }: { r: Res; shuttle: Sb | undefined;
   );
 }
 
-function MyGiving() {
+function MyGiving({ email }: { email: string }) {
   const qc = useQueryClient();
   const { data = [] } = useQuery({
-    queryKey: ["my-giving"],
-    queryFn: async () => (await supabase.from("partners").select("id, amount_cents, frequency, status, start_date").neq("status", "canceled")).data ?? [],
+    queryKey: ["my-giving", email],
+    queryFn: async () => (await supabase.from("partners").select("id, amount_cents, frequency, status, start_date").ilike("email", email).neq("status", "canceled")).data ?? [],
   });
   if (!data.length) return null;
   async function cancel(id: string) {
