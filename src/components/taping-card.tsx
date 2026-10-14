@@ -1,5 +1,7 @@
 import type { TapingWithAvail } from "@/lib/queries";
-import { LOCATION, TZ, fmtTime } from "@/lib/show";
+import { Link } from "@tanstack/react-router";
+import { LOCATION, TZ, fmtTime, effectiveCapacity } from "@/lib/show";
+import { SponsorSlot } from "@/components/sponsor-slot";
 import { Button } from "@/components/ui/button";
 import { ReserveDialog } from "@/components/reserve-dialog";
 
@@ -9,7 +11,8 @@ export function TapingCard({ t, featured = false }: { t: TapingWithAvail; featur
   const month = d.toLocaleDateString("en-US", { month: "short", timeZone: TZ });
   const day = d.toLocaleDateString("en-US", { day: "numeric", timeZone: TZ });
   const wk = d.toLocaleDateString("en-US", { weekday: "long", timeZone: TZ });
-  const pct = Math.round(((t.capacity - left) / t.capacity) * 100);
+  const cap = effectiveCapacity(t.capacity, t.overbook_pct);
+  const pct = Math.round(((cap - left) / cap) * 100);
   return (
     <article className={`relative overflow-hidden rounded-3xl border bg-card ${featured ? "border-gold shadow-glow" : "border-border shadow-soft"}`}>
       <div className="flex">
@@ -20,16 +23,17 @@ export function TapingCard({ t, featured = false }: { t: TapingWithAvail; featur
         </div>
         <div className="flex-1 p-6">
           <p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">{fmtTime(t.starts_at)} · {LOCATION}</p>
-          <h3 className="mt-2 text-3xl leading-tight">{t.theme}</h3>
+          <h3 className="mt-2 text-3xl leading-tight"><Link to="/tapings/$id" params={{ id: t.id }} className="hover:text-walnut">{t.theme}</Link></h3>
           {t.description && <p className="mt-2 text-sm text-muted-foreground">{t.description}</p>}
           <p className="mt-3 text-sm"><span className="font-display italic text-walnut">with</span> {t.guests.join(", ")}</p>
+          <div className="mt-3"><SponsorSlot s={t} label="Supported by" compact /></div>
         </div>
       </div>
       <div className="flex items-center justify-between gap-4 border-t border-border p-5">
         <div className="flex-1">
           <div className="flex items-baseline gap-2">
             <span className={`font-display text-4xl ${left === 0 ? "text-destructive" : "text-walnut"}`}>{left}</span>
-            <span className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">of {t.capacity} seats left</span>
+            <span className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">of {cap} tickets left</span>
           </div>
           <div className="mt-2 h-1 max-w-48 overflow-hidden rounded-full bg-muted">
             <div className="h-full bg-gold-gradient" style={{ width: `${pct}%` }} />

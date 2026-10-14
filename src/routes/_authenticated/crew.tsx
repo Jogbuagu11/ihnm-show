@@ -13,6 +13,8 @@ import { GroupRequests } from "@/components/crew/group-requests";
 import { SubmissionsQueue } from "@/components/crew/submissions";
 import { TapingsEditor } from "@/components/crew/tapings-editor";
 import { EpisodesEditor } from "@/components/crew/episodes-editor";
+import { Releases } from "@/components/crew/releases";
+import { Analytics } from "@/components/crew/analytics";
 
 export const Route = createFileRoute("/_authenticated/crew")({
   head: () => ({
@@ -70,18 +72,22 @@ function Crew() {
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="checkin">Check-in</TabsTrigger>
           <TabsTrigger value="shuttle">Shuttle</TabsTrigger>
+          <TabsTrigger value="releases">Releases</TabsTrigger>
           <TabsTrigger value="groups">Groups</TabsTrigger>
           <TabsTrigger value="submissions">Submissions</TabsTrigger>
           <TabsTrigger value="tapings">Tapings</TabsTrigger>
           <TabsTrigger value="episodes">Episodes</TabsTrigger>
+          {roles.includes("admin") && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
         </TabsList>
         <TabsContent value="dashboard">{taping && <Dashboard taping={taping} />}</TabsContent>
         <TabsContent value="checkin">{taping && <CheckIn taping={taping} />}</TabsContent>
         <TabsContent value="shuttle">{taping && <ShuttleManifest taping={taping} />}</TabsContent>
+        <TabsContent value="releases">{taping && <Releases taping={taping} />}</TabsContent>
         <TabsContent value="groups"><GroupRequests /></TabsContent>
         <TabsContent value="submissions"><SubmissionsQueue tapings={tapings} /></TabsContent>
         <TabsContent value="tapings"><TapingsEditor tapings={tapings} /></TabsContent>
         <TabsContent value="episodes"><EpisodesEditor /></TabsContent>
+        {roles.includes("admin") && <TabsContent value="analytics"><Analytics /></TabsContent>}
       </Tabs>
     </div>
   );

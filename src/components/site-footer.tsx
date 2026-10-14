@@ -5,11 +5,15 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { LOCATION } from "@/lib/show";
+import { siteSettingsQuery } from "@/lib/settings";
 
 export function SiteFooter() {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
+  const { data: settings } = useQuery(siteSettingsQuery);
   async function join(e: React.FormEvent) {
     e.preventDefault();
     const parsed = z.string().trim().email().max(255).safeParse(email);
@@ -54,7 +58,14 @@ export function SiteFooter() {
           </div>
         </form>
       </div>
-      <p className="pb-8 text-center text-xs opacity-60">© {new Date().getFullYear()} IHNM Show</p>
+      <nav aria-label="Legal and more" className="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-6 gap-y-2 px-4 pb-4 font-mono text-[0.7rem] uppercase tracking-[0.2em]">
+        <Link to="/terms" className="hover:text-gold">Terms</Link>
+        <Link to="/privacy" className="hover:text-gold">Privacy Policy</Link>
+        <Link to="/filming-consent" className="hover:text-gold">Audience Filming Consent</Link>
+        {settings?.giving_enabled && <Link to="/give" className="hover:text-gold">Partner Giving</Link>}
+        {settings?.merch_enabled && <Link to="/merch" className="hover:text-gold">Merch</Link>}
+      </nav>
+      <p className="pb-8 text-center text-xs text-stage-foreground/80">© {new Date().getFullYear()} IHNM Show</p>
     </footer>
   );
 }

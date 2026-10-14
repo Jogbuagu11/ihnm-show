@@ -33,6 +33,9 @@ export function ReserveDialog({ taping, trigger }: { taping: TapingWithAvail; tr
   const [name, setName] = useState("");
   const [question, setQuestion] = useState("");
   const [consent, setConsent] = useState(false);
+  const [hasMinors, setHasMinors] = useState(false);
+  const [minors, setMinors] = useState<string[]>([""]);
+  const [accessible, setAccessible] = useState(false);
   const [busy, setBusy] = useState(false);
   const [g, setG] = useState({ church_name: "", contact_name: "", phone: "", seats: 6, notes: "" });
   const full = taping.avail.seats_left <= 0;
@@ -51,8 +54,10 @@ export function ReserveDialog({ taping, trigger }: { taping: TapingWithAvail; tr
         toast.success("Group request sent! We'll confirm once a producer approves it.");
       } else {
         if (!name.trim()) throw new Error("Please enter your name");
+        if (hasMinors && !minors.some((m) => m.trim())) throw new Error("Please list the name of each attendee under 18");
         const { data, error } = await supabase.rpc("reserve_seat", {
           _taping: taping.id, _name: name.trim(), _email: user.email ?? "", _question: question.trim(), _consent: consent,
+          _minors: hasMinors ? minors.map((m) => m.trim()).filter(Boolean) : [], _accessible: accessible,
         });
         if (error) throw error;
         const res = data as { status: string };
@@ -114,12 +119,33 @@ export function ReserveDialog({ taping, trigger }: { taping: TapingWithAvail; tr
                   <Label>Submit a question or story for this episode <span className="text-muted-foreground">(optional)</span></Label>
                   <Textarea value={question} onChange={(e) => setQuestion(e.target.value)} maxLength={2000} />
                 </div>
+                <div className="rounded-xl border p-3">
+                  <p className="text-sm font-semibold">Are any attendees under 18?</p>
+                  <RadioGroup value={hasMinors ? "yes" : "no"} onValueChange={(v) => setHasMinors(v === "yes")} className="mt-2 flex gap-4">
+                    <Label className="flex items-center gap-2 font-normal"><RadioGroupItem value="no" /> No</Label>
+                    <Label className="flex items-center gap-2 font-normal"><RadioGroupItem value="yes" /> Yes</Label>
+                  </RadioGroup>
+                  {hasMinors && (
+                    <div className="mt-3 space-y-2">
+                      <p className="text-xs text-muted-foreground">Minors must be listed on your adult ticket and stay with you. Each adds a seat (up to 4).</p>
+                      {minors.map((m, i) => (
+                        <Input key={i} aria-label={`Minor ${i + 1} full name`} placeholder={`Minor ${i + 1} full name`} value={m} maxLength={100}
+                          onChange={(e) => setMinors(minors.map((x, j) => (j === i ? e.target.value : x)))} />
+                      ))}
+                      {minors.length < 4 && <Button type="button" size="sm" variant="outline" onClick={() => setMinors([...minors, ""])}>Add another minor</Button>}
+                    </div>
+                  )}
+                </div>
+                <Label className="flex items-start gap-3 rounded-xl border p-3 text-sm font-normal">
+                  <Checkbox checked={accessible} onCheckedChange={(v) => setAccessible(v === true)} className="mt-0.5" />
+                  <span><span className="font-semibold">I need accessible seating</span><span className="block text-xs text-muted-foreground">Wheelchair space, step-free access or an aisle seat — our crew will save it for you.</span></span>
+                </Label>
               </div>
             )}
 
             <Label className="flex items-start gap-3 rounded-xl bg-muted p-3 text-sm font-normal leading-snug">
               <Checkbox checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" />
-              I agree to be filmed and recorded as part of the studio audience, and that footage may appear in IHNM Show broadcasts and online.
+              I agree to be filmed and recorded as part of the studio audience, and that footage may appear in IHNM Show broadcasts and online (<Link to="/filming-consent" target="_blank" className="underline">read the consent</Link>).
             </Label>
             <Button type="submit" variant="gold" size="lg" className="w-full" disabled={busy || !consent}>
               {type === "group" ? "Send group request" : full ? "Join waitlist" : "Reserve my seat"}

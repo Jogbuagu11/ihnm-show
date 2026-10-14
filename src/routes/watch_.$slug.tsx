@@ -2,14 +2,15 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { EpisodeCard } from "@/components/episode-card";
 import { episodesQuery } from "@/lib/queries";
-import { fmtShortDate, kindLabel, youtubeEmbed } from "@/lib/show";
+import { fmtShortDate, kindLabel, youtubeEmbed, youtubeThumb } from "@/lib/show";
+import { SponsorSlot } from "@/components/sponsor-slot";
 
 export const Route = createFileRoute("/watch_/$slug")({
   loader: async ({ context, params }) => {
     const eps = await context.queryClient.ensureQueryData(episodesQuery);
     const ep = eps.find((e) => e.slug === params.slug);
     if (!ep) throw notFound();
-    return { title: ep.title, description: ep.description ?? "" };
+    return { title: ep.title, description: (ep.description ?? `${ep.title} — IHNM Show with ${ep.guests.join(", ")}`).slice(0, 300), image: youtubeThumb(ep.youtube_url) };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/watch_/$slug")({
           { property: "og:description", content: loaderData.description },
           { property: "og:type", content: "video.episode" },
           { name: "twitter:card", content: "summary_large_image" },
+          ...(loaderData.image ? [{ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image }] : []),
         ]
       : [{ title: "Episode — IHNM Show" }, { name: "robots", content: "noindex" }],
   }),
@@ -48,6 +50,7 @@ function EpisodePage() {
           <p className="eyebrow">{kindLabel[ep.kind]} · {fmtShortDate(ep.aired_on + "T12:00:00Z")}</p>
           <h1 className="mt-2 text-4xl font-semibold">{ep.title}</h1>
           <p className="mt-4 text-lg text-muted-foreground">{ep.description}</p>
+          <div className="mt-6"><SponsorSlot s={ep} /></div>
           <div className="mt-4 flex flex-wrap gap-1.5">
             {ep.tags.map((t) => <span key={t} className="rounded-full bg-blush px-3 py-1 text-xs text-blush-foreground">{t}</span>)}
           </div>

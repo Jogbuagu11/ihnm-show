@@ -51,3 +51,13 @@ export function youtubeEmbed(url?: string | null) {
 }
 
 export const kindLabel = { episode: "Episode", sitdown: "Sit-Down", special: "Special" } as const;
+
+/** Seats bookable including the over-booking buffer (e.g. 20 seats + 30% → 26). */
+export function effectiveCapacity(capacity: number, overbookPct: number) {
+  return capacity + Math.ceil((capacity * Math.max(0, overbookPct)) / 100);
+}
+
+export function youtubeThumb(url?: string | null) {
+  const m = url?.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);
+  return m ? `https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg` : null;
+}

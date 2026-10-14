@@ -23,6 +23,9 @@ export type Database = {
           id: string
           kind: Database["public"]["Enums"]["episode_type"]
           slug: string
+          sponsor_logo_url: string | null
+          sponsor_name: string | null
+          sponsor_url: string | null
           tags: string[]
           thumbnail: string | null
           title: string
@@ -36,6 +39,9 @@ export type Database = {
           id?: string
           kind?: Database["public"]["Enums"]["episode_type"]
           slug: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          sponsor_url?: string | null
           tags?: string[]
           thumbnail?: string | null
           title: string
@@ -49,6 +55,9 @@ export type Database = {
           id?: string
           kind?: Database["public"]["Enums"]["episode_type"]
           slug?: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          sponsor_url?: string | null
           tags?: string[]
           thumbnail?: string | null
           title?: string
@@ -106,6 +115,50 @@ export type Database = {
           },
         ]
       }
+      guest_releases: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          role: string
+          signature: string | null
+          signed_at: string | null
+          taping_id: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          role?: string
+          signature?: string | null
+          signed_at?: string | null
+          taping_id: string
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          role?: string
+          signature?: string | null
+          signed_at?: string | null
+          taping_id?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_releases_taping_id_fkey"
+            columns: ["taping_id"]
+            isOneToOne: false
+            referencedRelation: "tapings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_signups: {
         Row: {
           created_at: string
@@ -124,14 +177,41 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          created_at: string
+          id: string
+          path: string
+          session_id: string
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          path: string
+          session_id: string
+          source?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          path?: string
+          session_id?: string
+          source?: string
+        }
+        Relationships: []
+      }
       reservations: {
         Row: {
+          accessible_seating: boolean
           checked_in_at: string | null
           created_at: string
           email: string
           filming_consent: boolean
           full_name: string
           id: string
+          minor_names: string[]
+          no_show_at: string | null
           qr_code: string
           question: string | null
           seats: number
@@ -141,12 +221,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          accessible_seating?: boolean
           checked_in_at?: string | null
           created_at?: string
           email: string
           filming_consent: boolean
           full_name: string
           id?: string
+          minor_names?: string[]
+          no_show_at?: string | null
           qr_code?: string
           question?: string | null
           seats?: number
@@ -156,12 +239,15 @@ export type Database = {
           user_id: string
         }
         Update: {
+          accessible_seating?: boolean
           checked_in_at?: string | null
           created_at?: string
           email?: string
           filming_consent?: boolean
           full_name?: string
           id?: string
+          minor_names?: string[]
+          no_show_at?: string | null
           qr_code?: string
           question?: string | null
           seats?: number
@@ -237,6 +323,24 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          giving_enabled: boolean
+          id: number
+          merch_enabled: boolean
+        }
+        Insert: {
+          giving_enabled?: boolean
+          id?: number
+          merch_enabled?: boolean
+        }
+        Update: {
+          giving_enabled?: boolean
+          id?: number
+          merch_enabled?: boolean
+        }
+        Relationships: []
+      }
       submissions: {
         Row: {
           content: string
@@ -289,10 +393,14 @@ export type Database = {
           group_enabled: boolean
           guests: string[]
           id: string
+          overbook_pct: number
           shuttle_end: string
           shuttle_interval_min: number
           shuttle_seats_per_loop: number
           shuttle_start: string
+          sponsor_logo_url: string | null
+          sponsor_name: string | null
+          sponsor_url: string | null
           starts_at: string
           theme: string
           vip_price_cents: number
@@ -305,10 +413,14 @@ export type Database = {
           group_enabled?: boolean
           guests?: string[]
           id?: string
+          overbook_pct?: number
           shuttle_end?: string
           shuttle_interval_min?: number
           shuttle_seats_per_loop?: number
           shuttle_start?: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          sponsor_url?: string | null
           starts_at: string
           theme: string
           vip_price_cents?: number
@@ -321,10 +433,14 @@ export type Database = {
           group_enabled?: boolean
           guests?: string[]
           id?: string
+          overbook_pct?: number
           shuttle_end?: string
           shuttle_interval_min?: number
           shuttle_seats_per_loop?: number
           shuttle_start?: string
+          sponsor_logo_url?: string | null
+          sponsor_name?: string | null
+          sponsor_url?: string | null
           starts_at?: string
           theme?: string
           vip_price_cents?: number
@@ -406,6 +522,15 @@ export type Database = {
         Args: { _approve: boolean; _req: string }
         Returns: undefined
       }
+      effective_capacity: { Args: { _taping: string }; Returns: number }
+      flagged_attendees: {
+        Args: { _taping: string }
+        Returns: {
+          no_shows: number
+          user_id: string
+        }[]
+      }
+      get_release: { Args: { _token: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -414,11 +539,19 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      mark_no_show: {
+        Args: { _reservation: string; _undo?: boolean }
+        Returns: undefined
+      }
+      my_no_show_flag: { Args: never; Returns: boolean }
+      no_show_count: { Args: { _user: string }; Returns: number }
       offer_open_seats: { Args: { _taping: string }; Returns: undefined }
       reserve_seat: {
         Args: {
+          _accessible?: boolean
           _consent: boolean
           _email: string
+          _minors?: string[]
           _name: string
           _question: string
           _taping: string
@@ -435,6 +568,10 @@ export type Database = {
       }
       shuttle_signal: {
         Args: { _booking: string; _signal: string }
+        Returns: undefined
+      }
+      sign_release: {
+        Args: { _signature: string; _token: string }
         Returns: undefined
       }
       taping_availability: {
