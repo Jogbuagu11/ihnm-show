@@ -195,6 +195,7 @@ function TicketCard({ r, shuttle, onChange }: { r: Res; shuttle: Sb | undefined;
           </div>
         )}
       </div>
+      <TapingUpdates tapingId={r.taping_id} reservationId={r.id} optIn={r.sms_opt_in} phone={r.sms_phone} onChange={onChange} />
       <div className="flex justify-end border-t p-4">
         <AlertDialog>
           <AlertDialogTrigger asChild><Button variant="ghost" size="sm" className="text-destructive">Cancel reservation</Button></AlertDialogTrigger>

@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const blank = { title: "", kind: "episode" as "episode" | "sitdown" | "special", youtube_url: "", guests: "", tags: "", description: "", aired_on: new Date().toISOString().slice(0, 10), thumbnail: "studio", sponsor_name: "", sponsor_logo_url: "", sponsor_url: "" };
+const blank = { title: "", kind: "episode" as "episode" | "sitdown" | "special", youtube_url: "", guests: "", tags: "", description: "", aired_on: new Date().toISOString().slice(0, 10), thumbnail: "studio", sponsor_name: "", sponsor_logo_url: "", sponsor_url: "", live_at: "", chat_url: "" };
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 80);
 
 export function EpisodesEditor() {
@@ -25,6 +25,7 @@ export function EpisodesEditor() {
       slug: `${slugify(f.title)}-${Date.now().toString(36).slice(-4)}`, title: f.title.trim(), kind: f.kind,
       youtube_url: f.youtube_url.trim() || null, description: f.description.trim() || null, aired_on: f.aired_on, thumbnail: f.thumbnail,
       sponsor_name: f.sponsor_name.trim() || null, sponsor_logo_url: f.sponsor_logo_url.trim() || null, sponsor_url: f.sponsor_url.trim() || null,
+      live_at: f.live_at ? new Date(f.live_at).toISOString() : null, chat_url: f.chat_url.trim() || null,
       guests: f.guests.split(",").map((x) => x.trim()).filter(Boolean), tags: f.tags.split(",").map((x) => x.trim()).filter(Boolean),
     });
     if (error) return toast.error(error.message);
@@ -67,6 +68,8 @@ export function EpisodesEditor() {
             </Select>
           </div>
         </div>
+        {f.kind === "special" && <div><Label>Goes live at (for Watch Live)</Label><Input type="datetime-local" value={f.live_at} onChange={(e) => setF({ ...f, live_at: e.target.value })} /></div>}
+        {f.kind === "special" && <div><Label>Live chat link</Label><Input value={f.chat_url} onChange={(e) => setF({ ...f, chat_url: e.target.value })} placeholder="https://…" /></div>}
         <div><Label>YouTube URL</Label><Input value={f.youtube_url} onChange={(e) => setF({ ...f, youtube_url: e.target.value })} placeholder="https://youtube.com/watch?v=…" /></div>
         <div className="grid gap-3 sm:grid-cols-2">
           <div><Label>Guests (comma separated)</Label><Input value={f.guests} onChange={(e) => setF({ ...f, guests: e.target.value })} /></div>

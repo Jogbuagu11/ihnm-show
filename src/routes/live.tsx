@@ -65,7 +65,7 @@ function Live() {
             {ep.description && <p className="mt-3 max-w-2xl text-stage-foreground/80">{ep.description}</p>}
             <div className="mt-8 grid gap-8 lg:grid-cols-[1.6fr_1fr]">
               <div>
-                {started && ep.youtube_url ? (
+                {started && youtubeEmbed(ep.youtube_url) ? (
                   <div className="aspect-video overflow-hidden rounded-3xl border border-gold/40"><iframe src={`${youtubeEmbed(ep.youtube_url)}?autoplay=1`} title={ep.title} className="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen /></div>
                 ) : (
                   <div className="grid aspect-video place-items-center rounded-3xl border border-gold/40 bg-stage-foreground/5"><div className="text-center"><p className="eyebrow mb-4 text-gold">Going live in</p>{ep.live_at && <Countdown at={ep.live_at} />}</div></div>
