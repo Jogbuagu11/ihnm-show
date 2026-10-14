@@ -252,6 +252,42 @@ export type Database = {
           },
         ]
       }
+      hour_packs: {
+        Row: {
+          created_at: string
+          email: string
+          hours: number
+          hours_used: number
+          id: string
+          name: string
+          price_cents: number
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          hours: number
+          hours_used?: number
+          id?: string
+          name: string
+          price_cents: number
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          hours?: number
+          hours_used?: number
+          id?: string
+          name?: string
+          price_cents?: number
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       income: {
         Row: {
           amount_cents: number
@@ -457,57 +493,204 @@ export type Database = {
           },
         ]
       }
+      rental_inquiries: {
+        Row: {
+          admin_note: string | null
+          created_at: string
+          details: string
+          email: string
+          event_type: string
+          headcount: number
+          id: string
+          name: string
+          pay_url: string | null
+          phone: string | null
+          preferred_date: string | null
+          quote_cents: number | null
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string
+          details: string
+          email: string
+          event_type: string
+          headcount?: number
+          id?: string
+          name: string
+          pay_url?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          quote_cents?: number | null
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string
+          details?: string
+          email?: string
+          event_type?: string
+          headcount?: number
+          id?: string
+          name?: string
+          pay_url?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          quote_cents?: number | null
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      rental_settings: {
+        Row: {
+          deposit_pct: number
+          edited_video_cents: number
+          full_day_cents: number
+          half_day_cents: number
+          id: number
+          max_capacity: number
+          operator_hourly_cents: number
+          pack_discount_pct: number
+          pack_hours: number
+          package_hourly_cents: number
+          podcast_hourly_cents: number
+          security_deposit_cents: number
+          setup_hourly_cents: number
+          shuttle_cents: number
+        }
+        Insert: {
+          deposit_pct?: number
+          edited_video_cents?: number
+          full_day_cents?: number
+          half_day_cents?: number
+          id?: number
+          max_capacity?: number
+          operator_hourly_cents?: number
+          pack_discount_pct?: number
+          pack_hours?: number
+          package_hourly_cents?: number
+          podcast_hourly_cents?: number
+          security_deposit_cents?: number
+          setup_hourly_cents?: number
+          shuttle_cents?: number
+        }
+        Update: {
+          deposit_pct?: number
+          edited_video_cents?: number
+          full_day_cents?: number
+          half_day_cents?: number
+          id?: number
+          max_capacity?: number
+          operator_hourly_cents?: number
+          pack_discount_pct?: number
+          pack_hours?: number
+          package_hourly_cents?: number
+          podcast_hourly_cents?: number
+          security_deposit_cents?: number
+          setup_hourly_cents?: number
+          shuttle_cents?: number
+        }
+        Relationships: []
+      }
       rentals: {
         Row: {
+          addons: Json
+          agreement_name: string | null
           agreement_path: string | null
+          agreement_signed_at: string | null
+          balance_due_on: string | null
+          balance_paid: boolean
           created_at: string
           deposit_cents: number
           deposit_paid: boolean
           email: string | null
           ends_at: string
+          headcount: number
           id: string
           invoice_id: string | null
           notes: string | null
+          pack_hours_used: number
           phone: string | null
+          quote_cents: number
           rate_cents: number
           rate_type: string
+          refund_pct: number | null
+          rental_type: string
           renter: string
+          security_deposit_cents: number
+          security_note: string | null
+          security_photo_path: string | null
+          security_status: string
           starts_at: string
           status: string
+          user_id: string | null
         }
         Insert: {
+          addons?: Json
+          agreement_name?: string | null
           agreement_path?: string | null
+          agreement_signed_at?: string | null
+          balance_due_on?: string | null
+          balance_paid?: boolean
           created_at?: string
           deposit_cents?: number
           deposit_paid?: boolean
           email?: string | null
           ends_at: string
+          headcount?: number
           id?: string
           invoice_id?: string | null
           notes?: string | null
+          pack_hours_used?: number
           phone?: string | null
+          quote_cents?: number
           rate_cents?: number
           rate_type?: string
+          refund_pct?: number | null
+          rental_type?: string
           renter: string
+          security_deposit_cents?: number
+          security_note?: string | null
+          security_photo_path?: string | null
+          security_status?: string
           starts_at: string
           status?: string
+          user_id?: string | null
         }
         Update: {
+          addons?: Json
+          agreement_name?: string | null
           agreement_path?: string | null
+          agreement_signed_at?: string | null
+          balance_due_on?: string | null
+          balance_paid?: boolean
           created_at?: string
           deposit_cents?: number
           deposit_paid?: boolean
           email?: string | null
           ends_at?: string
+          headcount?: number
           id?: string
           invoice_id?: string | null
           notes?: string | null
+          pack_hours_used?: number
           phone?: string | null
+          quote_cents?: number
           rate_cents?: number
           rate_type?: string
+          refund_pct?: number | null
+          rental_type?: string
           renter?: string
+          security_deposit_cents?: number
+          security_note?: string | null
+          security_photo_path?: string | null
+          security_status?: string
           starts_at?: string
           status?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -920,11 +1103,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      book_rental: {
+        Args: {
+          _addons: Json
+          _email: string
+          _end: string
+          _headcount: number
+          _name: string
+          _phone: string
+          _signature: string
+          _start: string
+          _type: string
+          _use_pack?: boolean
+        }
+        Returns: Json
+      }
       book_shuttle: {
         Args: { _direction: string; _loop: string; _reservation: string }
         Returns: undefined
       }
+      buy_hour_pack: {
+        Args: { _email: string; _name: string }
+        Returns: undefined
+      }
       cancel_my_giving: { Args: { _partner: string }; Returns: undefined }
+      cancel_my_rental: { Args: { _rental: string }; Returns: number }
       cancel_reservation: { Args: { _reservation: string }; Returns: undefined }
       check_in: { Args: { _code: string }; Returns: Json }
       decide_group_request: {
@@ -955,6 +1158,16 @@ export type Database = {
       my_no_show_flag: { Args: never; Returns: boolean }
       no_show_count: { Args: { _user: string }; Returns: number }
       offer_open_seats: { Args: { _taping: string }; Returns: undefined }
+      rental_price: {
+        Args: {
+          _addons: Json
+          _end: string
+          _pack_hours?: number
+          _start: string
+          _type: string
+        }
+        Returns: Json
+      }
       reserve_seat: {
         Args: {
           _accessible?: boolean
@@ -982,6 +1195,14 @@ export type Database = {
       sign_release: {
         Args: { _signature: string; _token: string }
         Returns: undefined
+      }
+      studio_busy: {
+        Args: { _from: string; _to: string }
+        Returns: {
+          ends_at: string
+          kind: string
+          starts_at: string
+        }[]
       }
       taping_availability: {
         Args: never
