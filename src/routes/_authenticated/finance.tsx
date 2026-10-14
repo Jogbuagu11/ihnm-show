@@ -10,6 +10,7 @@ import { fmtShortDate } from "@/lib/show";
 import { Crud, Pill, useTable, type Field } from "@/components/finance/crud";
 import { Overview } from "@/components/finance/overview";
 import { Reports } from "@/components/finance/reports";
+import { StudioAdmin } from "@/components/finance/studio";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
@@ -141,7 +142,7 @@ function InvoicesTab() {
       <div className="mt-4 rounded-2xl border border-gold/50 bg-secondary p-4 text-sm">Invoices are tracked here. Paste a payment link into "Pay-online link" and it shows on the invoice; online invoicing with automatic reminders turns on once payments are set up.</div>
       <Crud table="invoices" title="invoice" fields={[
         { k: "client_name", label: "Client", required: true }, { k: "email", label: "Email", type: "email" },
-        { k: "kind", label: "Type", type: "select", options: ["sponsor", "studio_rental", "worship_video", "church_group"] },
+        { k: "kind", label: "Type", type: "select", options: ["sponsor", "rental", "studio_rental", "worship_video", "church_group"] },
         { k: "amount_cents", label: "Amount", type: "money", required: true },
         { k: "issued_on", label: "Issued", type: "date", def: new Date().toISOString().slice(0, 10) },
         { k: "due_on", label: "Due", type: "date", def: new Date(Date.now() + 14 * 864e5).toISOString().slice(0, 10) },
@@ -154,29 +155,7 @@ function InvoicesTab() {
 }
 
 function RentalsTab() {
-  const invoices = useOpts("invoices", "number");
-  const { data = [] } = useTable("rentals");
-  const upcoming = data.filter((r) => new Date(r.ends_at) > new Date()).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
-  return (
-    <>
-      <div className="mt-4 rounded-3xl border bg-card p-5">
-        <h3 className="text-lg font-semibold">Upcoming bookings</h3>
-        <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {upcoming.map((r) => <li key={r.id} className="rounded-xl bg-stage p-3 text-sm text-stage-foreground"><p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-gold">{new Date(r.starts_at).toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" })}</p><p className="font-display text-lg">{r.renter}</p></li>)}
-          {upcoming.length === 0 && <li className="text-sm text-muted-foreground">No upcoming rentals.</li>}
-        </ul>
-      </div>
-      <Crud table="rentals" title="rental" fields={[
-        { k: "renter", label: "Renter", required: true }, { k: "email", label: "Email", type: "email" }, { k: "phone", label: "Phone" },
-        { k: "starts_at", label: "Starts", type: "datetime", required: true }, { k: "ends_at", label: "Ends", type: "datetime", required: true },
-        { k: "rate_type", label: "Rate", type: "select", options: ["hourly", "day"] }, { k: "rate_cents", label: "Rate amount", type: "money" },
-        { k: "deposit_cents", label: "Deposit", type: "money" }, { k: "deposit_paid", label: "Deposit paid", type: "bool" },
-        { k: "status", label: "Status", type: "select", options: ["booked", "tentative", "completed", "canceled"] },
-        { k: "invoice_id", label: "Invoice", type: "select", options: invoices },
-        { k: "agreement_path", label: "Signed rental agreement", type: "file", wide: true }, { k: "notes", label: "Notes", type: "textarea" },
-      ]} columns={(r) => <><span className="font-semibold">{r.renter}</span><Pill tone={r.status === "canceled" ? "bad" : "muted"}>{r.status}</Pill><span className="block text-xs text-muted-foreground">{new Date(r.starts_at).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} · {usd(r.rate_cents)}/{r.rate_type === "day" ? "day" : "hr"} · deposit {usd(r.deposit_cents)} {r.deposit_paid ? "✓" : "(unpaid)"}{r.invoice_id ? ` · ${invoices.find((i) => i.v === r.invoice_id)?.l}` : ""}</span></>} />
-    </>
-  );
+  return <StudioAdmin />;
 }
 
 function ExpensesTab() {
