@@ -26,7 +26,7 @@ export function GuestHub({ taping }: { taping: Taping; tapings: Taping[] }) {
     window.location.href = `mailto:${e.email}?subject=${encodeURIComponent(`Your IHNM Show briefing — ${t.theme}`)}&body=${encodeURIComponent(text)}`;
     db.from("expert_bookings").update({ briefing_sent_at: new Date().toISOString() }).eq("id", b.id).then(() => qc.invalidateQueries({ queryKey: ["fin", "expert_bookings"] }));
   }
-  async function clips(b: Record<string, string | null> & { id: string; expert_id: string }) {
+  async function clips(b: { id: string; expert_id: string; clip_1?: string | null; clip_2?: string | null; clip_3?: string | null; clip_4?: string | null; clip_5?: string | null }) {
     const e = exp(b.expert_id); if (!e?.email) return toast.error("Add an email to this expert first");
     const paths = [b.clip_1, b.clip_2, b.clip_3, b.clip_4, b.clip_5].filter(Boolean) as string[];
     if (!paths.length) return toast.error("Upload at least one clip first");
