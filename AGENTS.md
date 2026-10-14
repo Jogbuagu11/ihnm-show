@@ -14,3 +14,6 @@
 - Staff access = any row in user_roles (admin/crew); the first account to sign up becomes admin via a trigger — avoids hardcoding an admin.
 - Signed-in pages live under src/routes/_authenticated (client-only gate redirecting to /auth).
 - Shared display helpers (Pacific time formatting, shuttle loop generation, image keys) live in src/lib/show.ts.
+- Bookable capacity = effective_capacity() (capacity + overbook %) in SQL, mirrored by effectiveCapacity() in src/lib/show.ts — keep both in sync so the site and the seat rules agree.
+- Analytics are first-party: PageTracker in __root logs anonymous rows to page_views; only admins can read them.
+- Guest releases are signed through a public token link (/release/$token) using get_release/sign_release RPCs, so guests don't need an account.
