@@ -22,3 +22,5 @@
 - Roles: is_staff() and useAuth().isStaff count only admin/crew; "volunteer" is a non-staff role granted by join_volunteers RPC — keeps volunteers out of crew tools.
 - Shift claiming goes through claim_shift/release_shift RPCs (slot limits enforced in SQL); volunteer docs live in private "volunteer-docs" bucket under <user_id>/, readable by admins only.
 - Ticket-holder announcements are rows in taping_messages shown on My Tickets; SMS opt-in is stored on reservations, actual texting needs a provider connection.
+- Crew/admin access is granted only via add_staff/remove_staff RPCs (admin-checked); emails without an account wait in staff_invites and are applied by a trigger on signup — avoids editing roles by hand.
+- Door self check-in uses a staff-only per-taping code (door_code RPC) embedded in the printed QR; self_check_in validates code, account reservation and a ±3h window — so the public taping data never exposes the code.
