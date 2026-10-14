@@ -20,6 +20,7 @@ import { Route as GiveRouteImport } from './routes/give'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PartnerRouteImport } from './routes/partner'
+import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RentRouteImport } from './routes/rent'
 import { Route as ServeRouteImport } from './routes/serve'
@@ -30,6 +31,7 @@ import { Route as TicketsRouteImport } from './routes/tickets'
 import { Route as WatchRouteImport } from './routes/watch'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedBookingsRouteImport } from './routes/_authenticated/bookings'
+import { Route as AuthenticatedCheckinRouteImport } from './routes/_authenticated/checkin'
 import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
 import { Route as AuthenticatedFinanceRouteImport } from './routes/_authenticated/finance'
 import { Route as AuthenticatedVolunteerRouteImport } from './routes/_authenticated/volunteer'
@@ -91,6 +93,11 @@ const PartnerRoute = PartnerRouteImport.update({
   path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrayerRoute = PrayerRouteImport.update({
+  id: '/prayer',
+  path: '/prayer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -141,6 +148,11 @@ const AuthenticatedBookingsRoute = AuthenticatedBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCheckinRoute = AuthenticatedCheckinRouteImport.update({
+  id: '/checkin',
+  path: '/checkin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCrewRoute = AuthenticatedCrewRouteImport.update({
   id: '/crew',
   path: '/crew',
@@ -183,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
+  '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
   '/serve': typeof ServeRoute
@@ -193,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
   '/bookings': typeof AuthenticatedBookingsRoute
+  '/checkin': typeof AuthenticatedCheckinRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
@@ -211,6 +225,7 @@ export interface FileRoutesByTo {
   '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
+  '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
   '/serve': typeof ServeRoute
@@ -221,6 +236,7 @@ export interface FileRoutesByTo {
   '/watch': typeof WatchRoute
   '/account': typeof AuthenticatedAccountRoute
   '/bookings': typeof AuthenticatedBookingsRoute
+  '/checkin': typeof AuthenticatedCheckinRoute
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
@@ -241,6 +257,7 @@ export interface FileRoutesById {
   '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
+  '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
   '/serve': typeof ServeRoute
@@ -251,6 +268,7 @@ export interface FileRoutesById {
   '/watch': typeof WatchRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/bookings': typeof AuthenticatedBookingsRoute
+  '/_authenticated/checkin': typeof AuthenticatedCheckinRoute
   '/_authenticated/crew': typeof AuthenticatedCrewRoute
   '/_authenticated/finance': typeof AuthenticatedFinanceRoute
   '/_authenticated/volunteer': typeof AuthenticatedVolunteerRoute
@@ -271,6 +289,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/merch'
     | '/partner'
+    | '/prayer'
     | '/privacy'
     | '/rent'
     | '/serve'
@@ -281,6 +300,7 @@ export interface FileRouteTypes {
     | '/watch'
     | '/account'
     | '/bookings'
+    | '/checkin'
     | '/crew'
     | '/finance'
     | '/volunteer'
@@ -299,6 +319,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/merch'
     | '/partner'
+    | '/prayer'
     | '/privacy'
     | '/rent'
     | '/serve'
@@ -309,6 +330,7 @@ export interface FileRouteTypes {
     | '/watch'
     | '/account'
     | '/bookings'
+    | '/checkin'
     | '/crew'
     | '/finance'
     | '/volunteer'
@@ -328,6 +350,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/merch'
     | '/partner'
+    | '/prayer'
     | '/privacy'
     | '/rent'
     | '/serve'
@@ -338,6 +361,7 @@ export interface FileRouteTypes {
     | '/watch'
     | '/_authenticated/account'
     | '/_authenticated/bookings'
+    | '/_authenticated/checkin'
     | '/_authenticated/crew'
     | '/_authenticated/finance'
     | '/_authenticated/volunteer'
@@ -358,6 +382,7 @@ export interface RootRouteChildren {
   LiveRoute: typeof LiveRoute
   MerchRoute: typeof MerchRoute
   PartnerRoute: typeof PartnerRoute
+  PrayerRoute: typeof PrayerRoute
   PrivacyRoute: typeof PrivacyRoute
   RentRoute: typeof RentRoute
   ServeRoute: typeof ServeRoute
@@ -450,6 +475,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prayer': {
+      id: '/prayer'
+      path: '/prayer'
+      fullPath: '/prayer'
+      preLoaderRoute: typeof PrayerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -520,6 +552,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBookingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/checkin': {
+      id: '/_authenticated/checkin'
+      path: '/checkin'
+      fullPath: '/checkin'
+      preLoaderRoute: typeof AuthenticatedCheckinRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/crew': {
       id: '/_authenticated/crew'
       path: '/crew'
@@ -568,6 +607,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedBookingsRoute: typeof AuthenticatedBookingsRoute
+  AuthenticatedCheckinRoute: typeof AuthenticatedCheckinRoute
   AuthenticatedCrewRoute: typeof AuthenticatedCrewRoute
   AuthenticatedFinanceRoute: typeof AuthenticatedFinanceRoute
   AuthenticatedVolunteerRoute: typeof AuthenticatedVolunteerRoute
@@ -576,6 +616,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedBookingsRoute: AuthenticatedBookingsRoute,
+  AuthenticatedCheckinRoute: AuthenticatedCheckinRoute,
   AuthenticatedCrewRoute: AuthenticatedCrewRoute,
   AuthenticatedFinanceRoute: AuthenticatedFinanceRoute,
   AuthenticatedVolunteerRoute: AuthenticatedVolunteerRoute,
@@ -596,6 +637,7 @@ const rootRouteChildren: RootRouteChildren = {
   LiveRoute: LiveRoute,
   MerchRoute: MerchRoute,
   PartnerRoute: PartnerRoute,
+  PrayerRoute: PrayerRoute,
   PrivacyRoute: PrivacyRoute,
   RentRoute: RentRoute,
   ServeRoute: ServeRoute,
