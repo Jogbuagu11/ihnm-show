@@ -1,3 +1,4 @@
+import { TapingUpdates } from "@/components/taping-updates";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QRCodeSVG } from "qrcode.react";
