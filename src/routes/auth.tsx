@@ -33,6 +33,12 @@ function AuthPage() {
 
   useEffect(() => {
     if (!user || loading) return;
+    const back = sessionStorage.getItem("ihnm_return");
+    if (back) {
+      sessionStorage.removeItem("ihnm_return");
+      window.location.assign(back);
+      return;
+    }
     if (admin) {
       // roles load right after the session; wait briefly before deciding
       const t = setTimeout(() => navigate({ to: roles.includes("admin") ? "/finance" : isStaff ? "/crew" : "/account" }), 600);
