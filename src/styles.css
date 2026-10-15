@@ -174,8 +174,8 @@
 }
 @utility display-xl {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 8.2vw, 7.5rem);
-  line-height: 0.92;
+  font-size: clamp(3.4rem, 10.5vw, 10rem);
+  line-height: 0.86;
   letter-spacing: -0.03em;
   font-weight: 600;
 }
@@ -213,12 +213,28 @@
 @utility animate-marquee {
   animation: marquee 38s linear infinite;
 }
+@utility animate-throb {
+  animation: throb 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 @utility animate-onair {
   animation: onair 1.6s ease-in-out infinite;
 }
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+/* Soft pulse plus an expanding ring, so the CTA reads as alive without
+   jumping around and shifting the layout. */
+@keyframes throb {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 60%, transparent);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 16px color-mix(in oklab, var(--gold) 0%, transparent);
+  }
 }
 @keyframes onair {
   0%, 100% { opacity: 1; }

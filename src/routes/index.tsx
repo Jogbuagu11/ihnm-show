@@ -77,7 +77,7 @@ function Prelaunch() {
       <TickerStrip />
       <section className="bg-daylight relative isolate overflow-hidden">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-12 lg:grid-cols-12 lg:items-center lg:pt-16">
-          <div className="relative z-10 lg:col-span-7">
+          <div className="relative z-10 lg:col-span-8">
             <p className="inline-flex items-center gap-2 rounded-full border border-persimmon/40 bg-persimmon/10 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-persimmon">
               <span className="size-1.5 animate-onair rounded-full bg-persimmon" />
               Season 1 · Prelaunch
@@ -95,14 +95,19 @@ function Prelaunch() {
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-6">
-              <Button asChild variant="gold" size="lg">
+              <Button
+                asChild
+                variant="gold"
+                size="lg"
+                className="animate-throb motion-reduce:animate-none"
+              >
                 <a href="#waitlist">Join the waitlist</a>
               </Button>
               <Countdown target={settings?.ticket_drop_at} />
             </div>
           </div>
 
-          <div className="relative lg:col-span-5">
+          <div className="relative lg:col-span-4">
             <div className="arch frame-gold relative overflow-hidden rounded-b-[2rem] shadow-soft">
               <img
                 src={studio}
