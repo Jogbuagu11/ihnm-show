@@ -60,6 +60,7 @@ export type Database = {
           id: string;
           message: string;
           name: string;
+          notified_at: string | null;
           organization: string | null;
           phone: string | null;
           status: string;
@@ -72,6 +73,7 @@ export type Database = {
           id?: string;
           message: string;
           name: string;
+          notified_at?: string | null;
           organization?: string | null;
           phone?: string | null;
           status?: string;
@@ -83,6 +85,7 @@ export type Database = {
           id?: string;
           message?: string;
           name?: string;
+          notified_at?: string | null;
           organization?: string | null;
           phone?: string | null;
           status?: string;
@@ -610,6 +613,7 @@ export type Database = {
           interest: string;
           message: string | null;
           name: string;
+          notified_at: string | null;
           phone: string | null;
           status: string;
         };
@@ -623,6 +627,7 @@ export type Database = {
           interest: string;
           message?: string | null;
           name: string;
+          notified_at?: string | null;
           phone?: string | null;
           status?: string;
         };
@@ -635,6 +640,7 @@ export type Database = {
           interest?: string;
           message?: string | null;
           name?: string;
+          notified_at?: string | null;
           phone?: string | null;
           status?: string;
         };
@@ -732,6 +738,7 @@ export type Database = {
           headcount: number;
           id: string;
           name: string;
+          notified_at: string | null;
           pay_url: string | null;
           phone: string | null;
           preferred_date: string | null;
@@ -749,6 +756,7 @@ export type Database = {
           headcount?: number;
           id?: string;
           name: string;
+          notified_at?: string | null;
           pay_url?: string | null;
           phone?: string | null;
           preferred_date?: string | null;
@@ -765,6 +773,7 @@ export type Database = {
           headcount?: number;
           id?: string;
           name?: string;
+          notified_at?: string | null;
           pay_url?: string | null;
           phone?: string | null;
           preferred_date?: string | null;
@@ -1761,11 +1770,9 @@ export type Database = {
       check_in: { Args: { _code: string }; Returns: Json };
       claim_shift: { Args: { _shift: string }; Returns: undefined };
       confirm_waitlist: { Args: { p_token: string }; Returns: Json };
-      dearmor: { Args: { "": string }; Returns: string };
       decide_group_request: { Args: { _approve: boolean; _req: string }; Returns: undefined };
       door_code: { Args: { _taping: string }; Returns: string };
       effective_capacity: { Args: { _taping: string }; Returns: number };
-      fips_mode: { Args: Record<PropertyKey, never>; Returns: boolean };
       flagged_attendees: {
         Args: { _taping: string };
         Returns: {
@@ -1773,9 +1780,7 @@ export type Database = {
           user_id: string;
         }[];
       };
-      gen_random_uuid: { Args: Record<PropertyKey, never>; Returns: string };
       gen_referral_code: { Args: Record<PropertyKey, never>; Returns: string };
-      gen_salt: { Args: { "": string }; Returns: string };
       get_release: { Args: { _token: string }; Returns: Json };
       has_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"]; _user_id: string };
@@ -1831,7 +1836,6 @@ export type Database = {
       my_no_show_flag: { Args: Record<PropertyKey, never>; Returns: boolean };
       no_show_count: { Args: { _user: string }; Returns: number };
       offer_open_seats: { Args: { _taping: string }; Returns: undefined };
-      pgp_armor_headers: { Args: { "": string }; Returns: Record<string, unknown>[] };
       release_shift: { Args: { _shift: string }; Returns: undefined };
       remove_staff: { Args: { _email: string; _user: string }; Returns: undefined };
       rental_price: {

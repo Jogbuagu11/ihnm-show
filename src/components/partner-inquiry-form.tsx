@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PARTNER_INTERESTS } from "@/lib/waitlist";
+import { notifyInquiry } from "@/lib/inquiries.functions";
 
 export function PartnerInquiryForm() {
   const [f, setF] = useState({ name: "", business: "", email: "", phone: "", message: "" });
@@ -29,7 +30,11 @@ export function PartnerInquiryForm() {
     if (!interest) return toast.error("Please choose what you're interested in.");
 
     setBusy(true);
+    // The id is generated here rather than read back: anon has no SELECT
+    // policy on this table, so an insert...returning would come back empty.
+    const id = crypto.randomUUID();
     const { error } = await supabase.from("partner_inquiries").insert({
+      id,
       name: f.name.trim(),
       business: f.business.trim() || null,
       email: f.email.trim().toLowerCase(),
@@ -43,6 +48,11 @@ export function PartnerInquiryForm() {
       return toast.error("Could not send your inquiry. Please try again.");
     }
     setSent(true);
+    // Alert the team. A failure here must not look like a failed submission —
+    // the inquiry is already saved and visible in the Crew Portal.
+    notifyInquiry({ data: { table: "partner_inquiries", id } }).catch((e: unknown) =>
+      console.error("[partner] notification failed", e),
+    );
   }
 
   if (sent) {

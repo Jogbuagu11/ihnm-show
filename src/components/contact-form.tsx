@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { notifyInquiry } from "@/lib/inquiries.functions";
 import {
   Select,
   SelectContent,
@@ -39,7 +40,10 @@ export function ContactForm({
     if (!f.name.trim() || !f.email.includes("@") || !f.message.trim())
       return toast.error("Please add your name, email and a message");
     setBusy(true);
+    // id generated here: anon has no SELECT policy, so returning it is not an option.
+    const id = crypto.randomUUID();
     const { error } = await supabase.from("contact_messages").insert({
+      id,
       topic,
       name: f.name.trim(),
       email: f.email.trim(),
@@ -50,6 +54,10 @@ export function ContactForm({
     setBusy(false);
     if (error) return toast.error("Could not send your message");
     setSent(true);
+    // Already saved; a failed alert must not surface as a failed submission.
+    notifyInquiry({ data: { table: "contact_messages", id } }).catch((e: unknown) =>
+      console.error("[contact] notification failed", e),
+    );
   }
   if (sent)
     return (

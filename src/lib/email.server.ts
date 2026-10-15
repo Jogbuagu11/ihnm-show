@@ -116,3 +116,62 @@ function escapeHtml(s: string): string {
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c,
   );
 }
+
+/** Where new-inquiry alerts go. */
+const NOTIFY_TO = process.env["INQUIRY_NOTIFY_TO"] ?? null;
+
+const INQUIRY_LABELS: Record<string, string> = {
+  partner_inquiries: "sponsor inquiry",
+  contact_messages: "message",
+  rental_inquiries: "studio rental inquiry",
+};
+
+/** Alerts the team that something arrived, so inquiries aren't only visible to
+ *  whoever happens to open the Crew Portal. */
+export async function sendInquiryNotification(
+  table: string,
+  row: Record<string, unknown>,
+): Promise<void> {
+  if (!NOTIFY_TO) {
+    console.info(`[email] skipped inquiry alert — no INQUIRY_NOTIFY_TO configured`);
+    return;
+  }
+
+  const label = INQUIRY_LABELS[table] ?? "inquiry";
+  const name = String(row["name"] ?? "Someone");
+  const email = String(row["email"] ?? "");
+  const detail = String(row["interest"] ?? row["topic"] ?? row["event_type"] ?? "");
+
+  // Only show fields that have a value, so each inquiry type reads cleanly
+  // without a template per table.
+  const fields: [string, unknown][] = [
+    ["Name", row["name"]],
+    ["Business", row["business"] ?? row["organization"]],
+    ["Email", row["email"]],
+    ["Phone", row["phone"]],
+    ["Interest", row["interest"]],
+    ["Topic", row["topic"]],
+    ["Event type", row["event_type"]],
+    ["Preferred date", row["preferred_date"]],
+    ["Headcount", row["headcount"]],
+    ["Message", row["message"] ?? row["details"]],
+  ];
+  const rows = fields
+    .filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== "")
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:6px 14px 6px 0;color:#8a7f72;vertical-align:top;white-space:nowrap">${k}</td>` +
+        `<td style="padding:6px 0;color:#2b2520">${escapeHtml(String(v))}</td></tr>`,
+    )
+    .join("");
+
+  await send(
+    NOTIFY_TO,
+    `New ${label}${detail ? ` — ${detail}` : ""} from ${name}`,
+    shell(`
+      <p style="font-family:Georgia,serif;font-size:22px;margin:0 0 16px">New ${label}</p>
+      <table style="font-size:14px;line-height:21px;border-collapse:collapse">${rows}</table>
+      ${email ? `<p style="margin:24px 0 0"><a href="mailto:${escapeHtml(email)}" style="background:#2b2520;color:#fdf8ef;padding:11px 20px;border-radius:999px;text-decoration:none">Reply to ${escapeHtml(name)}</a></p>` : ""}
+      <p style="font-size:13px;color:#8a7f72;margin-top:22px">Also in the Crew Portal.</p>`),
+  );
+}
