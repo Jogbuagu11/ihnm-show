@@ -14,14 +14,27 @@ export function thumb(key?: string | null) {
 
 export function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
-    weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: TZ,
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: TZ,
   });
 }
 export function fmtShortDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: TZ });
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: TZ,
+  });
 }
 export function fmtTime(iso: string) {
-  return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: TZ });
+  return new Date(iso).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: TZ,
+  });
 }
 
 /** Shuttle loop departure times, e.g. 18:00 → 18:45 every 15 min. */

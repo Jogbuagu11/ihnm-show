@@ -15,7 +15,9 @@ export const Route = createFileRoute("/merch")({
   }),
   component: () => (
     <>
-      <PageHeader image={panel} eyebrow="Store" title="Merch Store">The shop is opening soon.</PageHeader>
+      <PageHeader image={panel} eyebrow="Store" title="Merch Store">
+        The shop is opening soon.
+      </PageHeader>
       <div className="mx-auto max-w-3xl px-4 py-12 text-lg text-muted-foreground">
         <p>Shirts, mugs and study guides are on the way. Check back soon.</p>
       </div>

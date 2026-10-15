@@ -24,23 +24,51 @@ function isoToPacific(iso: string) {
 }
 
 const blank = {
-  id: "", theme: "", description: "", starts: "", guests: "", capacity: 20, vip_seats: 4, vip_price: 20, group_enabled: true,
-  shuttle_start: "18:00", shuttle_end: "18:45", shuttle_interval_min: 15, shuttle_seats_per_loop: 7,
-  overbook_pct: 30, sponsor_name: "", sponsor_logo_url: "", sponsor_url: "",
+  id: "",
+  theme: "",
+  description: "",
+  starts: "",
+  guests: "",
+  capacity: 20,
+  vip_seats: 4,
+  vip_price: 20,
+  group_enabled: true,
+  shuttle_start: "18:00",
+  shuttle_end: "18:45",
+  shuttle_interval_min: 15,
+  shuttle_seats_per_loop: 7,
+  overbook_pct: 30,
+  sponsor_name: "",
+  sponsor_logo_url: "",
+  sponsor_url: "",
 };
 
 export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
   const qc = useQueryClient();
   const [f, setF] = useState(blank);
-  const set = (k: keyof typeof blank) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setF({ ...f, [k]: e.target.type === "number" ? Number(e.target.value) : e.target.value });
+  const set =
+    (k: keyof typeof blank) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setF({ ...f, [k]: e.target.type === "number" ? Number(e.target.value) : e.target.value });
 
   function edit(t: Taping) {
     setF({
-      id: t.id, theme: t.theme, description: t.description ?? "", starts: isoToPacific(t.starts_at), guests: t.guests.join(", "),
-      capacity: t.capacity, vip_seats: t.vip_seats, vip_price: t.vip_price_cents / 100, group_enabled: t.group_enabled,
-      shuttle_start: t.shuttle_start.slice(0, 5), shuttle_end: t.shuttle_end.slice(0, 5), shuttle_interval_min: t.shuttle_interval_min, shuttle_seats_per_loop: t.shuttle_seats_per_loop,
-      overbook_pct: t.overbook_pct, sponsor_name: t.sponsor_name ?? "", sponsor_logo_url: t.sponsor_logo_url ?? "", sponsor_url: t.sponsor_url ?? "",
+      id: t.id,
+      theme: t.theme,
+      description: t.description ?? "",
+      starts: isoToPacific(t.starts_at),
+      guests: t.guests.join(", "),
+      capacity: t.capacity,
+      vip_seats: t.vip_seats,
+      vip_price: t.vip_price_cents / 100,
+      group_enabled: t.group_enabled,
+      shuttle_start: t.shuttle_start.slice(0, 5),
+      shuttle_end: t.shuttle_end.slice(0, 5),
+      shuttle_interval_min: t.shuttle_interval_min,
+      shuttle_seats_per_loop: t.shuttle_seats_per_loop,
+      overbook_pct: t.overbook_pct,
+      sponsor_name: t.sponsor_name ?? "",
+      sponsor_logo_url: t.sponsor_logo_url ?? "",
+      sponsor_url: t.sponsor_url ?? "",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -49,13 +77,29 @@ export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
     e.preventDefault();
     if (!f.theme.trim() || !f.starts) return toast.error("Theme and date are required");
     const row = {
-      theme: f.theme.trim(), description: f.description.trim() || null, starts_at: pacificToIso(f.starts),
-      guests: f.guests.split(",").map((g) => g.trim()).filter(Boolean),
-      capacity: f.capacity, vip_seats: f.vip_seats, vip_price_cents: Math.round(f.vip_price * 100), group_enabled: f.group_enabled,
-      shuttle_start: f.shuttle_start, shuttle_end: f.shuttle_end, shuttle_interval_min: f.shuttle_interval_min, shuttle_seats_per_loop: f.shuttle_seats_per_loop,
-      overbook_pct: f.overbook_pct, sponsor_name: f.sponsor_name.trim() || null, sponsor_logo_url: f.sponsor_logo_url.trim() || null, sponsor_url: f.sponsor_url.trim() || null,
+      theme: f.theme.trim(),
+      description: f.description.trim() || null,
+      starts_at: pacificToIso(f.starts),
+      guests: f.guests
+        .split(",")
+        .map((g) => g.trim())
+        .filter(Boolean),
+      capacity: f.capacity,
+      vip_seats: f.vip_seats,
+      vip_price_cents: Math.round(f.vip_price * 100),
+      group_enabled: f.group_enabled,
+      shuttle_start: f.shuttle_start,
+      shuttle_end: f.shuttle_end,
+      shuttle_interval_min: f.shuttle_interval_min,
+      shuttle_seats_per_loop: f.shuttle_seats_per_loop,
+      overbook_pct: f.overbook_pct,
+      sponsor_name: f.sponsor_name.trim() || null,
+      sponsor_logo_url: f.sponsor_logo_url.trim() || null,
+      sponsor_url: f.sponsor_url.trim() || null,
     };
-    const { error } = f.id ? await supabase.from("tapings").update(row).eq("id", f.id) : await supabase.from("tapings").insert(row);
+    const { error } = f.id
+      ? await supabase.from("tapings").update(row).eq("id", f.id)
+      : await supabase.from("tapings").insert(row);
     if (error) return toast.error(error.message);
     toast.success("Taping saved");
     setF(blank);
@@ -66,43 +110,128 @@ export function TapingsEditor({ tapings }: { tapings: Taping[] }) {
     <div className="grid gap-6 py-4 lg:grid-cols-[1.3fr_1fr]">
       <form onSubmit={save} className="space-y-4 rounded-3xl border bg-card p-5">
         <h3 className="text-xl font-semibold">{f.id ? "Edit taping" : "New taping"}</h3>
-        <div><Label>Theme</Label><Input value={f.theme} onChange={set("theme")} maxLength={150} /></div>
-        <div><Label>Description</Label><Textarea value={f.description} onChange={set("description")} maxLength={1000} /></div>
+        <div>
+          <Label>Theme</Label>
+          <Input value={f.theme} onChange={set("theme")} maxLength={150} />
+        </div>
+        <div>
+          <Label>Description</Label>
+          <Textarea value={f.description} onChange={set("description")} maxLength={1000} />
+        </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          <div><Label>Date & time (Pacific)</Label><Input type="datetime-local" value={f.starts} onChange={set("starts")} /></div>
-          <div><Label>Guests (comma separated)</Label><Input value={f.guests} onChange={set("guests")} /></div>
+          <div>
+            <Label>Date & time (Pacific)</Label>
+            <Input type="datetime-local" value={f.starts} onChange={set("starts")} />
+          </div>
+          <div>
+            <Label>Guests (comma separated)</Label>
+            <Input value={f.guests} onChange={set("guests")} />
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          <div><Label>Capacity</Label><Input type="number" min={1} value={f.capacity} onChange={set("capacity")} /></div>
-          <div><Label>VIP seats</Label><Input type="number" min={0} value={f.vip_seats} onChange={set("vip_seats")} /></div>
-          <div><Label>VIP price $</Label><Input type="number" min={0} value={f.vip_price} onChange={set("vip_price")} /></div>
+          <div>
+            <Label>Capacity</Label>
+            <Input type="number" min={1} value={f.capacity} onChange={set("capacity")} />
+          </div>
+          <div>
+            <Label>VIP seats</Label>
+            <Input type="number" min={0} value={f.vip_seats} onChange={set("vip_seats")} />
+          </div>
+          <div>
+            <Label>VIP price $</Label>
+            <Input type="number" min={0} value={f.vip_price} onChange={set("vip_price")} />
+          </div>
         </div>
-        <div><Label>Over-booking (% extra free tickets)</Label><Input type="number" min={0} max={100} value={f.overbook_pct} onChange={set("overbook_pct")} />
-          <p className="mt-1 text-xs text-muted-foreground">Covers no-shows. {f.capacity} seats + {f.overbook_pct}% = {effectiveCapacity(f.capacity, f.overbook_pct)} tickets.</p></div>
-        <Label className="flex items-center gap-3"><Switch checked={f.group_enabled} onCheckedChange={(v) => setF({ ...f, group_enabled: v })} /> Accept church group requests</Label>
+        <div>
+          <Label>Over-booking (% extra free tickets)</Label>
+          <Input
+            type="number"
+            min={0}
+            max={100}
+            value={f.overbook_pct}
+            onChange={set("overbook_pct")}
+          />
+          <p className="mt-1 text-xs text-muted-foreground">
+            Covers no-shows. {f.capacity} seats + {f.overbook_pct}% ={" "}
+            {effectiveCapacity(f.capacity, f.overbook_pct)} tickets.
+          </p>
+        </div>
+        <Label className="flex items-center gap-3">
+          <Switch
+            checked={f.group_enabled}
+            onCheckedChange={(v) => setF({ ...f, group_enabled: v })}
+          />{" "}
+          Accept church group requests
+        </Label>
         <p className="eyebrow pt-2">Shuttle loops</p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div><Label>First</Label><Input type="time" value={f.shuttle_start} onChange={set("shuttle_start")} /></div>
-          <div><Label>Last</Label><Input type="time" value={f.shuttle_end} onChange={set("shuttle_end")} /></div>
-          <div><Label>Every (min)</Label><Input type="number" min={5} value={f.shuttle_interval_min} onChange={set("shuttle_interval_min")} /></div>
-          <div><Label>Seats/loop</Label><Input type="number" min={1} value={f.shuttle_seats_per_loop} onChange={set("shuttle_seats_per_loop")} /></div>
+          <div>
+            <Label>First</Label>
+            <Input type="time" value={f.shuttle_start} onChange={set("shuttle_start")} />
+          </div>
+          <div>
+            <Label>Last</Label>
+            <Input type="time" value={f.shuttle_end} onChange={set("shuttle_end")} />
+          </div>
+          <div>
+            <Label>Every (min)</Label>
+            <Input
+              type="number"
+              min={5}
+              value={f.shuttle_interval_min}
+              onChange={set("shuttle_interval_min")}
+            />
+          </div>
+          <div>
+            <Label>Seats/loop</Label>
+            <Input
+              type="number"
+              min={1}
+              value={f.shuttle_seats_per_loop}
+              onChange={set("shuttle_seats_per_loop")}
+            />
+          </div>
         </div>
         <p className="eyebrow pt-2">Sponsor (optional)</p>
         <div className="grid gap-3 sm:grid-cols-3">
-          <div><Label>Sponsor name</Label><Input value={f.sponsor_name} onChange={set("sponsor_name")} maxLength={100} /></div>
-          <div><Label>Logo image URL</Label><Input value={f.sponsor_logo_url} onChange={set("sponsor_logo_url")} placeholder="https://…" /></div>
-          <div><Label>Website</Label><Input value={f.sponsor_url} onChange={set("sponsor_url")} placeholder="https://…" /></div>
+          <div>
+            <Label>Sponsor name</Label>
+            <Input value={f.sponsor_name} onChange={set("sponsor_name")} maxLength={100} />
+          </div>
+          <div>
+            <Label>Logo image URL</Label>
+            <Input
+              value={f.sponsor_logo_url}
+              onChange={set("sponsor_logo_url")}
+              placeholder="https://…"
+            />
+          </div>
+          <div>
+            <Label>Website</Label>
+            <Input value={f.sponsor_url} onChange={set("sponsor_url")} placeholder="https://…" />
+          </div>
         </div>
         <div className="flex gap-2">
           <Button variant="gold">{f.id ? "Save changes" : "Create taping"}</Button>
-          {f.id && <Button type="button" variant="ghost" onClick={() => setF(blank)}>Cancel</Button>}
+          {f.id && (
+            <Button type="button" variant="ghost" onClick={() => setF(blank)}>
+              Cancel
+            </Button>
+          )}
         </div>
       </form>
       <ul className="space-y-2">
         {tapings.map((t) => (
           <li key={t.id} className="flex items-center justify-between rounded-2xl bg-secondary p-4">
-            <span><span className="font-semibold">{t.theme}</span><span className="block text-xs text-muted-foreground">{fmtShortDate(t.starts_at)} · {t.capacity} seats</span></span>
-            <Button size="sm" variant="outline" onClick={() => edit(t)}>Edit</Button>
+            <span>
+              <span className="font-semibold">{t.theme}</span>
+              <span className="block text-xs text-muted-foreground">
+                {fmtShortDate(t.starts_at)} · {t.capacity} seats
+              </span>
+            </span>
+            <Button size="sm" variant="outline" onClick={() => edit(t)}>
+              Edit
+            </Button>
           </li>
         ))}
       </ul>

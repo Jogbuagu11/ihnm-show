@@ -7,11 +7,25 @@ export const STREAMS = {
   merch: "Merch",
   youtube: "YouTube",
 } as const;
-export const EXPENSE_CATEGORIES = ["rent", "utilities", "insurance", "equipment", "shuttle", "hospitality", "ads", "software", "supplies"] as const;
+export const EXPENSE_CATEGORIES = [
+  "rent",
+  "utilities",
+  "insurance",
+  "equipment",
+  "shuttle",
+  "hospitality",
+  "ads",
+  "software",
+  "supplies",
+] as const;
 export const DEFAULT_FUNDRAISING_GOAL_CENTS = 2_100_000;
 
 export const usd = (cents: number) =>
-  (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: cents % 100 ? 2 : 0 });
+  (cents / 100).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: cents % 100 ? 2 : 0,
+  });
 export const monthKey = (d: string) => d.slice(0, 7);
 
 type Dated = { amount_cents: number };
@@ -37,7 +51,10 @@ export function rentCoveredPct(incomeCents: number, operatingCents: number) {
 }
 
 /** A sent invoice past its due date is overdue. */
-export function invoiceStatus(inv: { status: string; due_on: string }, today = new Date().toISOString().slice(0, 10)) {
+export function invoiceStatus(
+  inv: { status: string; due_on: string },
+  today = new Date().toISOString().slice(0, 10),
+) {
   if (inv.status === "sent" && inv.due_on < today) return "overdue";
   return inv.status;
 }

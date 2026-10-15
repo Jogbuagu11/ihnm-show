@@ -11,7 +11,11 @@ export const Route = createFileRoute("/tapings/$id")({
     if (!t) throw notFound();
     return {
       title: `${t.theme} — Live Taping ${fmtDate(t.starts_at)}`,
-      description: `${t.description ?? "Join the IHNM Show live studio audience."} ${fmtTime(t.starts_at)} at ${LOCATION}. Free seats.`.slice(0, 300),
+      description:
+        `${t.description ?? "Join the IHNM Show live studio audience."} ${fmtTime(t.starts_at)} at ${LOCATION}. Free seats.`.slice(
+          0,
+          300,
+        ),
       image: t.sponsor_logo_url,
     };
   },
@@ -36,9 +40,13 @@ function TapingPage() {
   const t = data.find((x) => x.id === id)!;
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <Link to="/tickets" className="text-sm font-semibold text-walnut">← All tapings</Link>
+      <Link to="/tickets" className="text-sm font-semibold text-walnut">
+        ← All tapings
+      </Link>
       <h1 className="sr-only">{t.theme}</h1>
-      <div className="mt-6"><TapingCard t={t} featured /></div>
+      <div className="mt-6">
+        <TapingCard t={t} featured />
+      </div>
     </div>
   );
 }

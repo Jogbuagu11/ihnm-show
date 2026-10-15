@@ -3,9 +3,21 @@ import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 type Role = "admin" | "crew" | "volunteer";
-type AuthState = { session: Session | null; user: User | null; roles: Role[]; loading: boolean; isStaff: boolean };
+type AuthState = {
+  session: Session | null;
+  user: User | null;
+  roles: Role[];
+  loading: boolean;
+  isStaff: boolean;
+};
 
-const Ctx = createContext<AuthState>({ session: null, user: null, roles: [], loading: true, isStaff: false });
+const Ctx = createContext<AuthState>({
+  session: null,
+  user: null,
+  roles: [],
+  loading: true,
+  isStaff: false,
+});
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -34,7 +46,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [session?.user?.id]);
 
   return (
-    <Ctx.Provider value={{ session, user: session?.user ?? null, roles, loading, isStaff: roles.some((r) => r === "admin" || r === "crew") }}>
+    <Ctx.Provider
+      value={{
+        session,
+        user: session?.user ?? null,
+        roles,
+        loading,
+        isStaff: roles.some((r) => r === "admin" || r === "crew"),
+      }}
+    >
       {children}
     </Ctx.Provider>
   );

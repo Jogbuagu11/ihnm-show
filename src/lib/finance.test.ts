@@ -1,8 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { DEFAULT_FUNDRAISING_GOAL_CENTS, invoiceStatus, needsRenewal, rentCoveredPct, toCsv, lastMonths } from "./finance";
+import {
+  DEFAULT_FUNDRAISING_GOAL_CENTS,
+  invoiceStatus,
+  needsRenewal,
+  rentCoveredPct,
+  toCsv,
+  lastMonths,
+} from "./finance";
 
 describe("finance rules", () => {
-  it("default fundraising goal is $21,000", () => expect(DEFAULT_FUNDRAISING_GOAL_CENTS).toBe(2_100_000));
+  it("default fundraising goal is $21,000", () =>
+    expect(DEFAULT_FUNDRAISING_GOAL_CENTS).toBe(2_100_000));
   it("rent covered meter compares income to operating costs", () => {
     expect(rentCoveredPct(150_000, 300_000)).toBe(50);
     expect(rentCoveredPct(400_000, 300_000)).toBe(100);
@@ -22,5 +30,6 @@ describe("finance rules", () => {
     expect(m[0]).toBe("2025-11");
     expect(m[11]).toBe("2026-10");
   });
-  it("CSV escapes commas and quotes", () => expect(toCsv([{ a: 'x,"y"', b: 1 }])).toBe('a,b\n"x,""y""",1'));
+  it("CSV escapes commas and quotes", () =>
+    expect(toCsv([{ a: 'x,"y"', b: 1 }])).toBe('a,b\n"x,""y""",1'));
 });

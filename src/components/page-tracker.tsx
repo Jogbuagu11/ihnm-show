@@ -29,7 +29,10 @@ export function PageTracker() {
       sessionStorage.setItem("ihnm_src", sourceOf());
     }
     source.current ??= sessionStorage.getItem("ihnm_src") ?? "direct";
-    supabase.from("page_views").insert({ path: path.slice(0, 300), source: source.current, session_id: sid }).then(() => {});
+    supabase
+      .from("page_views")
+      .insert({ path: path.slice(0, 300), source: source.current, session_id: sid })
+      .then(() => {});
   }, [path]);
   return null;
 }

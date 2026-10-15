@@ -2,7 +2,15 @@ import type { ReactNode } from "react";
 import { PageHeader } from "@/components/page-header";
 import audience from "@/assets/audience.jpg";
 
-export function LegalPage({ eyebrow, title, children }: { eyebrow: string; title: string; children: ReactNode }) {
+export function LegalPage({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  children: ReactNode;
+}) {
   return (
     <>
       <PageHeader image={audience} eyebrow={eyebrow} title={title}>
