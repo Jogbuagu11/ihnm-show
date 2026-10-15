@@ -8,25 +8,28 @@ export const Route = createFileRoute("/terms")({
       "Terms for using the IHNM Show website and reserving studio audience seats.",
     ),
   component: () => (
-    <LegalPage eyebrow="Legal" title="Terms of Use">
+    <LegalPage
+      eyebrow="Legal"
+      title="Terms of Use"
+      intro="The terms for using this site and attending a taping."
+      updated="15 October 2026"
+      draft
+    >
       <p>
-        [Placeholder] By using this website and reserving seats for IHNM Show tapings, you agree to
-        these terms.
+        By using this website and reserving seats for IHNM Show tapings, you agree to these terms.
       </p>
       <h2>Reservations</h2>
       <p>
-        [Placeholder] Tickets are free unless stated otherwise and are non-transferable. Seating is
-        not guaranteed; we release extra tickets to cover no-shows, so please arrive early. Repeat
+        Tickets are free unless stated otherwise and are non-transferable. Seating is not
+        guaranteed; we release extra tickets to cover no-shows, so please arrive early. Repeat
         no-shows may be limited to one reservation at a time.
       </p>
       <h2>Minors</h2>
-      <p>
-        [Placeholder] Attendees under 18 must be listed on, and accompanied by, an adult's ticket.
-      </p>
+      <p>Attendees under 18 must be listed on, and accompanied by, an adult's ticket.</p>
       <h2>Conduct</h2>
-      <p>[Placeholder] We may refuse entry or remove anyone who disrupts the taping.</p>
+      <p>We may refuse entry or remove anyone who disrupts the taping.</p>
       <h2>Changes</h2>
-      <p>[Placeholder] Taping dates, guests and times may change without notice.</p>
+      <p>Taping dates, guests and times may change without notice.</p>
     </LegalPage>
   ),
 });
