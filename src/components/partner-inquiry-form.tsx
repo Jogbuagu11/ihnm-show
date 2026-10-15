@@ -47,7 +47,7 @@ export function PartnerInquiryForm() {
 
   if (sent) {
     return (
-      <div className="rounded-3xl border border-gold/50 bg-card p-6" aria-live="polite">
+      <div className="rounded-3xl border border-gold/50 bg-white p-6" aria-live="polite">
         <h3 className="font-display text-2xl">
           Inquiry <span className="italic-gold">received</span>.
         </h3>
@@ -61,7 +61,7 @@ export function PartnerInquiryForm() {
   return (
     <form
       onSubmit={submit}
-      className="grid gap-4 rounded-3xl border bg-card p-6 sm:grid-cols-2"
+      className="grid gap-4 rounded-3xl border bg-white p-6 sm:grid-cols-2"
       noValidate
     >
       <div>
