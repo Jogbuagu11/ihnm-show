@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarCheck, Download, Mic2, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarCheck, Download, Mic2, Sparkles } from "lucide-react";
 import studio from "@/assets/studio.jpg";
 import audience from "@/assets/audience.jpg";
 import { Button } from "@/components/ui/button";
@@ -99,9 +99,20 @@ function Prelaunch() {
                 asChild
                 variant="gold"
                 size="lg"
-                className="animate-throb motion-reduce:animate-none"
+                className="animate-throb group relative h-14 overflow-hidden px-9 text-base shadow-[0_12px_32px_-10px_color-mix(in_oklab,var(--gold)_75%,transparent)] transition-all duration-300 hover:shadow-[0_18px_44px_-12px_color-mix(in_oklab,var(--gold)_90%,transparent)] hover:brightness-105 motion-reduce:animate-none [&_svg]:size-5"
               >
-                <a href="#waitlist">Join the waitlist</a>
+                <a href="#waitlist">
+                  <span className="relative z-10">Join the waitlist</span>
+                  <ArrowRight
+                    className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"
+                    aria-hidden
+                  />
+                  {/* Glint. Decorative, so it stays out of the accessibility tree. */}
+                  <span
+                    aria-hidden
+                    className="animate-sheen pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/45 to-transparent motion-reduce:hidden"
+                  />
+                </a>
               </Button>
               <Countdown target={settings?.ticket_drop_at} />
             </div>
