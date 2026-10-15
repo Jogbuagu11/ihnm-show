@@ -1,14 +1,3 @@
-<!-- LOVABLE:BEGIN -->
-> [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
-<!-- LOVABLE:END -->
-
 ## Architecture rules
 - Seat, waitlist, shuttle, check-in and group-approval logic lives in security-definer Postgres functions (reserve_seat, cancel_reservation, book_shuttle, check_in, decide_group_request); the browser calls them via RPC — keeps capacity rules atomic and server-enforced.
 - Staff access = any row in user_roles (admin/crew); the first account to sign up becomes admin via a trigger — avoids hardcoding an admin.
@@ -24,3 +13,10 @@
 - Ticket-holder announcements are rows in taping_messages shown on My Tickets; SMS opt-in is stored on reservations, actual texting needs a provider connection.
 - Crew/admin access is granted only via add_staff/remove_staff RPCs (admin-checked); emails without an account wait in staff_invites and are applied by a trigger on signup — avoids editing roles by hand.
 - Door self check-in uses a staff-only per-taping code (door_code RPC) embedded in the printed QR; self_check_in validates code, account reservation and a ±3h window — so the public taping data never exposes the code.
+- Prelaunch waitlist + referrals live in public.waitlist_signups; position is a generated column (greatest(1, signup_order - 5 * referral_count)) so it can never drift from the referral count. Signup/confirm go through join_waitlist/confirm_waitlist, which are revoked from anon and called via TanStack server functions holding the service role — otherwise an email address could be probed to read someone else's position.
+- Waitlist admin RPCs (waitlist_stats, invite_top_waitlist, import_waitlist) are called straight from the browser with the admin's JWT and gate themselves on is_admin_or_service(), which reads the PostgREST role claim because security definer hides current_user.
+- The waitlist table is the ticketing table: status walks waitlist -> invited -> ticketed, so the ticket launch reads the same rows rather than a new one.
+- Referral credit timing is a setting: site_settings.require_email_confirm is off while the newsletter lives on Substack (no per-person send API), so signups confirm instantly and referrals credit on signup. Turning it on gates credit behind confirm_waitlist.
+- Everything on the prelaunch page (hero copy, ticket drop date, SMS keyword/number, Substack and social URLs, media kit PDF) is a column on site_settings, editable in Crew Portal -> Settings. A null ticket_drop_at hides the countdown.
+- Build is plain Vite + TanStack Start + nitro with the vercel preset (vite.config.ts). The signed-in area sets ssr:false, so its noindex comes from nitro routeRules headers plus robots.txt, not a meta tag.
+

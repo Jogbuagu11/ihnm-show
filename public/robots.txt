@@ -1,14 +1,14 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
 User-agent: *
 Allow: /
+
+# Signed-in and token-gated areas have nothing for a crawler.
+Disallow: /crew
+Disallow: /finance
+Disallow: /account
+Disallow: /bookings
+Disallow: /checkin
+Disallow: /volunteer
+Disallow: /confirm/
+Disallow: /release/
+
+Sitemap: https://ihnmshow.com/sitemap.xml
