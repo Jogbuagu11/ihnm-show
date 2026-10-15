@@ -30,6 +30,7 @@ import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TicketsRouteImport } from './routes/tickets'
 import { Route as WatchRouteImport } from './routes/watch'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedBookingsRouteImport } from './routes/_authenticated/bookings'
 import { Route as AuthenticatedCheckinRouteImport } from './routes/_authenticated/checkin'
@@ -145,6 +146,11 @@ const WatchRoute = WatchRouteImport.update({
   path: '/watch',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
+  '/welcome': typeof WelcomeRoute
   '/account': typeof AuthenticatedAccountRoute
   '/bookings': typeof AuthenticatedBookingsRoute
   '/checkin': typeof AuthenticatedCheckinRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
+  '/welcome': typeof WelcomeRoute
   '/account': typeof AuthenticatedAccountRoute
   '/bookings': typeof AuthenticatedBookingsRoute
   '/checkin': typeof AuthenticatedCheckinRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
   '/watch': typeof WatchRoute
+  '/welcome': typeof WelcomeRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/bookings': typeof AuthenticatedBookingsRoute
   '/_authenticated/checkin': typeof AuthenticatedCheckinRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tickets'
     | '/watch'
+    | '/welcome'
     | '/account'
     | '/bookings'
     | '/checkin'
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tickets'
     | '/watch'
+    | '/welcome'
     | '/account'
     | '/bookings'
     | '/checkin'
@@ -382,6 +393,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tickets'
     | '/watch'
+    | '/welcome'
     | '/_authenticated/account'
     | '/_authenticated/bookings'
     | '/_authenticated/checkin'
@@ -416,6 +428,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TicketsRoute: typeof TicketsRoute
   WatchRoute: typeof WatchRoute
+  WelcomeRoute: typeof WelcomeRoute
   ConfirmTokenRoute: typeof ConfirmTokenRoute
   ReleaseTokenRoute: typeof ReleaseTokenRoute
   TapingsIdRoute: typeof TapingsIdRoute
@@ -571,6 +584,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/account': {
       id: '/_authenticated/account'
       path: '/account'
@@ -687,6 +707,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TicketsRoute: TicketsRoute,
   WatchRoute: WatchRoute,
+  WelcomeRoute: WelcomeRoute,
   ConfirmTokenRoute: ConfirmTokenRoute,
   ReleaseTokenRoute: ReleaseTokenRoute,
   TapingsIdRoute: TapingsIdRoute,

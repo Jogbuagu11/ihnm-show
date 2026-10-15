@@ -59,7 +59,7 @@ function AuthPage() {
         : await supabase.auth.signUp({
             email,
             password,
-            options: { emailRedirectTo: `${window.location.origin}/account` },
+            options: { emailRedirectTo: `${window.location.origin}/welcome` },
           });
     setBusy(false);
     if (error) return toast.error(error.message);
