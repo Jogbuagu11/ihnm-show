@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { LOCATION } from "@/lib/show";
 import { siteSettingsQuery } from "@/lib/settings";
-import { NextdoorIcon, SubstackIcon, ThreadsIcon } from "@/components/social-icons";
+import { NextdoorIcon, SubstackIcon } from "@/components/social-icons";
 
 export function SiteFooter() {
   const { data: settings } = useQuery(siteSettingsQuery);
@@ -15,7 +15,6 @@ export function SiteFooter() {
     { label: "Instagram", href: settings?.url_instagram, icon: Instagram },
     { label: "TikTok", href: settings?.url_tiktok, icon: Music2 },
     { label: "Facebook", href: settings?.url_facebook, icon: Facebook },
-    { label: "Threads", href: settings?.url_threads, icon: ThreadsIcon },
     { label: "Nextdoor", href: settings?.url_nextdoor, icon: NextdoorIcon },
     { label: "Substack", href: settings?.substack_url, icon: SubstackIcon },
   ].filter((s): s is { label: string; href: string; icon: typeof Youtube } => !!s.href);

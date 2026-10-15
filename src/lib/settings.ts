@@ -48,7 +48,6 @@ export const SOCIAL_FIELDS = [
   { key: "url_instagram", label: "Instagram" },
   { key: "url_tiktok", label: "TikTok" },
   { key: "url_facebook", label: "Facebook" },
-  { key: "url_threads", label: "Threads" },
   { key: "url_nextdoor", label: "Nextdoor" },
   { key: "substack_url", label: "Substack" },
 ] as const satisfies readonly { key: keyof SiteSettings; label: string }[];

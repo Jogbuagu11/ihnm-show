@@ -24,7 +24,6 @@ const TEXT_FIELDS: { k: keyof SiteSettings; label: string; hint?: string }[] = [
   { k: "url_instagram", label: "Instagram URL" },
   { k: "url_tiktok", label: "TikTok URL" },
   { k: "url_facebook", label: "Facebook URL" },
-  { k: "url_threads", label: "Threads URL" },
   { k: "url_nextdoor", label: "Nextdoor URL" },
 ];
 
@@ -57,7 +56,6 @@ export function PrelaunchSettings() {
           url_instagram: blank(draft.url_instagram),
           url_tiktok: blank(draft.url_tiktok),
           url_facebook: blank(draft.url_facebook),
-          url_threads: blank(draft.url_threads),
           url_nextdoor: blank(draft.url_nextdoor),
           weekly_position_emails: draft.weekly_position_emails ?? false,
           require_email_confirm: draft.require_email_confirm ?? false,
