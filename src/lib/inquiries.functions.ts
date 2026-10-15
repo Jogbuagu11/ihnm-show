@@ -20,26 +20,33 @@ export const notifyInquiry = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: row, error } = await supabaseAdmin
-      .from(data.table)
-      .select("*")
-      .eq("id", data.id)
-      .maybeSingle();
-
-    if (error || !row) {
-      console.error("[inquiry] row not found for notification", data.table, error);
-      return { sent: false };
-    }
-    const record = row as Record<string, unknown>;
-    if (record["notified_at"]) return { sent: false };
-
-    const { sendInquiryNotification } = await import("./email.server");
-    await sendInquiryNotification(data.table, record);
-
-    await supabaseAdmin
+    // Claim the row and send only if the claim succeeded. The database trigger
+    // calls the edge function for the same insert, so without an atomic claim
+    // both paths could read notified_at as null and send twice. A conditional
+    // UPDATE is atomic, so exactly one of them wins.
+    const { data: claimed, error } = await supabaseAdmin
       .from(data.table)
       .update({ notified_at: new Date().toISOString() })
-      .eq("id", data.id);
+      .eq("id", data.id)
+      .is("notified_at", null)
+      .select("*");
+
+    if (error) {
+      console.error("[inquiry] claim failed", data.table, error);
+      return { sent: false };
+    }
+    if (!claimed || claimed.length === 0) return { sent: false };
+
+    const record = claimed[0] as Record<string, unknown>;
+    try {
+      const { sendInquiryNotification } = await import("./email.server");
+      await sendInquiryNotification(data.table, record);
+    } catch (e) {
+      // Release the claim so the other path, or a retry, can still deliver it.
+      await supabaseAdmin.from(data.table).update({ notified_at: null }).eq("id", data.id);
+      console.error("[inquiry] send failed, claim released", e);
+      return { sent: false };
+    }
 
     return { sent: true };
   });
