@@ -23,6 +23,7 @@ import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RentRouteImport } from './routes/rent'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServeRouteImport } from './routes/serve'
 import { Route as ShuttleRouteImport } from './routes/shuttle'
 import { Route as SubmitRouteImport } from './routes/submit'
@@ -107,6 +108,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const RentRoute = RentRouteImport.update({
   id: '/rent',
   path: '/rent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServeRoute = ServeRouteImport.update({
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/serve': typeof ServeRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
@@ -235,6 +242,7 @@ export interface FileRoutesByTo {
   '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/serve': typeof ServeRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
@@ -268,6 +276,7 @@ export interface FileRoutesById {
   '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
   '/rent': typeof RentRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/serve': typeof ServeRoute
   '/shuttle': typeof ShuttleRoute
   '/submit': typeof SubmitRoute
@@ -301,6 +310,7 @@ export interface FileRouteTypes {
     | '/prayer'
     | '/privacy'
     | '/rent'
+    | '/reset-password'
     | '/serve'
     | '/shuttle'
     | '/submit'
@@ -332,6 +342,7 @@ export interface FileRouteTypes {
     | '/prayer'
     | '/privacy'
     | '/rent'
+    | '/reset-password'
     | '/serve'
     | '/shuttle'
     | '/submit'
@@ -364,6 +375,7 @@ export interface FileRouteTypes {
     | '/prayer'
     | '/privacy'
     | '/rent'
+    | '/reset-password'
     | '/serve'
     | '/shuttle'
     | '/submit'
@@ -397,6 +409,7 @@ export interface RootRouteChildren {
   PrayerRoute: typeof PrayerRoute
   PrivacyRoute: typeof PrivacyRoute
   RentRoute: typeof RentRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServeRoute: typeof ServeRoute
   ShuttleRoute: typeof ShuttleRoute
   SubmitRoute: typeof SubmitRoute
@@ -507,6 +520,13 @@ declare module '@tanstack/react-router' {
       path: '/rent'
       fullPath: '/rent'
       preLoaderRoute: typeof RentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/serve': {
@@ -660,6 +680,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrayerRoute: PrayerRoute,
   PrivacyRoute: PrivacyRoute,
   RentRoute: RentRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServeRoute: ServeRoute,
   ShuttleRoute: ShuttleRoute,
   SubmitRoute: SubmitRoute,

@@ -136,6 +136,12 @@ function AuthPage() {
               <Button variant="gold" className="w-full" disabled={busy}>
                 Sign in to portal
               </Button>
+              <a
+                href="/reset-password"
+                className="block text-center text-xs text-stage-foreground/70 underline-offset-2 hover:text-gold hover:underline"
+              >
+                Forgot your password?
+              </a>
             </form>
             <Button variant="hero" className="w-full rounded-full" onClick={google}>
               Continue with Google
@@ -205,6 +211,14 @@ function AuthPage() {
             >
               {mode === "in" ? "New here? Create an account" : "Already have an account? Sign in"}
             </button>
+            {mode === "in" && (
+              <a
+                href="/reset-password"
+                className="block text-center text-sm text-muted-foreground underline-offset-2 hover:text-walnut hover:underline"
+              >
+                Forgot your password?
+              </a>
+            )}
           </div>
         </>
       )}
