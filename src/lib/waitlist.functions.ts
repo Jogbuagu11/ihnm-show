@@ -94,6 +94,16 @@ export const confirmWaitlist = createServerFn({ method: "POST" })
   .validator((data: { token: string }) => z.object({ token: z.string().uuid() }).parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Read the row first: confirm_waitlist is idempotent and always reports
+    // confirmed, so this is the only way to tell a first confirmation from a
+    // re-clicked link and avoid emailing twice.
+    const { data: before } = await supabaseAdmin
+      .from("waitlist_signups")
+      .select("email, confirmed_at")
+      .eq("confirm_token", data.token)
+      .maybeSingle();
+
     const { data: result, error } = await supabaseAdmin.rpc("confirm_waitlist", {
       p_token: data.token,
     });
@@ -103,11 +113,24 @@ export const confirmWaitlist = createServerFn({ method: "POST" })
       console.error("[waitlist] confirm failed", error);
       throw new Error("We couldn't confirm your spot. Please try again.");
     }
-    return result as unknown as {
+
+    const row = result as unknown as {
       position: number;
       referral_code: string;
       referral_count: number;
       first_name: string;
       confirmed: boolean;
     };
+
+    if (before && !before.confirmed_at && before.email) {
+      const { sendWelcomeEmail } = await import("./email.server");
+      await sendWelcomeEmail({
+        email: before.email,
+        first_name: row.first_name,
+        position: row.position,
+        referral_code: row.referral_code,
+      });
+    }
+
+    return row;
   });

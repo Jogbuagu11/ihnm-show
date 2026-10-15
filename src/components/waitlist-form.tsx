@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import { Check, Copy, Facebook, Mail, MessageCircle, MessageSquare } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,17 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { joinWaitlist } from "@/lib/waitlist.functions";
-import {
-  FIRST_ACCESS_COUNT,
-  SPOTS_PER_REFERRAL,
-  WAITLIST_SOURCES,
-  positionLabel,
-  readUrlAttribution,
-  referralUrl,
-  shareLinks,
-  type JoinResult,
-} from "@/lib/waitlist";
-import { trackReferralShare, trackSignup } from "@/lib/analytics";
+import { ReferralPanel } from "@/components/referral-panel";
+import { WAITLIST_SOURCES, readUrlAttribution, type JoinResult } from "@/lib/waitlist";
+import { trackSignup } from "@/lib/analytics";
 
 const SMS_CONSENT =
   "By checking this box you agree to receive text messages about tapings and ticket drops. Msg & data rates may apply. Reply STOP to opt out.";
@@ -97,7 +88,18 @@ export function WaitlistForm() {
     }
   }
 
-  if (result) return <JoinedPanel result={result} />;
+  if (result)
+    return (
+      <ReferralPanel
+        position={result.position}
+        referralCode={result.referral_code}
+        referralCount={result.referral_count}
+        firstName={result.first_name}
+        already={result.already}
+        confirmed={result.confirmed}
+        idPrefix="wl"
+      />
+    );
 
   return (
     <form
@@ -241,113 +243,5 @@ export function WaitlistForm() {
         .
       </p>
     </form>
-  );
-}
-
-function JoinedPanel({ result }: { result: JoinResult }) {
-  const [copied, setCopied] = useState(false);
-  const link = useMemo(() => referralUrl(result.referral_code), [result.referral_code]);
-  const links = useMemo(() => shareLinks(result.referral_code), [result.referral_code]);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(link);
-      setCopied(true);
-      trackReferralShare("copy");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Couldn't copy — select the link and copy it manually.");
-    }
-  }
-
-  const shares = [
-    { label: "Text message", href: links.sms, icon: MessageSquare, channel: "sms" },
-    { label: "WhatsApp", href: links.whatsapp, icon: MessageCircle, channel: "whatsapp" },
-    { label: "Facebook", href: links.facebook, icon: Facebook, channel: "facebook" },
-    { label: "X", href: links.x, icon: XIcon, channel: "x" },
-    { label: "Email", href: links.email, icon: Mail, channel: "email" },
-  ];
-
-  return (
-    <div
-      className="rounded-3xl border border-gold/50 bg-card p-6 shadow-soft sm:p-8"
-      aria-live="polite"
-    >
-      {result.already && (
-        <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          You're already on the list
-        </p>
-      )}
-      <h3 className="display-lg">
-        {positionLabel(result.position).replace(/^You're /, "You're ")}
-      </h3>
-      {result.referral_count > 0 && (
-        <p className="mt-2 text-sm text-muted-foreground">
-          {result.referral_count} {result.referral_count === 1 ? "friend has" : "friends have"}{" "}
-          joined with your link.
-        </p>
-      )}
-      <p className="mt-4 text-muted-foreground">
-        Each friend who joins moves you up {SPOTS_PER_REFERRAL} spots. The first{" "}
-        {FIRST_ACCESS_COUNT} get first access to tickets.
-      </p>
-
-      <div className="mt-6">
-        <Label
-          htmlFor="wl-link"
-          className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground"
-        >
-          Your personal link
-        </Label>
-        <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-          <Input
-            id="wl-link"
-            readOnly
-            value={link}
-            onFocus={(e) => e.currentTarget.select()}
-            className="font-mono text-sm"
-          />
-          <Button type="button" variant="gold" onClick={copy} className="shrink-0">
-            {copied ? (
-              <>
-                <Check className="size-4" aria-hidden /> Copied
-              </>
-            ) : (
-              <>
-                <Copy className="size-4" aria-hidden /> Copy
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-
-      <p className="mt-6 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-        Share it
-      </p>
-      <ul className="mt-3 flex flex-wrap gap-2">
-        {shares.map(({ label, href, icon: Icon, channel }) => (
-          <li key={label}>
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackReferralShare(channel)}
-              className="inline-flex items-center gap-2 rounded-full border border-input px-4 py-2 text-sm transition hover:border-gold hover:text-gold focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            >
-              <Icon className="size-4" aria-hidden /> {label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-/** lucide has no X/Twitter glyph, so draw the mark inline. */
-function XIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
-      <path d="M18.9 2H22l-7.1 8.1L22.8 22h-6.6l-4.6-6.2L6.2 22H3l7.4-8.4L2.6 2h6.7l4.3 5.8L18.9 2Zm-1.2 18h1.8L7.4 3.8H5.5L17.7 20Z" />
-    </svg>
   );
 }

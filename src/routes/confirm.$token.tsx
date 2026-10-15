@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { confirmWaitlist } from "@/lib/waitlist.functions";
-import { FIRST_ACCESS_COUNT, SPOTS_PER_REFERRAL, positionLabel, referralUrl } from "@/lib/waitlist";
+import { ReferralPanel } from "@/components/referral-panel";
 
 export const Route = createFileRoute("/confirm/$token")({
   head: () => ({
@@ -15,7 +14,7 @@ export const Route = createFileRoute("/confirm/$token")({
 type State =
   | { tag: "loading" }
   | { tag: "error"; message: string }
-  | { tag: "done"; position: number; code: string; firstName: string };
+  | { tag: "done"; position: number; code: string; firstName: string; referralCount: number };
 
 function Confirm() {
   const { token } = Route.useParams();
@@ -31,6 +30,7 @@ function Confirm() {
             position: r.position,
             code: r.referral_code,
             firstName: r.first_name,
+            referralCount: r.referral_count,
           });
       })
       .catch((e: unknown) => {
@@ -62,24 +62,16 @@ function Confirm() {
       {state.tag === "done" && (
         <>
           <p className="eyebrow">— You're in</p>
-          <h1 className="display-lg mt-4">{positionLabel(state.position)}</h1>
-          <p className="mt-4 text-muted-foreground">
-            Thanks {state.firstName}. Each friend who joins moves you up {SPOTS_PER_REFERRAL} spots
-            — the first {FIRST_ACCESS_COUNT} get first access to tickets.
+          <p className="mt-3 text-muted-foreground">
+            Thanks{state.firstName ? ` ${state.firstName}` : ""} — your spot is confirmed.
           </p>
           <div className="mt-6">
-            <label
-              htmlFor="confirm-link"
-              className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground"
-            >
-              Your personal link
-            </label>
-            <Input
-              id="confirm-link"
-              readOnly
-              className="mt-2 font-mono text-sm"
-              value={referralUrl(state.code)}
-              onFocus={(e) => e.currentTarget.select()}
+            <ReferralPanel
+              position={state.position}
+              referralCode={state.code}
+              referralCount={state.referralCount}
+              firstName={state.firstName}
+              idPrefix="confirm"
             />
           </div>
         </>

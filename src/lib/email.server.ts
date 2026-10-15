@@ -44,7 +44,6 @@ const shell = (body: string) => `
 /** Confirmation when confirmation is required, welcome when it isn't. */
 export async function sendWaitlistEmail(row: JoinResult): Promise<void> {
   if (row.already) return;
-  const link = referralUrl(row.referral_code, SITE);
 
   if (!row.confirmed && row.confirm_token) {
     await send(
@@ -65,15 +64,28 @@ export async function sendWaitlistEmail(row: JoinResult): Promise<void> {
     return;
   }
 
+  await sendWelcomeEmail(row);
+}
+
+/** Sent once the spot is confirmed: position plus what the link is for. */
+export async function sendWelcomeEmail(row: {
+  email: string;
+  first_name: string;
+  position: number;
+  referral_code: string;
+}): Promise<void> {
+  const link = referralUrl(row.referral_code, SITE);
   await send(
     row.email,
     `You're #${row.position} on the list — IHNM Show`,
     shell(`
       <p>Hi ${escapeHtml(row.first_name)},</p>
       <p style="font-family:Georgia,serif;font-size:24px;margin:16px 0">You're #${row.position} on the list.</p>
-      <p>Each friend who joins moves you up ${SPOTS_PER_REFERRAL} spots. The first ${FIRST_ACCESS_COUNT} get first access to tickets.</p>
-      <p style="margin:20px 0">Your link:<br />
-        <a href="${link}" style="color:#b8893b">${link}</a></p>`),
+      <p><strong>Want to move up?</strong> Send the link below to friends. Every friend who joins
+         through it moves you up ${SPOTS_PER_REFERRAL} spots, and the first ${FIRST_ACCESS_COUNT}
+         people on the list get first access to tickets.</p>
+      <p style="margin:20px 0">
+        <a href="${link}" style="color:#b8893b;word-break:break-all">${link}</a></p>`),
   );
 }
 
