@@ -85,6 +85,10 @@ export function SiteFooter() {
         <Link to="/filming-consent" className="hover:text-gold">
           Audience Filming Consent
         </Link>
+        {/* The prelaunch header drops the nav, so this is the way to /auth. */}
+        <Link to="/auth" className="hover:text-gold">
+          Sign in
+        </Link>
         {settings?.giving_enabled && (
           <Link to="/give" className="hover:text-gold">
             Partner Giving

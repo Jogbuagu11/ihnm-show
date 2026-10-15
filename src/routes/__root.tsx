@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -13,6 +14,7 @@ import { type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
+import { PrelaunchHeader } from "@/components/prelaunch-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { PageTracker } from "@/components/page-tracker";
@@ -135,12 +137,16 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // The prelaunch header is for the landing page only; every other page keeps
+  // its normal navigation.
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isPrelaunch = pathname === "/";
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <div className="flex min-h-screen flex-col">
           <PageTracker />
-          <SiteHeader />
+          {isPrelaunch ? <PrelaunchHeader /> : <SiteHeader />}
           <main className="flex-1">
             <Outlet />
           </main>
