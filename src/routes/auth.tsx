@@ -140,6 +140,22 @@ function AuthPage() {
             <Button variant="hero" className="w-full rounded-full" onClick={google}>
               Continue with Google
             </Button>
+            {/* Account creation lives on the Audience tab, so a first-time
+                admin or new crew member otherwise hits a dead end here. */}
+            <p className="text-center text-xs text-stage-foreground/70">
+              New here? Create your account on the{" "}
+              <button
+                type="button"
+                onClick={() => {
+                  setAdmin(false);
+                  setMode("up");
+                }}
+                className="underline underline-offset-2 hover:text-gold"
+              >
+                Audience tab
+              </button>
+              , then ask an admin for crew access.
+            </p>
           </div>
         </>
       ) : (
