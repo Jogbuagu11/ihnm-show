@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Pill } from "@/components/finance/crud";
 import { WAITLIST_SOURCES, normalizeImportRow, parseCsv, toCsv } from "@/lib/waitlist";
+import { inviteTopWaitlist } from "@/lib/waitlist-admin.functions";
 import type { Database } from "@/integrations/supabase/types";
 
 type Signup = Database["public"]["Tables"]["waitlist_signups"]["Row"];
@@ -107,15 +108,13 @@ export function WaitlistAdmin() {
   }, [rows, search, status, source]);
 
   const invite = useMutation({
-    mutationFn: async (n: number) => {
-      const { data, error } = await supabase.rpc("invite_top_waitlist", { p_count: n });
-      if (error) throw error;
-      return data ?? [];
-    },
-    onSuccess: (invited) => {
+    // Goes through the server so the invite emails actually send; the RPC alone
+    // only flips the status.
+    mutationFn: (count: number) => inviteTopWaitlist({ data: { count } }),
+    onSuccess: ({ invited, emailed }) => {
       toast.success(
-        invited.length
-          ? `${invited.length} marked as invited.`
+        invited
+          ? `${invited} marked as invited, ${emailed} emailed.`
           : "Nobody new to invite — the top of the list is already invited.",
       );
       void qc.invalidateQueries({ queryKey: ["waitlist"] });

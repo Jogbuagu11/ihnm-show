@@ -199,12 +199,15 @@ export function PrelaunchSettings() {
             checked={draft.require_email_confirm ?? false}
             onChange={(v) => set("require_email_confirm", v)}
           />
+          {/* Deliberately disabled: nothing sends these yet. A switch that
+              silently does nothing is worse than one that says so. */}
           <Toggle
             id="s-weekly"
             label="Weekly position-update emails"
-            hint="Sends each member their current position once a week. Needs a transactional sender."
-            checked={draft.weekly_position_emails ?? false}
-            onChange={(v) => set("weekly_position_emails", v)}
+            hint="Not built yet — there is no scheduled job to send these, so turning it on would do nothing. The setting is kept so it can be switched on the day a sender exists."
+            checked={false}
+            disabled
+            onChange={() => undefined}
           />
         </div>
       </section>
@@ -222,16 +225,24 @@ function Toggle({
   hint,
   checked,
   onChange,
+  disabled = false,
 }: {
   id: string;
   label: string;
   hint: string;
   checked: boolean;
   onChange: (v: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
-    <div className="flex items-start gap-3">
-      <Switch id={id} checked={checked} onCheckedChange={onChange} className="mt-1" />
+    <div className={`flex items-start gap-3${disabled ? " opacity-60" : ""}`}>
+      <Switch
+        id={id}
+        checked={checked}
+        onCheckedChange={onChange}
+        disabled={disabled}
+        className="mt-1"
+      />
       <div>
         <Label htmlFor={id}>{label}</Label>
         <p className="mt-1 max-w-prose text-xs text-muted-foreground">{hint}</p>
