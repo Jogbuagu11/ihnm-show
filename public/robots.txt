@@ -11,4 +11,4 @@ Disallow: /volunteer
 Disallow: /confirm/
 Disallow: /release/
 
-Sitemap: https://ihnmshow.com/sitemap.xml
+Sitemap: https://www.ihnmshow.com/sitemap.xml
