@@ -58,7 +58,7 @@ export function ReferralPanel({
 
   return (
     <div
-      className="rounded-3xl border border-gold/50 bg-card p-6 shadow-soft sm:p-8"
+      className="rounded-3xl border border-gold/50 bg-white p-6 shadow-soft sm:p-8"
       aria-live="polite"
     >
       {already && (
