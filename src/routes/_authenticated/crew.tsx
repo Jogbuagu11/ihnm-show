@@ -5,7 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { fmtShortDate } from "@/lib/show";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Dashboard } from "@/components/crew/dashboard";
 import { CheckIn } from "@/components/crew/check-in";
 import { ShuttleManifest } from "@/components/crew/shuttle-manifest";
@@ -23,6 +29,9 @@ import { StaffAdmin } from "@/components/crew/staff";
 import { DoorSign } from "@/components/crew/door-sign";
 import { FeedbackList } from "@/components/crew/feedback";
 import { PrayerInbox } from "@/components/crew/prayer";
+import { WaitlistAdmin } from "@/components/crew/waitlist-admin";
+import { PrelaunchSettings } from "@/components/crew/prelaunch-settings";
+import { PartnerInbox } from "@/components/crew/partner-inbox";
 
 export const Route = createFileRoute("/_authenticated/crew")({
   head: () => ({
@@ -51,13 +60,22 @@ function Crew() {
   const [tid, setTid] = useState<string>("");
   useEffect(() => {
     if (!tid && tapings.length) {
-      const upcoming = tapings.find((t) => new Date(t.starts_at) > new Date(Date.now() - 6 * 3600e3));
+      const upcoming = tapings.find(
+        (t) => new Date(t.starts_at) > new Date(Date.now() - 6 * 3600e3),
+      );
       setTid((upcoming ?? tapings[tapings.length - 1])?.id ?? "");
     }
   }, [tapings, tid]);
 
   if (!isStaff) {
-    return <div className="mx-auto max-w-md px-4 py-20 text-center"><h1 className="text-3xl font-semibold">Crew only</h1><p className="mt-2 text-muted-foreground">Your account doesn't have crew access. Ask an admin to add you.</p></div>;
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="text-3xl font-semibold">Crew only</h1>
+        <p className="mt-2 text-muted-foreground">
+          Your account doesn't have crew access. Ask an admin to add you.
+        </p>
+      </div>
+    );
   }
   const taping = tapings.find((t) => t.id === tid);
 
@@ -69,9 +87,15 @@ function Crew() {
           <h1 className="text-4xl font-semibold">Crew Portal</h1>
         </div>
         <Select value={tid} onValueChange={setTid}>
-          <SelectTrigger className="sm:w-80"><SelectValue placeholder="Choose a taping" /></SelectTrigger>
+          <SelectTrigger className="sm:w-80">
+            <SelectValue placeholder="Choose a taping" />
+          </SelectTrigger>
           <SelectContent>
-            {tapings.map((t) => <SelectItem key={t.id} value={t.id}>{fmtShortDate(t.starts_at)} — {t.theme}</SelectItem>)}
+            {tapings.map((t) => (
+              <SelectItem key={t.id} value={t.id}>
+                {fmtShortDate(t.starts_at)} — {t.theme}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -90,6 +114,9 @@ function Crew() {
           <TabsTrigger value="door">Door QR</TabsTrigger>
           <TabsTrigger value="feedback">Feedback</TabsTrigger>
           <TabsTrigger value="prayer">Prayer</TabsTrigger>
+          {roles.includes("admin") && <TabsTrigger value="waitlist">Waitlist</TabsTrigger>}
+          {roles.includes("admin") && <TabsTrigger value="partners">Partners</TabsTrigger>}
+          {roles.includes("admin") && <TabsTrigger value="prelaunch">Settings</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="guests">Guest Hub</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="inbox">Inbox</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
@@ -99,19 +126,64 @@ function Crew() {
         <TabsContent value="checkin">{taping && <CheckIn taping={taping} />}</TabsContent>
         <TabsContent value="shuttle">{taping && <ShuttleManifest taping={taping} />}</TabsContent>
         <TabsContent value="releases">{taping && <Releases taping={taping} />}</TabsContent>
-        <TabsContent value="groups"><GroupRequests /></TabsContent>
-        <TabsContent value="submissions"><SubmissionsQueue tapings={tapings} /></TabsContent>
-        <TabsContent value="tapings"><TapingsEditor tapings={tapings} /></TabsContent>
-        <TabsContent value="episodes"><EpisodesEditor /></TabsContent>
-        <TabsContent value="volunteers">{taping && <VolunteersAdmin taping={taping} tapings={tapings} isAdmin={roles.includes("admin")} />}</TabsContent>
+        <TabsContent value="groups">
+          <GroupRequests />
+        </TabsContent>
+        <TabsContent value="submissions">
+          <SubmissionsQueue tapings={tapings} />
+        </TabsContent>
+        <TabsContent value="tapings">
+          <TapingsEditor tapings={tapings} />
+        </TabsContent>
+        <TabsContent value="episodes">
+          <EpisodesEditor />
+        </TabsContent>
+        <TabsContent value="volunteers">
+          {taping && (
+            <VolunteersAdmin taping={taping} tapings={tapings} isAdmin={roles.includes("admin")} />
+          )}
+        </TabsContent>
         <TabsContent value="messages">{taping && <Messages taping={taping} />}</TabsContent>
         <TabsContent value="door">{taping && <DoorSign taping={taping} />}</TabsContent>
         <TabsContent value="feedback">{taping && <FeedbackList taping={taping} />}</TabsContent>
-        <TabsContent value="prayer"><PrayerInbox /></TabsContent>
-        {roles.includes("admin") && <TabsContent value="guests">{taping && <GuestHub taping={taping} tapings={tapings} />}</TabsContent>}
-        {roles.includes("admin") && <TabsContent value="inbox"><Inbox /></TabsContent>}
-        {roles.includes("admin") && <TabsContent value="analytics"><Analytics /></TabsContent>}
-        {roles.includes("admin") && <TabsContent value="team"><StaffAdmin /></TabsContent>}
+        <TabsContent value="prayer">
+          <PrayerInbox />
+        </TabsContent>
+        {roles.includes("admin") && (
+          <TabsContent value="waitlist">
+            <WaitlistAdmin />
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="partners">
+            <PartnerInbox />
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="prelaunch">
+            <PrelaunchSettings />
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="guests">
+            {taping && <GuestHub taping={taping} tapings={tapings} />}
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="inbox">
+            <Inbox />
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="analytics">
+            <Analytics />
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="team">
+            <StaffAdmin />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

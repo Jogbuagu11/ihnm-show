@@ -35,6 +35,7 @@ import { Route as AuthenticatedCheckinRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
 import { Route as AuthenticatedFinanceRouteImport } from './routes/_authenticated/finance'
 import { Route as AuthenticatedVolunteerRouteImport } from './routes/_authenticated/volunteer'
+import { Route as ConfirmTokenRouteImport } from './routes/confirm.$token'
 import { Route as ReleaseTokenRouteImport } from './routes/release.$token'
 import { Route as TapingsIdRouteImport } from './routes/tapings.$id'
 import { Route as WatchSlugRouteImport } from './routes/watch_.$slug'
@@ -168,6 +169,11 @@ const AuthenticatedVolunteerRoute = AuthenticatedVolunteerRouteImport.update({
   path: '/volunteer',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ConfirmTokenRoute = ConfirmTokenRouteImport.update({
+  id: '/confirm/$token',
+  path: '/confirm/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReleaseTokenRoute = ReleaseTokenRouteImport.update({
   id: '/release/$token',
   path: '/release/$token',
@@ -210,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
+  '/confirm/$token': typeof ConfirmTokenRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
@@ -240,6 +247,7 @@ export interface FileRoutesByTo {
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
+  '/confirm/$token': typeof ConfirmTokenRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/_authenticated/crew': typeof AuthenticatedCrewRoute
   '/_authenticated/finance': typeof AuthenticatedFinanceRoute
   '/_authenticated/volunteer': typeof AuthenticatedVolunteerRoute
+  '/confirm/$token': typeof ConfirmTokenRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch_/$slug': typeof WatchSlugRoute
@@ -304,6 +313,7 @@ export interface FileRouteTypes {
     | '/crew'
     | '/finance'
     | '/volunteer'
+    | '/confirm/$token'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
@@ -334,6 +344,7 @@ export interface FileRouteTypes {
     | '/crew'
     | '/finance'
     | '/volunteer'
+    | '/confirm/$token'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
@@ -365,6 +376,7 @@ export interface FileRouteTypes {
     | '/_authenticated/crew'
     | '/_authenticated/finance'
     | '/_authenticated/volunteer'
+    | '/confirm/$token'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch_/$slug'
@@ -391,6 +403,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TicketsRoute: typeof TicketsRoute
   WatchRoute: typeof WatchRoute
+  ConfirmTokenRoute: typeof ConfirmTokenRoute
   ReleaseTokenRoute: typeof ReleaseTokenRoute
   TapingsIdRoute: typeof TapingsIdRoute
   WatchSlugRoute: typeof WatchSlugRoute
@@ -580,6 +593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVolunteerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/confirm/$token': {
+      id: '/confirm/$token'
+      path: '/confirm/$token'
+      fullPath: '/confirm/$token'
+      preLoaderRoute: typeof ConfirmTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/release/$token': {
       id: '/release/$token'
       path: '/release/$token'
@@ -646,6 +666,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TicketsRoute: TicketsRoute,
   WatchRoute: WatchRoute,
+  ConfirmTokenRoute: ConfirmTokenRoute,
   ReleaseTokenRoute: ReleaseTokenRoute,
   TapingsIdRoute: TapingsIdRoute,
   WatchSlugRoute: WatchSlugRoute,
