@@ -5,6 +5,7 @@ import studio from "@/assets/studio.jpg";
 import audience from "@/assets/audience.jpg";
 import { Button } from "@/components/ui/button";
 import { Countdown } from "@/components/countdown";
+import { TickerStrip } from "@/components/ticker";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { PartnerInquiryForm } from "@/components/partner-inquiry-form";
 import { siteSettingsQuery, mediaKitUrl } from "@/lib/settings";
@@ -70,26 +71,30 @@ function Prelaunch() {
 
   return (
     <>
-      {/* 1 — Hero */}
-      <section className="relative isolate overflow-hidden bg-stage text-stage-foreground">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-10 lg:grid-cols-12 lg:pt-16">
-          <div className="flex items-center justify-between lg:col-span-12">
-            <p className="font-mono text-xs uppercase tracking-[0.25em] text-gold">
+      {/* 1 — Hero. Daylight rather than the old near-black: the brief asks for
+          warm daytime TV, and the rest of the page is ivory, so a black hero
+          made the page change personality at the fold. */}
+      <TickerStrip />
+      <section className="bg-daylight relative isolate overflow-hidden">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-12 lg:grid-cols-12 lg:items-center lg:pt-16">
+          <div className="relative z-10 lg:col-span-7">
+            <p className="inline-flex items-center gap-2 rounded-full border border-persimmon/40 bg-persimmon/10 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-persimmon">
+              <span className="size-1.5 animate-onair rounded-full bg-persimmon" />
               Season 1 · Prelaunch
             </p>
-            <p className="hidden font-mono text-xs uppercase tracking-[0.25em] text-stage-foreground/80 sm:block">
-              {LOCATION}
-            </p>
-          </div>
 
-          <div className="relative z-10 lg:col-span-7 lg:pt-8">
-            <h1 className="display-xl">{settings?.hero_headline ?? "Be in the first audience."}</h1>
-            <div className="rule-gold mt-8 max-w-md" />
-            <p className="mt-6 max-w-xl text-lg text-stage-foreground/90 md:text-xl">
+            <h1 className="display-xl mt-6 text-walnut">
+              {settings?.hero_headline ?? "Be in the first audience."}
+            </h1>
+
+            <div className="rule-gold mt-7 max-w-xs" />
+
+            <p className="mt-6 max-w-xl text-lg text-foreground/80 md:text-xl">
               {settings?.hero_subline ??
                 "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching early 2027."}
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-6">
+
+            <div className="mt-9 flex flex-wrap items-center gap-6">
               <Button asChild variant="gold" size="lg">
                 <a href="#waitlist">Join the waitlist</a>
               </Button>
@@ -98,7 +103,7 @@ function Prelaunch() {
           </div>
 
           <div className="relative lg:col-span-5">
-            <div className="arch frame-gold relative overflow-hidden rounded-b-[2rem]">
+            <div className="arch frame-gold relative overflow-hidden rounded-b-[2rem] shadow-soft">
               <img
                 src={studio}
                 alt="The IHNM Show set: a cream armchair and curved sofa in front of an arched ivory-and-gold backdrop under soft lighting."
@@ -108,6 +113,9 @@ function Prelaunch() {
                 className="aspect-[4/5] w-full object-cover object-[62%_center]"
               />
             </div>
+            <p className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-full bg-persimmon px-4 py-2 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-persimmon-foreground shadow-soft">
+              Free seats · Studio A
+            </p>
           </div>
         </div>
       </section>

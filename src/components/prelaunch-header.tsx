@@ -6,13 +6,13 @@ import { useAuth } from "@/lib/auth";
  *  Shuttle, Submit, Live, Rent) points at pages that stay thin until 2027, so
  *  on this page it competes with the single thing we want people to do.
  *
- *  No bottom border: the bar shares the hero's background, so the two read as
- *  one dark field instead of a bar sitting on an image. */
+ *  No bottom border: the bar shares the hero's ivory, so the two read as one
+ *  field rather than a bar sitting on top of it. */
 export function PrelaunchHeader() {
   const { user, isStaff } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 bg-stage/95 text-stage-foreground backdrop-blur">
+    <header className="sticky top-0 z-40 bg-ivory/85 text-walnut backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
         <Link
           to="/"
@@ -26,7 +26,7 @@ export function PrelaunchHeader() {
           {isStaff && (
             <Link
               to="/crew"
-              className="hidden font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/80 hover:text-gold sm:inline"
+              className="hidden font-mono text-xs uppercase tracking-[0.2em] text-walnut/70 hover:text-persimmon sm:inline"
             >
               Crew
             </Link>
@@ -34,7 +34,7 @@ export function PrelaunchHeader() {
           {user && (
             <Link
               to="/account"
-              className="hidden font-mono text-xs uppercase tracking-[0.2em] text-stage-foreground/80 hover:text-gold sm:inline"
+              className="hidden font-mono text-xs uppercase tracking-[0.2em] text-walnut/70 hover:text-persimmon sm:inline"
             >
               Account
             </Link>
