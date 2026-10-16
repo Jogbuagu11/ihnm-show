@@ -23,7 +23,7 @@ export const SETTINGS_FALLBACK = {
   media_kit_path: null,
   hero_headline: "Be in the first audience.",
   hero_subline:
-    "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching early 2027.",
+    "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching March 2027.",
   weekly_position_emails: false,
   require_email_confirm: false,
 } satisfies SiteSettings;

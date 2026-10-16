@@ -458,7 +458,7 @@ alter table public.site_settings
   add column media_kit_path text,
   add column hero_headline text not null default 'Be in the first audience.',
   add column hero_subline text not null default
-    'A live talk show where Scripture, history and today''s headlines meet. Studio A, San Jose · Launching early 2027.',
+    'A live talk show where Scripture, history and today''s headlines meet. Studio A, San Jose · Launching March 2027.',
   add column weekly_position_emails boolean not null default false,
   -- Substack sends the newsletter but cannot send per-person token links, so
   -- confirmation is off until a transactional sender is connected. Flip this on

@@ -20,13 +20,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Join the waitlist for IHNM Show, a live talk show where Scripture, history and today's headlines meet. Recording at Studio A, San Jose. Launching early 2027.",
+          "Join the waitlist for IHNM Show, a live talk show where Scripture, history and today's headlines meet. Recording at Studio A, San Jose. Launching March 2027.",
       },
       { property: "og:title", content: "IHNM Show — Be in the first audience" },
       {
         property: "og:description",
         content:
-          "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching early 2027.",
+          "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching March 2027.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://www.ihnmshow.com/" },
@@ -91,7 +91,7 @@ function Prelaunch() {
 
             <p className="mt-6 max-w-xl text-lg text-foreground/80 md:text-xl">
               {settings?.hero_subline ??
-                "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching early 2027."}
+                "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching March 2027."}
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-6">

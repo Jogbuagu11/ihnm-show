@@ -38,7 +38,7 @@ export function TickerStrip() {
     "Worship",
     "Expert guests",
     "Studio A · San Jose",
-    "Launching early 2027",
+    "Launching March 2027",
   ];
   const doubled = [...row, ...row];
   return (
