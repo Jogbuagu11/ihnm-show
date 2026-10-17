@@ -63,35 +63,51 @@ function layout(bodyHtml: string, brand: "show" | "publishing", address: string 
 <style>a.btn{display:inline-block;background:#2b2520;color:#fdf8ef !important;padding:11px 20px;border-radius:999px;text-decoration:none}</style>`;
 }
 
+// Called from the browser, unlike the rest of the functions here, which
+// pg_net calls server-side. That means answering the preflight and returning
+// the headers on every response, including the failures.
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+const reply = (body: string, status: number, json = false) =>
+  new Response(body, {
+    status,
+    headers: { ...CORS, ...(json ? { "Content-Type": "application/json" } : {}) },
+  });
+
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
+
   const auth = req.headers.get("Authorization") ?? "";
   const jwt = auth.replace(/^Bearer /, "");
-  if (!jwt) return new Response("sign in first", { status: 401 });
+  if (!jwt) return reply("sign in first", 401);
 
   const { data: who, error: whoErr } = await admin.auth.getUser(jwt);
-  if (whoErr || !who?.user?.email) return new Response("sign in first", { status: 401 });
+  if (whoErr || !who?.user?.email) return reply("sign in first", 401);
 
   const { data: isAdmin } = await admin.rpc("has_role", {
     _user_id: who.user.id,
     _role: "admin",
   });
-  if (!isAdmin) return new Response("admins only", { status: 403 });
+  if (!isAdmin) return reply("admins only", 403);
 
   let body: { template?: string };
   try {
     body = await req.json();
   } catch {
-    return new Response("bad request", { status: 400 });
+    return reply("bad request", 400);
   }
   const key = String(body.template ?? "");
-  if (!key) return new Response("no template named", { status: 400 });
+  if (!key) return reply("no template named", 400);
 
   const { data: tpl } = await admin
     .from("email_templates")
     .select("subject, html, brand")
     .eq("key", key)
     .maybeSingle();
-  if (!tpl) return new Response("no such template", { status: 404 });
+  if (!tpl) return reply("no such template", 404);
 
   const { data: settings } = await admin
     .from("site_settings")
@@ -99,7 +115,7 @@ Deno.serve(async (req) => {
     .eq("id", 1)
     .maybeSingle();
 
-  if (!RESEND_KEY) return new Response("no email provider configured", { status: 500 });
+  if (!RESEND_KEY) return reply("no email provider configured", 500);
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -114,10 +130,8 @@ Deno.serve(async (req) => {
   });
   if (!res.ok) {
     console.error("[send-test] resend rejected", res.status, await res.text());
-    return new Response("the email provider rejected it", { status: 502 });
+    return reply("the email provider rejected it", 502);
   }
 
-  return new Response(JSON.stringify({ sent_to: who.user.email }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return reply(JSON.stringify({ sent_to: who.user.email }), 200, true);
 });
