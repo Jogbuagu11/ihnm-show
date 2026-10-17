@@ -33,16 +33,21 @@ function Unsubscribe() {
 
   // The link in the footer names a brand, so one click does the obvious
   // thing. The page then shows both lists so the rest can be corrected.
-  const [autoDone, setAutoDone] = useState(false);
+  // didAuto only ever goes true, so the effect cannot unsubscribe twice;
+  // the banner is separate, because changing anything by hand makes the
+  // "you are off the list" message untrue.
+  const [didAuto, setDidAuto] = useState(false);
+  const [banner, setBanner] = useState(false);
 
   useEffect(() => {
     if (!t) return;
     let active = true;
     (async () => {
       try {
-        if (b && !autoDone) {
+        if (b && !didAuto) {
+          setDidAuto(true);
           await unsubscribe({ data: { token: t, brand: b } });
-          if (active) setAutoDone(true);
+          if (active) setBanner(true);
         }
         const r = await getConsent({ data: { token: t } });
         if (active) setRows(r);
@@ -53,12 +58,13 @@ function Unsubscribe() {
     return () => {
       active = false;
     };
-  }, [t, b, autoDone]);
+  }, [t, b, didAuto]);
 
   async function toggle(row: ConsentRow) {
     if (!t) return;
     setBusy(row.brand);
     setError(null);
+    setBanner(false);
     try {
       const fn = row.subscribed ? unsubscribe : resubscribe;
       await fn({ data: { token: t, brand: row.brand } });
@@ -99,7 +105,7 @@ function Unsubscribe() {
       )}
       {rows && rows.length > 0 && (
         <>
-          {autoDone && b && (
+          {banner && b && (
             <p className="mb-6 rounded-xl bg-white p-4 text-ink">
               Done — you are off the {b ? LABEL[b] : ""} list. Nothing else will come from it.
             </p>
