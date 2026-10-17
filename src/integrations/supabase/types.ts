@@ -889,6 +889,308 @@ export type Database = {
         };
         Relationships: [];
       };
+      pub_authors: {
+        Row: {
+          bio: string | null;
+          created_at: string;
+          id: string;
+          instagram_url: string | null;
+          name: string;
+          photo_path: string | null;
+          slug: string;
+          website_url: string | null;
+          x_url: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          bio?: string | null;
+          created_at?: string;
+          id?: string;
+          instagram_url?: string | null;
+          name: string;
+          photo_path?: string | null;
+          slug: string;
+          website_url?: string | null;
+          x_url?: string | null;
+        };
+        Update: {
+          bio?: string | null;
+          created_at?: string;
+          id?: string;
+          instagram_url?: string | null;
+          name?: string;
+          photo_path?: string | null;
+          slug?: string;
+          website_url?: string | null;
+          x_url?: string | null;
+        };
+        Relationships: [];
+      };
+      pub_book_authors: {
+        Row: {
+          author_id: string;
+          book_id: string;
+          sort_order: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          author_id: string;
+          book_id: string;
+          sort_order?: number;
+        };
+        Update: {
+          author_id?: string;
+          book_id?: string;
+          sort_order?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pub_book_authors_author_id_fkey";
+            columns: ["author_id"];
+            isOneToOne: false;
+            referencedRelation: "pub_authors";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pub_book_authors_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: false;
+            referencedRelation: "pub_books";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pub_book_formats: {
+        Row: {
+          book_id: string;
+          format: Database["public"]["Enums"]["pub_format"];
+          id: string;
+          isbn: string | null;
+          price_cents: number | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          book_id: string;
+          format: Database["public"]["Enums"]["pub_format"];
+          id?: string;
+          isbn?: string | null;
+          price_cents?: number | null;
+        };
+        Update: {
+          book_id?: string;
+          format?: Database["public"]["Enums"]["pub_format"];
+          id?: string;
+          isbn?: string | null;
+          price_cents?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pub_book_formats_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: false;
+            referencedRelation: "pub_books";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pub_books: {
+        Row: {
+          buy_links: NonNullable<Json>;
+          category: Database["public"]["Enums"]["pub_category"];
+          cover_path: string | null;
+          created_at: string;
+          description: string | null;
+          featured: boolean;
+          id: string;
+          page_count: number | null;
+          release_date: string | null;
+          sample_pdf_path: string | null;
+          slug: string;
+          status: Database["public"]["Enums"]["pub_book_status"];
+          subtitle: string | null;
+          title: string;
+          youtube_url: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          buy_links?: NonNullable<Json>;
+          category?: Database["public"]["Enums"]["pub_category"];
+          cover_path?: string | null;
+          created_at?: string;
+          description?: string | null;
+          featured?: boolean;
+          id?: string;
+          page_count?: number | null;
+          release_date?: string | null;
+          sample_pdf_path?: string | null;
+          slug: string;
+          status?: Database["public"]["Enums"]["pub_book_status"];
+          subtitle?: string | null;
+          title: string;
+          youtube_url?: string | null;
+        };
+        Update: {
+          buy_links?: NonNullable<Json>;
+          category?: Database["public"]["Enums"]["pub_category"];
+          cover_path?: string | null;
+          created_at?: string;
+          description?: string | null;
+          featured?: boolean;
+          id?: string;
+          page_count?: number | null;
+          release_date?: string | null;
+          sample_pdf_path?: string | null;
+          slug?: string;
+          status?: Database["public"]["Enums"]["pub_book_status"];
+          subtitle?: string | null;
+          title?: string;
+          youtube_url?: string | null;
+        };
+        Relationships: [];
+      };
+      pub_endorsements: {
+        Row: {
+          book_id: string;
+          id: string;
+          quote: string;
+          sort_order: number;
+          source: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          book_id: string;
+          id?: string;
+          quote: string;
+          sort_order?: number;
+          source: string;
+        };
+        Update: {
+          book_id?: string;
+          id?: string;
+          quote?: string;
+          sort_order?: number;
+          source?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pub_endorsements_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: false;
+            referencedRelation: "pub_books";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pub_settings: {
+        Row: {
+          contract_term_years: number | null;
+          created_at: string;
+          id: number;
+          response_weeks: number;
+          royalty_rate_pct: number | null;
+          site_url: string;
+          substack_url: string | null;
+          url_facebook: string | null;
+          url_instagram: string | null;
+          url_youtube: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          contract_term_years?: number | null;
+          created_at?: string;
+          id?: number;
+          response_weeks?: number;
+          royalty_rate_pct?: number | null;
+          site_url?: string;
+          substack_url?: string | null;
+          url_facebook?: string | null;
+          url_instagram?: string | null;
+          url_youtube?: string | null;
+        };
+        Update: {
+          contract_term_years?: number | null;
+          created_at?: string;
+          id?: number;
+          response_weeks?: number;
+          royalty_rate_pct?: number | null;
+          site_url?: string;
+          substack_url?: string | null;
+          url_facebook?: string | null;
+          url_instagram?: string | null;
+          url_youtube?: string | null;
+        };
+        Relationships: [];
+      };
+      pub_submissions: {
+        Row: {
+          admin_notes: string | null;
+          author_bio: string | null;
+          book_title: string;
+          category: Database["public"]["Enums"]["pub_category"];
+          created_at: string;
+          email: string;
+          file_path: string | null;
+          id: string;
+          manuscript_status: Database["public"]["Enums"]["pub_manuscript_status"];
+          name: string;
+          notified_at: string | null;
+          phone: string | null;
+          pitch: string;
+          platform: string | null;
+          purge_after: string | null;
+          rights_confirmed: boolean;
+          status: Database["public"]["Enums"]["pub_submission_status"];
+          synopsis: string | null;
+          terms_confirmed: boolean;
+          word_count: number | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          admin_notes?: string | null;
+          author_bio?: string | null;
+          book_title: string;
+          category: Database["public"]["Enums"]["pub_category"];
+          created_at?: string;
+          email: string;
+          file_path?: string | null;
+          id?: string;
+          manuscript_status?: Database["public"]["Enums"]["pub_manuscript_status"];
+          name: string;
+          notified_at?: string | null;
+          phone?: string | null;
+          pitch: string;
+          platform?: string | null;
+          purge_after?: string | null;
+          rights_confirmed?: boolean;
+          status?: Database["public"]["Enums"]["pub_submission_status"];
+          synopsis?: string | null;
+          terms_confirmed?: boolean;
+          word_count?: number | null;
+        };
+        Update: {
+          admin_notes?: string | null;
+          author_bio?: string | null;
+          book_title?: string;
+          category?: Database["public"]["Enums"]["pub_category"];
+          created_at?: string;
+          email?: string;
+          file_path?: string | null;
+          id?: string;
+          manuscript_status?: Database["public"]["Enums"]["pub_manuscript_status"];
+          name?: string;
+          notified_at?: string | null;
+          phone?: string | null;
+          pitch?: string;
+          platform?: string | null;
+          purge_after?: string | null;
+          rights_confirmed?: boolean;
+          status?: Database["public"]["Enums"]["pub_submission_status"];
+          synopsis?: string | null;
+          terms_confirmed?: boolean;
+          word_count?: number | null;
+        };
+        Relationships: [];
+      };
       rental_inquiries: {
         Row: {
           admin_note: string | null;
@@ -2154,6 +2456,17 @@ export type Database = {
       app_role: "admin" | "crew" | "volunteer";
       block_scope: "audience" | "volunteer" | "both";
       episode_type: "episode" | "sitdown" | "special";
+      pub_book_status: "coming_soon" | "published";
+      pub_category: "faith" | "history" | "christian_living";
+      pub_format: "paperback" | "hardcover" | "ebook" | "audiobook";
+      pub_manuscript_status: "complete" | "in_progress";
+      pub_submission_status:
+        | "new"
+        | "reading"
+        | "request_full"
+        | "offer_made"
+        | "declined"
+        | "signed";
       ticket_type: "general" | "vip" | "group";
       waitlist_status: "waitlist" | "invited" | "ticketed";
     };
@@ -2274,6 +2587,11 @@ export const Constants = {
       app_role: ["admin", "crew", "volunteer"],
       block_scope: ["audience", "volunteer", "both"],
       episode_type: ["episode", "sitdown", "special"],
+      pub_book_status: ["coming_soon", "published"],
+      pub_category: ["faith", "history", "christian_living"],
+      pub_format: ["paperback", "hardcover", "ebook", "audiobook"],
+      pub_manuscript_status: ["complete", "in_progress"],
+      pub_submission_status: ["new", "reading", "request_full", "offer_made", "declined", "signed"],
       ticket_type: ["general", "vip", "group"],
       waitlist_status: ["waitlist", "invited", "ticketed"],
     },

@@ -175,3 +175,58 @@ export async function sendInquiryNotification(
       <p style="font-size:13px;color:#8a7f72;margin-top:22px">Also in the Crew Portal.</p>`),
   );
 }
+
+/** Two emails for one manuscript: a confirmation the writer can keep, and a
+ *  notification so a submission is not only visible to whoever opens the
+ *  database. */
+export async function sendSubmissionEmails(row: Record<string, unknown>): Promise<void> {
+  const name = String(row["name"] ?? "there");
+  const title = String(row["book_title"] ?? "your manuscript");
+  const email = String(row["email"] ?? "");
+  const weeks = 8;
+
+  if (email) {
+    await send(
+      email,
+      "We have your manuscript — IHNM Publishing House",
+      shell(`
+        <p>Hi ${escapeHtml(name)},</p>
+        <p>Thank you for sending us <strong>${escapeHtml(title)}</strong>. It has arrived safely.</p>
+        <p>We read everything that comes in, and you will hear from us within ${weeks} weeks
+           whatever the answer. There is nothing you need to do in the meantime.</p>
+        <p>One thing worth repeating: we never charge authors to publish. If anyone asks you for
+           money on our behalf, it is not us.</p>
+        <p style="margin-top:22px">— IHNM Publishing House</p>`),
+    );
+  }
+
+  if (NOTIFY_TO) {
+    const fields: [string, unknown][] = [
+      ["Name", row["name"]],
+      ["Email", row["email"]],
+      ["Phone", row["phone"]],
+      ["Title", row["book_title"]],
+      ["Category", row["category"]],
+      ["Words", row["word_count"]],
+      ["Status", row["manuscript_status"]],
+      ["Pitch", row["pitch"]],
+      ["Platform", row["platform"]],
+      ["File", row["file_path"] ? "attached in the manuscripts bucket" : "none"],
+    ];
+    const rows = fields
+      .filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== "")
+      .map(
+        ([k, v]) =>
+          `<tr><td style="padding:6px 14px 6px 0;color:#8a7f72;vertical-align:top;white-space:nowrap">${k}</td>` +
+          `<td style="padding:6px 0;color:#2b2520">${escapeHtml(String(v))}</td></tr>`,
+      )
+      .join("");
+    await send(
+      NOTIFY_TO,
+      `New manuscript — ${title}`,
+      shell(`
+        <p style="font-family:Georgia,serif;font-size:22px;margin:0 0 16px">New manuscript</p>
+        <table style="font-size:14px;line-height:21px;border-collapse:collapse">${rows}</table>`),
+    );
+  }
+}

@@ -22,6 +22,7 @@ import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PublishingRouteImport } from './routes/publishing'
 import { Route as RentRouteImport } from './routes/rent'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServeRouteImport } from './routes/serve'
@@ -38,9 +39,20 @@ import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/c
 import { Route as AuthenticatedFinanceRouteImport } from './routes/_authenticated/finance'
 import { Route as AuthenticatedVolunteerRouteImport } from './routes/_authenticated/volunteer'
 import { Route as ConfirmTokenRouteImport } from './routes/confirm.$token'
+import { Route as PublishingIndexRouteImport } from './routes/publishing.index'
+import { Route as PublishingAuthorsRouteImport } from './routes/publishing.authors'
+import { Route as PublishingBooksRouteImport } from './routes/publishing.books'
+import { Route as PublishingContactRouteImport } from './routes/publishing.contact'
+import { Route as PublishingFaqRouteImport } from './routes/publishing.faq'
+import { Route as PublishingHowItWorksRouteImport } from './routes/publishing.how-it-works'
+import { Route as PublishingPrivacyRouteImport } from './routes/publishing.privacy'
+import { Route as PublishingSubmitRouteImport } from './routes/publishing.submit'
+import { Route as PublishingTermsRouteImport } from './routes/publishing.terms'
 import { Route as ReleaseTokenRouteImport } from './routes/release.$token'
 import { Route as TapingsIdRouteImport } from './routes/tapings.$id'
 import { Route as WatchSlugRouteImport } from './routes/watch_.$slug'
+import { Route as PublishingAuthorsSlugRouteImport } from './routes/publishing.authors_.$slug'
+import { Route as PublishingBooksSlugRouteImport } from './routes/publishing.books_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -104,6 +116,11 @@ const PrayerRoute = PrayerRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublishingRoute = PublishingRouteImport.update({
+  id: '/publishing',
+  path: '/publishing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RentRoute = RentRouteImport.update({
@@ -186,6 +203,51 @@ const ConfirmTokenRoute = ConfirmTokenRouteImport.update({
   path: '/confirm/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublishingIndexRoute = PublishingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingAuthorsRoute = PublishingAuthorsRouteImport.update({
+  id: '/authors',
+  path: '/authors',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingBooksRoute = PublishingBooksRouteImport.update({
+  id: '/books',
+  path: '/books',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingContactRoute = PublishingContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingFaqRoute = PublishingFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingHowItWorksRoute = PublishingHowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingPrivacyRoute = PublishingPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingSubmitRoute = PublishingSubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingTermsRoute = PublishingTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => PublishingRoute,
+} as any)
 const ReleaseTokenRoute = ReleaseTokenRouteImport.update({
   id: '/release/$token',
   path: '/release/$token',
@@ -201,6 +263,16 @@ const WatchSlugRoute = WatchSlugRouteImport.update({
   path: '/watch/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublishingAuthorsSlugRoute = PublishingAuthorsSlugRouteImport.update({
+  id: '/authors_/$slug',
+  path: '/authors/$slug',
+  getParentRoute: () => PublishingRoute,
+} as any)
+const PublishingBooksSlugRoute = PublishingBooksSlugRouteImport.update({
+  id: '/books_/$slug',
+  path: '/books/$slug',
+  getParentRoute: () => PublishingRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -215,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/partner': typeof PartnerRoute
   '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
+  '/publishing': typeof PublishingRouteWithChildren
   '/rent': typeof RentRoute
   '/reset-password': typeof ResetPasswordRoute
   '/serve': typeof ServeRoute
@@ -231,9 +304,20 @@ export interface FileRoutesByFullPath {
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
   '/confirm/$token': typeof ConfirmTokenRoute
+  '/publishing/authors': typeof PublishingAuthorsRoute
+  '/publishing/books': typeof PublishingBooksRoute
+  '/publishing/contact': typeof PublishingContactRoute
+  '/publishing/faq': typeof PublishingFaqRoute
+  '/publishing/how-it-works': typeof PublishingHowItWorksRoute
+  '/publishing/privacy': typeof PublishingPrivacyRoute
+  '/publishing/submit': typeof PublishingSubmitRoute
+  '/publishing/terms': typeof PublishingTermsRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
+  '/publishing/': typeof PublishingIndexRoute
+  '/publishing/authors/$slug': typeof PublishingAuthorsSlugRoute
+  '/publishing/books/$slug': typeof PublishingBooksSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -264,9 +348,20 @@ export interface FileRoutesByTo {
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
   '/confirm/$token': typeof ConfirmTokenRoute
+  '/publishing/authors': typeof PublishingAuthorsRoute
+  '/publishing/books': typeof PublishingBooksRoute
+  '/publishing/contact': typeof PublishingContactRoute
+  '/publishing/faq': typeof PublishingFaqRoute
+  '/publishing/how-it-works': typeof PublishingHowItWorksRoute
+  '/publishing/privacy': typeof PublishingPrivacyRoute
+  '/publishing/submit': typeof PublishingSubmitRoute
+  '/publishing/terms': typeof PublishingTermsRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch/$slug': typeof WatchSlugRoute
+  '/publishing': typeof PublishingIndexRoute
+  '/publishing/authors/$slug': typeof PublishingAuthorsSlugRoute
+  '/publishing/books/$slug': typeof PublishingBooksSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -283,6 +378,7 @@ export interface FileRoutesById {
   '/partner': typeof PartnerRoute
   '/prayer': typeof PrayerRoute
   '/privacy': typeof PrivacyRoute
+  '/publishing': typeof PublishingRouteWithChildren
   '/rent': typeof RentRoute
   '/reset-password': typeof ResetPasswordRoute
   '/serve': typeof ServeRoute
@@ -299,9 +395,20 @@ export interface FileRoutesById {
   '/_authenticated/finance': typeof AuthenticatedFinanceRoute
   '/_authenticated/volunteer': typeof AuthenticatedVolunteerRoute
   '/confirm/$token': typeof ConfirmTokenRoute
+  '/publishing/authors': typeof PublishingAuthorsRoute
+  '/publishing/books': typeof PublishingBooksRoute
+  '/publishing/contact': typeof PublishingContactRoute
+  '/publishing/faq': typeof PublishingFaqRoute
+  '/publishing/how-it-works': typeof PublishingHowItWorksRoute
+  '/publishing/privacy': typeof PublishingPrivacyRoute
+  '/publishing/submit': typeof PublishingSubmitRoute
+  '/publishing/terms': typeof PublishingTermsRoute
   '/release/$token': typeof ReleaseTokenRoute
   '/tapings/$id': typeof TapingsIdRoute
   '/watch_/$slug': typeof WatchSlugRoute
+  '/publishing/': typeof PublishingIndexRoute
+  '/publishing/authors_/$slug': typeof PublishingAuthorsSlugRoute
+  '/publishing/books_/$slug': typeof PublishingBooksSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -318,6 +425,7 @@ export interface FileRouteTypes {
     | '/partner'
     | '/prayer'
     | '/privacy'
+    | '/publishing'
     | '/rent'
     | '/reset-password'
     | '/serve'
@@ -334,9 +442,20 @@ export interface FileRouteTypes {
     | '/finance'
     | '/volunteer'
     | '/confirm/$token'
+    | '/publishing/authors'
+    | '/publishing/books'
+    | '/publishing/contact'
+    | '/publishing/faq'
+    | '/publishing/how-it-works'
+    | '/publishing/privacy'
+    | '/publishing/submit'
+    | '/publishing/terms'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
+    | '/publishing/'
+    | '/publishing/authors/$slug'
+    | '/publishing/books/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -367,9 +486,20 @@ export interface FileRouteTypes {
     | '/finance'
     | '/volunteer'
     | '/confirm/$token'
+    | '/publishing/authors'
+    | '/publishing/books'
+    | '/publishing/contact'
+    | '/publishing/faq'
+    | '/publishing/how-it-works'
+    | '/publishing/privacy'
+    | '/publishing/submit'
+    | '/publishing/terms'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch/$slug'
+    | '/publishing'
+    | '/publishing/authors/$slug'
+    | '/publishing/books/$slug'
   id:
     | '__root__'
     | '/'
@@ -385,6 +515,7 @@ export interface FileRouteTypes {
     | '/partner'
     | '/prayer'
     | '/privacy'
+    | '/publishing'
     | '/rent'
     | '/reset-password'
     | '/serve'
@@ -401,9 +532,20 @@ export interface FileRouteTypes {
     | '/_authenticated/finance'
     | '/_authenticated/volunteer'
     | '/confirm/$token'
+    | '/publishing/authors'
+    | '/publishing/books'
+    | '/publishing/contact'
+    | '/publishing/faq'
+    | '/publishing/how-it-works'
+    | '/publishing/privacy'
+    | '/publishing/submit'
+    | '/publishing/terms'
     | '/release/$token'
     | '/tapings/$id'
     | '/watch_/$slug'
+    | '/publishing/'
+    | '/publishing/authors_/$slug'
+    | '/publishing/books_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -420,6 +562,7 @@ export interface RootRouteChildren {
   PartnerRoute: typeof PartnerRoute
   PrayerRoute: typeof PrayerRoute
   PrivacyRoute: typeof PrivacyRoute
+  PublishingRoute: typeof PublishingRouteWithChildren
   RentRoute: typeof RentRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServeRoute: typeof ServeRoute
@@ -526,6 +669,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/publishing': {
+      id: '/publishing'
+      path: '/publishing'
+      fullPath: '/publishing'
+      preLoaderRoute: typeof PublishingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rent': {
@@ -640,6 +790,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfirmTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/publishing/': {
+      id: '/publishing/'
+      path: '/'
+      fullPath: '/publishing/'
+      preLoaderRoute: typeof PublishingIndexRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/authors': {
+      id: '/publishing/authors'
+      path: '/authors'
+      fullPath: '/publishing/authors'
+      preLoaderRoute: typeof PublishingAuthorsRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/books': {
+      id: '/publishing/books'
+      path: '/books'
+      fullPath: '/publishing/books'
+      preLoaderRoute: typeof PublishingBooksRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/contact': {
+      id: '/publishing/contact'
+      path: '/contact'
+      fullPath: '/publishing/contact'
+      preLoaderRoute: typeof PublishingContactRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/faq': {
+      id: '/publishing/faq'
+      path: '/faq'
+      fullPath: '/publishing/faq'
+      preLoaderRoute: typeof PublishingFaqRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/how-it-works': {
+      id: '/publishing/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/publishing/how-it-works'
+      preLoaderRoute: typeof PublishingHowItWorksRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/privacy': {
+      id: '/publishing/privacy'
+      path: '/privacy'
+      fullPath: '/publishing/privacy'
+      preLoaderRoute: typeof PublishingPrivacyRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/submit': {
+      id: '/publishing/submit'
+      path: '/submit'
+      fullPath: '/publishing/submit'
+      preLoaderRoute: typeof PublishingSubmitRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/terms': {
+      id: '/publishing/terms'
+      path: '/terms'
+      fullPath: '/publishing/terms'
+      preLoaderRoute: typeof PublishingTermsRouteImport
+      parentRoute: typeof PublishingRoute
+    }
     '/release/$token': {
       id: '/release/$token'
       path: '/release/$token'
@@ -660,6 +873,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/watch/$slug'
       preLoaderRoute: typeof WatchSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/publishing/authors_/$slug': {
+      id: '/publishing/authors_/$slug'
+      path: '/authors/$slug'
+      fullPath: '/publishing/authors/$slug'
+      preLoaderRoute: typeof PublishingAuthorsSlugRouteImport
+      parentRoute: typeof PublishingRoute
+    }
+    '/publishing/books_/$slug': {
+      id: '/publishing/books_/$slug'
+      path: '/books/$slug'
+      fullPath: '/publishing/books/$slug'
+      preLoaderRoute: typeof PublishingBooksSlugRouteImport
+      parentRoute: typeof PublishingRoute
     }
   }
 }
@@ -685,6 +912,38 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface PublishingRouteChildren {
+  PublishingAuthorsRoute: typeof PublishingAuthorsRoute
+  PublishingBooksRoute: typeof PublishingBooksRoute
+  PublishingContactRoute: typeof PublishingContactRoute
+  PublishingFaqRoute: typeof PublishingFaqRoute
+  PublishingHowItWorksRoute: typeof PublishingHowItWorksRoute
+  PublishingPrivacyRoute: typeof PublishingPrivacyRoute
+  PublishingSubmitRoute: typeof PublishingSubmitRoute
+  PublishingTermsRoute: typeof PublishingTermsRoute
+  PublishingIndexRoute: typeof PublishingIndexRoute
+  PublishingAuthorsSlugRoute: typeof PublishingAuthorsSlugRoute
+  PublishingBooksSlugRoute: typeof PublishingBooksSlugRoute
+}
+
+const PublishingRouteChildren: PublishingRouteChildren = {
+  PublishingAuthorsRoute: PublishingAuthorsRoute,
+  PublishingBooksRoute: PublishingBooksRoute,
+  PublishingContactRoute: PublishingContactRoute,
+  PublishingFaqRoute: PublishingFaqRoute,
+  PublishingHowItWorksRoute: PublishingHowItWorksRoute,
+  PublishingPrivacyRoute: PublishingPrivacyRoute,
+  PublishingSubmitRoute: PublishingSubmitRoute,
+  PublishingTermsRoute: PublishingTermsRoute,
+  PublishingIndexRoute: PublishingIndexRoute,
+  PublishingAuthorsSlugRoute: PublishingAuthorsSlugRoute,
+  PublishingBooksSlugRoute: PublishingBooksSlugRoute,
+}
+
+const PublishingRouteWithChildren = PublishingRoute._addFileChildren(
+  PublishingRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -699,6 +958,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartnerRoute: PartnerRoute,
   PrayerRoute: PrayerRoute,
   PrivacyRoute: PrivacyRoute,
+  PublishingRoute: PublishingRouteWithChildren,
   RentRoute: RentRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ServeRoute: ServeRoute,

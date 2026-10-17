@@ -141,17 +141,26 @@ function RootComponent() {
   // its normal navigation.
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isPrelaunch = pathname === "/";
+  // The publishing site brings its own header and footer.
+  const isPublishing = pathname.startsWith("/publishing");
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <div className="flex min-h-screen flex-col">
-          <PageTracker />
-          {isPrelaunch ? <PrelaunchHeader /> : <SiteHeader />}
-          <main className="flex-1">
+        {isPublishing ? (
+          <>
+            <PageTracker />
             <Outlet />
-          </main>
-          <SiteFooter />
-        </div>
+          </>
+        ) : (
+          <div className="flex min-h-screen flex-col">
+            <PageTracker />
+            {isPrelaunch ? <PrelaunchHeader /> : <SiteHeader />}
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <SiteFooter />
+          </div>
+        )}
         <Toaster richColors position="top-center" />
       </AuthProvider>
     </QueryClientProvider>
