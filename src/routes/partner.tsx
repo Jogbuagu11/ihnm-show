@@ -6,6 +6,8 @@ import { PageHeader } from "@/components/page-header";
 import { ContactForm } from "@/components/contact-form";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { siteSettingsQuery, mediaKitUrl } from "@/lib/settings";
+import { trackMediaKitDownload } from "@/lib/analytics";
 
 export const Route = createFileRoute("/partner")({
   head: () => ({
@@ -36,28 +38,54 @@ const reach = [
 ];
 const packages = [
   {
-    n: "Episode Supporter",
-    p: "Placeholder price",
-    f: ["On-air mention", "Logo on the episode page", "Thank-you post"],
+    n: "Episode Sponsor",
+    standard: "$500/month",
+    founding: "$250/month",
+    f: "Name and logo in every episode that month, link in each YouTube description, 1 dedicated clip, thank-you in the newsletter",
   },
   {
-    n: "Taping Partner",
-    p: "Placeholder price",
-    f: [
-      "Everything in Supporter",
-      "Logo on the next-taping card",
-      "Booth or table at the taping",
-      "Clip of your mention",
-    ],
+    n: "Segment Sponsor",
+    standard: "$350/month",
+    founding: "$200/month",
+    f: "Name on one recurring part of the show (for example, the audience Q&A), logo on screen during that part, description link",
   },
   {
-    n: "Season Partner",
-    p: "Placeholder price",
-    f: ["Everything in Taping Partner", "Mentions all season", "Monthly recap of views and clips"],
+    n: "Special Presenting Sponsor",
+    standard: "$1,000 per Special",
+    founding: "$500 per Special",
+    f: "“Presented by” billing on the monthly live Special, mentions at open and close, logo on the livestream, 2 dedicated clips",
+  },
+  {
+    n: "Newsletter Feature",
+    standard: "$10/week",
+    founding: "$10/week",
+    f: "One product or book featured in that week’s email, marked Sponsored",
+  },
+];
+
+// Businesses can partner with goods or services instead of cash.
+const inKind = [
+  {
+    n: "Wardrobe Partner",
+    provide: "Outfits or jewelry for the host, gifted or loaned",
+    receive:
+      "“Wardrobe provided by” credit on screen, tags on YouTube and social, professional photos of the look",
+  },
+  {
+    n: "Refreshments Partner",
+    provide: "Coffee, pastries or light food for each recording",
+    receive: "On-screen credit, signage at the refreshments table, newsletter thank-you",
+  },
+  {
+    n: "Production Partner",
+    provide: "Lighting, audio or AV gear, or a discount on it",
+    receive:
+      "“Production partner” credit in every episode, behind-the-scenes feature, website listing",
   },
 ];
 
 function Partner() {
+  const { data: settings } = useQuery(siteSettingsQuery);
   const { data: logos = [] } = useQuery({
     queryKey: ["past-sponsors"],
     queryFn: async () => {
@@ -97,22 +125,60 @@ function Partner() {
       </section>
       <section className="bg-stage text-stage-foreground">
         <div className="mx-auto max-w-6xl px-4 py-16">
-          <p className="eyebrow text-gold">— Packages</p>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <p className="eyebrow text-gold">— Sponsorship packages</p>
+          <p className="mt-3 max-w-2xl text-stage-foreground/85">
+            Founding rates are locked for 12 months for sponsors who sign before the March 2027
+            launch. Sponsor mentions name the business, what it does and where it is.
+          </p>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
             {packages.map((p) => (
-              <div key={p.n} className="rounded-3xl border border-gold/40 p-6">
+              <div key={p.n} className="flex flex-col rounded-3xl border border-gold/40 p-6">
                 <p className="font-display text-2xl">{p.n}</p>
-                <p className="italic-gold text-lg">{p.p}</p>
-                <ul className="mt-3 space-y-1 text-sm text-stage-foreground/85">
-                  {p.f.map((x) => (
-                    <li key={x}>✦ {x}</li>
-                  ))}
-                </ul>
+                <div className="mt-3 flex items-baseline gap-3">
+                  <span className="font-display text-3xl text-gold">{p.founding}</span>
+                  {p.founding !== p.standard && (
+                    <span className="text-sm text-stage-foreground/60 line-through">
+                      {p.standard}
+                    </span>
+                  )}
+                </div>
+                <p className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-gold/80">
+                  {p.founding === p.standard ? "Flat rate" : "Founding rate"}
+                </p>
+                <p className="mt-4 text-sm text-stage-foreground/85">{p.f}</p>
               </div>
             ))}
           </div>
+
+          <p className="eyebrow mt-14 text-gold">— In-kind partnerships</p>
+          <p className="mt-3 max-w-2xl text-stage-foreground/85">
+            Partner with products or services instead of cash, and receive on-screen credit.
+          </p>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {inKind.map((k) => (
+              <div key={k.n} className="rounded-3xl border border-gold/40 p-6">
+                <p className="font-display text-2xl">{k.n}</p>
+                <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-gold/80">
+                  You provide
+                </p>
+                <p className="text-sm text-stage-foreground/85">{k.provide}</p>
+                <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-gold/80">
+                  You receive
+                </p>
+                <p className="text-sm text-stage-foreground/85">{k.receive}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-sm text-stage-foreground/70">
+            In His Name Ministries is a nonprofit ministry with{" "}
+            <span className="[font-variant-ligatures:none]">501(c)(3)</span> status pending. We
+            provide receipts for in-kind gifts; whether a gift is tax-deductible depends on the IRS
+            granting exemption.
+          </p>
+
           <Button asChild variant="gold" className="mt-8">
-            <a href="/ihnm-media-kit.pdf" download>
+            <a href={mediaKitUrl(settings)} download onClick={trackMediaKitDownload}>
               <Download className="size-4" aria-hidden /> Download media kit (PDF)
             </a>
           </Button>
