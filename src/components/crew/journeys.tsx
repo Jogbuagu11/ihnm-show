@@ -92,8 +92,15 @@ function describe(s: Step): string {
       const kind = String(c["kind"] ?? "?");
       const what = String(c["event"] ?? c["tag"] ?? c["interest"] ?? "");
       const within = c["within_days"] ? ` within ${String(c["within_days"])} days` : "";
-      const count = c["count"] ? ` at least ${String(c["count"])}×` : "";
-      return `If ${kind.replace(/_/g, " ")} ${what}${count}${within}`;
+      const n = c["count"] ? ` at least ${String(c["count"])} times` : "";
+      const phrase: Record<string, string> = {
+        did_event: `they have done ${what}${n}${within}`,
+        not_did_event: `they have not done ${what}${within}`,
+        event_count_at_least: `they have done ${what}${n}`,
+        has_tag: `they are tagged "${what}"`,
+        has_interest: `they are interested in ${what}`,
+      };
+      return `If ${phrase[kind] ?? `${kind.replace(/_/g, " ")} ${what}`}`;
     }
     case "add_tag":
       return `Tag as "${String(c["tag"])}"`;
@@ -168,13 +175,18 @@ export function JourneysAdmin() {
       void qc.invalidateQueries({ queryKey: ["crew", "journeys"] });
     },
     // The database refuses to enable a journey with unwritten templates; show
-    // exactly which ones rather than a generic failure.
-    onError: (e: unknown) =>
+    // exactly which ones. A PostgrestError is a plain object, not an Error,
+    // so instanceof is not enough to get at the message.
+    onError: (e: unknown) => {
+      const raw =
+        typeof e === "object" && e !== null && "message" in e
+          ? String((e as { message: unknown }).message)
+          : "";
+      const missing = /missing email templates: (.+)$/.exec(raw);
       toast.error(
-        e instanceof Error
-          ? e.message.replace(/^.*missing email templates: /, "Missing templates: ")
-          : "Could not change that.",
-      ),
+        missing ? `Write these templates first: ${missing[1]}` : raw || "Could not change that.",
+      );
+    },
   });
 
   const byJourney = (id: string) => steps.filter((s) => s.journey_id === id);
@@ -219,9 +231,9 @@ export function JourneysAdmin() {
                       {j.brand === "publishing" ? "Publishing" : "Show"}
                     </Pill>
                     {missing.length > 0 && (
-                      <Pill tone="warn">
+                      <span className="ml-2 rounded-full bg-blush px-2 py-0.5 text-xs font-semibold text-blush-foreground">
                         {missing.length} template{missing.length === 1 ? "" : "s"} to write
-                      </Pill>
+                      </span>
                     )}
                   </div>
                   {j.description && <p className="mt-1 text-sm text-ink/60">{j.description}</p>}
@@ -249,14 +261,18 @@ export function JourneysAdmin() {
 
               {isOpen && (
                 <ol className="space-y-1 border-t border-ink/10 px-4 py-3">
-                  {js.map((s) => {
+                  {js.map((s, i) => {
                     const Icon = ICON[s.type] ?? Clock;
                     const yes = posOf(s.next_step_id);
                     const no = posOf(s.alt_step_id);
+                    // Number by order shown, not by the stored position: a
+                    // removed step leaves a gap that reads as a missing step.
+                    const shown = (p: number | null) =>
+                      p === null ? "end" : String(js.findIndex((x) => x.position === p) + 1);
                     return (
                       <li key={s.id} className="flex items-start gap-3 py-1 text-sm">
                         <span className="w-5 shrink-0 text-right font-mono text-xs text-ink/40">
-                          {s.position}
+                          {i + 1}
                         </span>
                         <Icon size={15} className="mt-0.5 shrink-0 text-ink/50" />
                         <span className="flex-1">
@@ -268,8 +284,8 @@ export function JourneysAdmin() {
                         </span>
                         <span className="shrink-0 font-mono text-xs text-ink/40">
                           {s.type === "condition"
-                            ? `yes→${yes ?? "end"} no→${no ?? "end"}`
-                            : `→${yes ?? "end"}`}
+                            ? `yes→${shown(yes)} no→${shown(no)}`
+                            : `→${shown(yes)}`}
                         </span>
                       </li>
                     );
