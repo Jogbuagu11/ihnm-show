@@ -14,6 +14,9 @@ import { type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
+import { PubFooter, PubHeader } from "@/components/publishing/layout";
+import { PubCanonical } from "@/components/publishing/canonical";
+import { isBooksSite } from "@/lib/site";
 import { PrelaunchHeader } from "@/components/prelaunch-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
@@ -140,13 +143,25 @@ function RootComponent() {
   // The prelaunch header is for the landing page only; every other page keeps
   // its normal navigation.
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isPrelaunch = pathname === "/";
+  // On the publishing domain every page is a publishing page, prefix or not.
+  const booksSite = isBooksSite();
+  const isPrelaunch = !booksSite && pathname === "/";
   // The publishing site brings its own header and footer.
-  const isPublishing = pathname.startsWith("/publishing");
+  const isPublishing = booksSite || pathname.startsWith("/publishing");
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {isPublishing ? (
+        {booksSite && !pathname.startsWith("/publishing") ? (
+          <div className="flex min-h-screen flex-col bg-background">
+            <PageTracker />
+            <PubCanonical />
+            <PubHeader />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <PubFooter />
+          </div>
+        ) : isPublishing ? (
           <>
             <PageTracker />
             <Outlet />

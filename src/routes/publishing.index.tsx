@@ -14,20 +14,22 @@ import {
   pubSettingsQuery,
 } from "@/lib/publishing";
 
+export const pubHomeHead = () => ({
+  meta: [
+    { title: `${IMPRINT} — ${TAGLINE}` },
+    {
+      name: "description",
+      content:
+        "An independent Christian publisher of faith, history and Christian living. We pay for editing, cover and distribution; authors pay nothing and keep their copyright.",
+    },
+    { property: "og:title", content: IMPRINT },
+    { property: "og:description", content: TAGLINE },
+    { property: "og:type", content: "website" },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/")({
-  head: () => ({
-    meta: [
-      { title: `${IMPRINT} — ${TAGLINE}` },
-      {
-        name: "description",
-        content:
-          "An independent Christian publisher of faith, history and Christian living. We pay for editing, cover and distribution; authors pay nothing and keep their copyright.",
-      },
-      { property: "og:title", content: IMPRINT },
-      { property: "og:description", content: TAGLINE },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: pubHomeHead,
   component: PubHome,
 });
 
@@ -49,7 +51,7 @@ const WHY = [
   },
 ];
 
-function PubHome() {
+export function PubHome() {
   const { data: settings } = useQuery(pubSettingsQuery);
   const { data: books = [] } = useQuery(booksQuery);
   const { data: authors = [] } = useQuery(authorsQuery);

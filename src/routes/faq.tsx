@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { pubFaqHead, Faq as PubFaq } from "./publishing.faq";
+import { isBooksSite } from "@/lib/site";
 import audience from "@/assets/audience.jpg";
 import { PageHeader } from "@/components/page-header";
 import { CONDUCT } from "@/components/code-of-conduct";
@@ -10,25 +12,29 @@ import {
 } from "@/components/ui/accordion";
 import { LOCATION } from "@/lib/show";
 
+const showHead_faq = () => ({
+  meta: [
+    { title: "Audience FAQ — IHNM Show" },
+    {
+      name: "description",
+      content:
+        "Arrival time, what to wear on camera, parking and shuttle, phones, accessibility and minors at IHNM Show tapings.",
+    },
+    { property: "og:title", content: "Audience FAQ — IHNM Show" },
+    {
+      property: "og:description",
+      content: "Everything you need to know before your IHNM Show taping.",
+    },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ],
+});
+
+// This path exists on both sites. The host decides which one renders;
+// see src/lib/site.ts for why that is safe through hydration.
 export const Route = createFileRoute("/faq")({
-  head: () => ({
-    meta: [
-      { title: "Audience FAQ — IHNM Show" },
-      {
-        name: "description",
-        content:
-          "Arrival time, what to wear on camera, parking and shuttle, phones, accessibility and minors at IHNM Show tapings.",
-      },
-      { property: "og:title", content: "Audience FAQ — IHNM Show" },
-      {
-        property: "og:description",
-        content: "Everything you need to know before your IHNM Show taping.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Faq,
+  head: () => (isBooksSite() ? pubFaqHead() : showHead_faq()),
+  component: () => (isBooksSite() ? <PubFaq /> : <Faq />),
 });
 
 const qs: [string, string][] = [

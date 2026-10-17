@@ -21,11 +21,10 @@ export const Route = createFileRoute("/publishing/books_/$slug")({
   head: () => ({
     meta: [{ title: `Book — ${IMPRINT}` }],
   }),
-  component: BookPage,
+  component: BookRoute,
 });
 
-function BookPage() {
-  const { slug } = Route.useParams();
+export function BookPage({ slug }: { slug: string }) {
   const { data: book, isLoading } = useQuery(bookQuery(slug));
   const { data: settings } = useQuery(pubSettingsQuery);
   const { data: all = [] } = useQuery(booksQuery);
@@ -233,4 +232,9 @@ function BookPage() {
       )}
     </article>
   );
+}
+
+function BookRoute() {
+  const { slug } = Route.useParams();
+  return <BookPage slug={slug} />;
 }

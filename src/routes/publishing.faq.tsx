@@ -8,22 +8,24 @@ import {
 } from "@/components/ui/accordion";
 import { IMPRINT, pubSettingsQuery } from "@/lib/publishing";
 
+export const pubFaqHead = () => ({
+  meta: [
+    { title: `FAQ — ${IMPRINT}` },
+    {
+      name: "description",
+      content:
+        "Do I pay anything? Do I keep my copyright? What royalties do you pay? Answers for authors.",
+    },
+    { property: "og:type", content: "website" },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/faq")({
-  head: () => ({
-    meta: [
-      { title: `FAQ — ${IMPRINT}` },
-      {
-        name: "description",
-        content:
-          "Do I pay anything? Do I keep my copyright? What royalties do you pay? Answers for authors.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: pubFaqHead,
   component: Faq,
 });
 
-function Faq() {
+export function Faq() {
   const { data: settings } = useQuery(pubSettingsQuery);
   // Rate and term are settings, not prose, because they are contractual.
   const rate = settings?.royalty_rate_pct

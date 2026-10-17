@@ -1,4 +1,6 @@
 import { PageGate } from "@/components/page-gate";
+import { pubSubmitHead, Submit as PubSubmit } from "./publishing.submit";
+import { isBooksSite } from "@/lib/site";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -12,25 +14,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
+const showHead_submit = () => ({
+  meta: [
+    { title: "Submit — IHNM Show" },
+    {
+      name: "description",
+      content:
+        "Send IHNM Show a question, testimony, guest suggestion, or worship team application.",
+    },
+    { property: "og:title", content: "Be part of IHNM Show" },
+    {
+      property: "og:description",
+      content: "Questions, stories, guest ideas and worship team applications.",
+    },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ],
+});
+
+// This path exists on both sites. The host decides which one renders;
+// see src/lib/site.ts for why that is safe through hydration.
 export const Route = createFileRoute("/submit")({
-  head: () => ({
-    meta: [
-      { title: "Submit — IHNM Show" },
-      {
-        name: "description",
-        content:
-          "Send IHNM Show a question, testimony, guest suggestion, or worship team application.",
-      },
-      { property: "og:title", content: "Be part of IHNM Show" },
-      {
-        property: "og:description",
-        content: "Questions, stories, guest ideas and worship team applications.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: GatedSubmit,
+  head: () => (isBooksSite() ? pubSubmitHead() : showHead_submit()),
+  component: () => (isBooksSite() ? <PubSubmit /> : <GatedSubmit />),
 });
 
 function GatedSubmit() {

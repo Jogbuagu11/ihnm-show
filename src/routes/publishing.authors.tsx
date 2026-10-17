@@ -2,18 +2,20 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { IMPRINT, authorsQuery, pubAsset, pubPath } from "@/lib/publishing";
 
+export const pubAuthorsHead = () => ({
+  meta: [
+    { title: `Authors — ${IMPRINT}` },
+    { name: "description", content: `The writers published by ${IMPRINT}.` },
+    { property: "og:type", content: "website" },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/authors")({
-  head: () => ({
-    meta: [
-      { title: `Authors — ${IMPRINT}` },
-      { name: "description", content: `The writers published by ${IMPRINT}.` },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: pubAuthorsHead,
   component: Authors,
 });
 
-function Authors() {
+export function Authors() {
   const { data: authors = [], isLoading } = useQuery(authorsQuery);
   return (
     <section className="mx-auto max-w-6xl px-4 py-14">

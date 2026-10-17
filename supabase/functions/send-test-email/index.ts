@@ -13,8 +13,9 @@ const admin = createClient(
 );
 
 const esc = (s: string) =>
-  s.replace(/[&<>"']/g, (ch) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] ?? ch,
+  s.replace(
+    /[&<>"']/g,
+    (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] ?? ch,
   );
 
 // The same sample values the admin preview uses, so what lands in the inbox
@@ -37,8 +38,7 @@ const SAMPLE: Record<string, string> = {
   book_title: "A Long Obedience",
 };
 
-const merge = (text: string) =>
-  text.replace(/\{(\w+)\}/g, (_m, k: string) => esc(SAMPLE[k] ?? ""));
+const merge = (text: string) => text.replace(/\{(\w+)\}/g, (_m, k: string) => esc(SAMPLE[k] ?? ""));
 
 const BRAND = {
   show: { label: "Show", accent: "#b8893b", name: "IHNM Show" },

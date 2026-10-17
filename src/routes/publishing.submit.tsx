@@ -19,25 +19,27 @@ import {
 import { CATEGORIES, IMPRINT, pubSettingsQuery, type PubCategory } from "@/lib/publishing";
 import { notifySubmission } from "@/lib/publishing.functions";
 
+export const pubSubmitHead = () => ({
+  meta: [
+    { title: `Submit your manuscript — ${IMPRINT}` },
+    {
+      name: "description",
+      content:
+        "Send us your manuscript. We never charge authors to publish, and you keep your copyright.",
+    },
+    { property: "og:type", content: "website" },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/submit")({
-  head: () => ({
-    meta: [
-      { title: `Submit your manuscript — ${IMPRINT}` },
-      {
-        name: "description",
-        content:
-          "Send us your manuscript. We never charge authors to publish, and you keep your copyright.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: pubSubmitHead,
   component: Submit,
 });
 
 const MAX_MB = 10;
 const ACCEPT = ".pdf,.doc,.docx";
 
-function Submit() {
+export function Submit() {
   const { data: settings } = useQuery(pubSettingsQuery);
   const weeks = settings?.response_weeks ?? 8;
 

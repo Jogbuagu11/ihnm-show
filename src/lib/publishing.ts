@@ -1,4 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
+import { isBooksSite } from "./site";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -13,10 +14,11 @@ export const IMPRINT_SHORT = "IHNM Publishing";
 export const OPERATOR = "IHNM LLC";
 export const TAGLINE = "Timeless truth. Today's world.";
 
-/** Everything lives under this prefix today and moves to its own domain later
- *  by changing pub_settings.site_url; no page builds a URL any other way. */
+/** On its own domain the publishing site owns the root, so its links carry no
+ *  prefix; on the show's domain the same pages live under /publishing. Every
+ *  link goes through pubPath, so neither host ever emits the other's shape. */
 export const PUB_BASE = "/publishing";
-export const pubPath = (p = "") => `${PUB_BASE}${p}`;
+export const pubPath = (p = "") => (isBooksSite() ? p || "/" : `${PUB_BASE}${p}`);
 
 /** Absolute URL for canonical tags and share images. */
 export function pubUrl(settings: PubSettings | undefined, path = ""): string {

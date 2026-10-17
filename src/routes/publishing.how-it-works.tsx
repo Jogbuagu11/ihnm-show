@@ -3,22 +3,24 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { IMPRINT, pubPath, pubSettingsQuery } from "@/lib/publishing";
 
+export const pubHowHead = () => ({
+  meta: [
+    { title: `How publishing with us works — ${IMPRINT}` },
+    {
+      name: "description",
+      content:
+        "Five steps from manuscript to launch: submit, review, contract, production, and a launch on IHNM Show.",
+    },
+    { property: "og:type", content: "website" },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/how-it-works")({
-  head: () => ({
-    meta: [
-      { title: `How publishing with us works — ${IMPRINT}` },
-      {
-        name: "description",
-        content:
-          "Five steps from manuscript to launch: submit, review, contract, production, and a launch on IHNM Show.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: pubHowHead,
   component: HowItWorks,
 });
 
-function HowItWorks() {
+export function HowItWorks() {
   const { data: settings } = useQuery(pubSettingsQuery);
   const weeks = settings?.response_weeks ?? 8;
 

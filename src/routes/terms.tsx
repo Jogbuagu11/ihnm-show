@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pubTermsHead, PubTerms } from "./publishing.terms";
+import { isBooksSite } from "@/lib/site";
 import { LegalPage, legalHead } from "@/components/legal-page";
 
-export const Route = createFileRoute("/terms")({
-  head: () =>
-    legalHead(
-      "Terms of Use",
-      "Terms for using the IHNM Show website and reserving studio audience seats.",
-    ),
-  component: () => (
+const showTermsHead = () =>
+  legalHead(
+    "Terms of Use",
+    "Terms for using the IHNM Show website and reserving studio audience seats.",
+  );
+
+function ShowTerms() {
+  return (
     <LegalPage
       eyebrow="Legal"
       title="Terms of Use"
@@ -31,5 +34,12 @@ export const Route = createFileRoute("/terms")({
       <h2>Changes</h2>
       <p>Taping dates, guests and times may change without notice.</p>
     </LegalPage>
-  ),
+  );
+}
+
+// This path exists on both sites. The host decides which one renders;
+// see src/lib/site.ts for why that is safe through hydration.
+export const Route = createFileRoute("/terms")({
+  head: () => (isBooksSite() ? pubTermsHead() : showTermsHead()),
+  component: () => (isBooksSite() ? <PubTerms /> : <ShowTerms />),
 });

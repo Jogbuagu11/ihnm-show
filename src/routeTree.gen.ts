@@ -13,10 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthorsRouteImport } from './routes/authors'
+import { Route as BooksRouteImport } from './routes/books'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FilmingConsentRouteImport } from './routes/filming-consent'
 import { Route as GiveRouteImport } from './routes/give'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PartnerRouteImport } from './routes/partner'
@@ -39,6 +42,8 @@ import { Route as AuthenticatedCheckinRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedCrewRouteImport } from './routes/_authenticated/crew'
 import { Route as AuthenticatedFinanceRouteImport } from './routes/_authenticated/finance'
 import { Route as AuthenticatedVolunteerRouteImport } from './routes/_authenticated/volunteer'
+import { Route as AuthorsSlugRouteImport } from './routes/authors_.$slug'
+import { Route as BooksSlugRouteImport } from './routes/books_.$slug'
 import { Route as ConfirmTokenRouteImport } from './routes/confirm.$token'
 import { Route as PublishingIndexRouteImport } from './routes/publishing.index'
 import { Route as PublishingAuthorsRouteImport } from './routes/publishing.authors'
@@ -74,6 +79,16 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthorsRoute = AuthorsRouteImport.update({
+  id: '/authors',
+  path: '/authors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BooksRoute = BooksRouteImport.update({
+  id: '/books',
+  path: '/books',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -92,6 +107,11 @@ const FilmingConsentRoute = FilmingConsentRouteImport.update({
 const GiveRoute = GiveRouteImport.update({
   id: '/give',
   path: '/give',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LiveRoute = LiveRouteImport.update({
@@ -204,6 +224,16 @@ const AuthenticatedVolunteerRoute = AuthenticatedVolunteerRouteImport.update({
   path: '/volunteer',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthorsSlugRoute = AuthorsSlugRouteImport.update({
+  id: '/authors_/$slug',
+  path: '/authors/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BooksSlugRoute = BooksSlugRouteImport.update({
+  id: '/books_/$slug',
+  path: '/books/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConfirmTokenRoute = ConfirmTokenRouteImport.update({
   id: '/confirm/$token',
   path: '/confirm/$token',
@@ -284,10 +314,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/authors': typeof AuthorsRoute
+  '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
@@ -310,6 +343,8 @@ export interface FileRoutesByFullPath {
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
+  '/authors/$slug': typeof AuthorsSlugRoute
+  '/books/$slug': typeof BooksSlugRoute
   '/confirm/$token': typeof ConfirmTokenRoute
   '/publishing/authors': typeof PublishingAuthorsRoute
   '/publishing/books': typeof PublishingBooksRoute
@@ -330,10 +365,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/authors': typeof AuthorsRoute
+  '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
@@ -355,6 +393,8 @@ export interface FileRoutesByTo {
   '/crew': typeof AuthenticatedCrewRoute
   '/finance': typeof AuthenticatedFinanceRoute
   '/volunteer': typeof AuthenticatedVolunteerRoute
+  '/authors/$slug': typeof AuthorsSlugRoute
+  '/books/$slug': typeof BooksSlugRoute
   '/confirm/$token': typeof ConfirmTokenRoute
   '/publishing/authors': typeof PublishingAuthorsRoute
   '/publishing/books': typeof PublishingBooksRoute
@@ -377,10 +417,13 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/authors': typeof AuthorsRoute
+  '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/filming-consent': typeof FilmingConsentRoute
   '/give': typeof GiveRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/live': typeof LiveRoute
   '/merch': typeof MerchRoute
   '/partner': typeof PartnerRoute
@@ -403,6 +446,8 @@ export interface FileRoutesById {
   '/_authenticated/crew': typeof AuthenticatedCrewRoute
   '/_authenticated/finance': typeof AuthenticatedFinanceRoute
   '/_authenticated/volunteer': typeof AuthenticatedVolunteerRoute
+  '/authors_/$slug': typeof AuthorsSlugRoute
+  '/books_/$slug': typeof BooksSlugRoute
   '/confirm/$token': typeof ConfirmTokenRoute
   '/publishing/authors': typeof PublishingAuthorsRoute
   '/publishing/books': typeof PublishingBooksRoute
@@ -425,10 +470,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/authors'
+    | '/books'
     | '/contact'
     | '/faq'
     | '/filming-consent'
     | '/give'
+    | '/how-it-works'
     | '/live'
     | '/merch'
     | '/partner'
@@ -451,6 +499,8 @@ export interface FileRouteTypes {
     | '/crew'
     | '/finance'
     | '/volunteer'
+    | '/authors/$slug'
+    | '/books/$slug'
     | '/confirm/$token'
     | '/publishing/authors'
     | '/publishing/books'
@@ -471,10 +521,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/authors'
+    | '/books'
     | '/contact'
     | '/faq'
     | '/filming-consent'
     | '/give'
+    | '/how-it-works'
     | '/live'
     | '/merch'
     | '/partner'
@@ -496,6 +549,8 @@ export interface FileRouteTypes {
     | '/crew'
     | '/finance'
     | '/volunteer'
+    | '/authors/$slug'
+    | '/books/$slug'
     | '/confirm/$token'
     | '/publishing/authors'
     | '/publishing/books'
@@ -517,10 +572,13 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/auth'
+    | '/authors'
+    | '/books'
     | '/contact'
     | '/faq'
     | '/filming-consent'
     | '/give'
+    | '/how-it-works'
     | '/live'
     | '/merch'
     | '/partner'
@@ -543,6 +601,8 @@ export interface FileRouteTypes {
     | '/_authenticated/crew'
     | '/_authenticated/finance'
     | '/_authenticated/volunteer'
+    | '/authors_/$slug'
+    | '/books_/$slug'
     | '/confirm/$token'
     | '/publishing/authors'
     | '/publishing/books'
@@ -565,10 +625,13 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  AuthorsRoute: typeof AuthorsRoute
+  BooksRoute: typeof BooksRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   FilmingConsentRoute: typeof FilmingConsentRoute
   GiveRoute: typeof GiveRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   LiveRoute: typeof LiveRoute
   MerchRoute: typeof MerchRoute
   PartnerRoute: typeof PartnerRoute
@@ -585,6 +648,8 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   WatchRoute: typeof WatchRoute
   WelcomeRoute: typeof WelcomeRoute
+  AuthorsSlugRoute: typeof AuthorsSlugRoute
+  BooksSlugRoute: typeof BooksSlugRoute
   ConfirmTokenRoute: typeof ConfirmTokenRoute
   ReleaseTokenRoute: typeof ReleaseTokenRoute
   TapingsIdRoute: typeof TapingsIdRoute
@@ -621,6 +686,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/authors': {
+      id: '/authors'
+      path: '/authors'
+      fullPath: '/authors'
+      preLoaderRoute: typeof AuthorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/books': {
+      id: '/books'
+      path: '/books'
+      fullPath: '/books'
+      preLoaderRoute: typeof BooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -647,6 +726,13 @@ declare module '@tanstack/react-router' {
       path: '/give'
       fullPath: '/give'
       preLoaderRoute: typeof GiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/live': {
@@ -802,6 +888,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/volunteer'
       preLoaderRoute: typeof AuthenticatedVolunteerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/authors_/$slug': {
+      id: '/authors_/$slug'
+      path: '/authors/$slug'
+      fullPath: '/authors/$slug'
+      preLoaderRoute: typeof AuthorsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/books_/$slug': {
+      id: '/books_/$slug'
+      path: '/books/$slug'
+      fullPath: '/books/$slug'
+      preLoaderRoute: typeof BooksSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/confirm/$token': {
       id: '/confirm/$token'
@@ -969,10 +1069,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  AuthorsRoute: AuthorsRoute,
+  BooksRoute: BooksRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   FilmingConsentRoute: FilmingConsentRoute,
   GiveRoute: GiveRoute,
+  HowItWorksRoute: HowItWorksRoute,
   LiveRoute: LiveRoute,
   MerchRoute: MerchRoute,
   PartnerRoute: PartnerRoute,
@@ -989,6 +1092,8 @@ const rootRouteChildren: RootRouteChildren = {
   UnsubscribeRoute: UnsubscribeRoute,
   WatchRoute: WatchRoute,
   WelcomeRoute: WelcomeRoute,
+  AuthorsSlugRoute: AuthorsSlugRoute,
+  BooksSlugRoute: BooksSlugRoute,
   ConfirmTokenRoute: ConfirmTokenRoute,
   ReleaseTokenRoute: ReleaseTokenRoute,
   TapingsIdRoute: TapingsIdRoute,

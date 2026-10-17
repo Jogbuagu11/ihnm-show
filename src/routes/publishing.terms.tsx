@@ -1,14 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { IMPRINT, OPERATOR } from "@/lib/publishing";
 
+export const pubTermsHead = () => ({
+  meta: [
+    { title: `Terms of Use — ${IMPRINT}` },
+    { name: "description", content: `Terms for using the ${IMPRINT} website.` },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/terms")({
-  head: () => ({
-    meta: [
-      { title: `Terms of Use — ${IMPRINT}` },
-      { name: "description", content: `Terms for using the ${IMPRINT} website.` },
-    ],
-  }),
-  component: () => (
+  head: pubTermsHead,
+  component: PubTerms,
+});
+
+export function PubTerms() {
+  return (
     <section className="mx-auto max-w-3xl space-y-5 px-4 py-14 leading-relaxed [&_h2]:mt-8 [&_h2]:font-display [&_h2]:text-2xl">
       <p className="eyebrow">— Legal</p>
       <h1 className="display-lg">Terms of Use</h1>
@@ -47,5 +53,5 @@ export const Route = createFileRoute("/publishing/terms")({
       <h2>Changes</h2>
       <p>We may update these terms; the date above says when we last did.</p>
     </section>
-  ),
-});
+  );
+}

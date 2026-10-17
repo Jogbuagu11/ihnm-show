@@ -16,23 +16,25 @@ import {
 } from "@/lib/publishing";
 import { supabase } from "@/integrations/supabase/client";
 
+export const pubBooksHead = () => ({
+  meta: [
+    { title: `Books — ${IMPRINT}` },
+    {
+      name: "description",
+      content:
+        "Our catalogue of faith, history and Christian living titles, in paperback, hardcover, ebook and audiobook.",
+    },
+    { property: "og:title", content: `Books — ${IMPRINT}` },
+    { property: "og:type", content: "website" },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/books")({
-  head: () => ({
-    meta: [
-      { title: `Books — ${IMPRINT}` },
-      {
-        name: "description",
-        content:
-          "Our catalogue of faith, history and Christian living titles, in paperback, hardcover, ebook and audiobook.",
-      },
-      { property: "og:title", content: `Books — ${IMPRINT}` },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: pubBooksHead,
   component: Books,
 });
 
-function Books() {
+export function Books() {
   const { data: books = [], isLoading } = useQuery(booksQuery);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<PubCategory | "all">("all");

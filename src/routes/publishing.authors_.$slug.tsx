@@ -13,11 +13,10 @@ import {
 
 export const Route = createFileRoute("/publishing/authors_/$slug")({
   head: () => ({ meta: [{ title: `Author — ${IMPRINT}` }] }),
-  component: AuthorPage,
+  component: AuthorRoute,
 });
 
-function AuthorPage() {
-  const { slug } = Route.useParams();
+export function AuthorPage({ slug }: { slug: string }) {
   const { data: author, isLoading } = useQuery(authorQuery(slug));
   const { data: settings } = useQuery(pubSettingsQuery);
 
@@ -118,4 +117,9 @@ function AuthorPage() {
       )}
     </article>
   );
+}
+
+function AuthorRoute() {
+  const { slug } = Route.useParams();
+  return <AuthorPage slug={slug} />;
 }

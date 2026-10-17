@@ -1,10 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pubPrivacyHead, PubPrivacy } from "./publishing.privacy";
+import { isBooksSite } from "@/lib/site";
 import { LegalPage, legalHead } from "@/components/legal-page";
 
+const showPrivacyHead = () =>
+  legalHead("Privacy Policy", "What IHNM Show collects, why, and how to get it removed.");
+
+// This path exists on both sites. The host decides which one renders;
+// see src/lib/site.ts for why that is safe through hydration.
 export const Route = createFileRoute("/privacy")({
-  head: () =>
-    legalHead("Privacy Policy", "What IHNM Show collects, why, and how to get it removed."),
-  component: Privacy,
+  head: () => (isBooksSite() ? pubPrivacyHead() : showPrivacyHead()),
+  component: () => (isBooksSite() ? <PubPrivacy /> : <Privacy />),
 });
 
 // Written to match what the site actually stores. If the waitlist form or the

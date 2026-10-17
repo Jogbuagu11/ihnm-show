@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { pubHomeHead, PubHome } from "./publishing.index";
+import { isBooksSite } from "@/lib/site";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, CalendarCheck, Download, Mic2, Sparkles } from "lucide-react";
 import studio from "@/assets/studio.jpg";
@@ -13,31 +15,35 @@ import { LOCATION } from "@/lib/show";
 import { telHref } from "@/lib/waitlist";
 import { trackMediaKitDownload } from "@/lib/analytics";
 
+const showHead_index = () => ({
+  meta: [
+    { title: "IHNM Show — Be in the first audience" },
+    {
+      name: "description",
+      content:
+        "Join the waitlist for IHNM Show, a live talk show where Scripture, history and today's headlines meet. Recording at Studio A, San Jose. Launching March 2027.",
+    },
+    { property: "og:title", content: "IHNM Show — Be in the first audience" },
+    {
+      property: "og:description",
+      content:
+        "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching March 2027.",
+    },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://www.ihnmshow.com/" },
+    { property: "og:image", content: "https://www.ihnmshow.com/og-image.jpg" },
+    { property: "og:image:alt", content: "The IHNM Show studio set" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: "https://www.ihnmshow.com/og-image.jpg" },
+  ],
+  links: [{ rel: "canonical", href: "https://www.ihnmshow.com/" }],
+});
+
+// This path exists on both sites. The host decides which one renders;
+// see src/lib/site.ts for why that is safe through hydration.
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "IHNM Show — Be in the first audience" },
-      {
-        name: "description",
-        content:
-          "Join the waitlist for IHNM Show, a live talk show where Scripture, history and today's headlines meet. Recording at Studio A, San Jose. Launching March 2027.",
-      },
-      { property: "og:title", content: "IHNM Show — Be in the first audience" },
-      {
-        property: "og:description",
-        content:
-          "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching March 2027.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.ihnmshow.com/" },
-      { property: "og:image", content: "https://www.ihnmshow.com/og-image.jpg" },
-      { property: "og:image:alt", content: "The IHNM Show studio set" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://www.ihnmshow.com/og-image.jpg" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.ihnmshow.com/" }],
-  }),
-  component: Prelaunch,
+  head: () => (isBooksSite() ? pubHomeHead() : showHead_index()),
+  component: () => (isBooksSite() ? <PubHome /> : <Prelaunch />),
 });
 
 const PERKS = [

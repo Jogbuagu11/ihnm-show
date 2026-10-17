@@ -1,14 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { IMPRINT, OPERATOR } from "@/lib/publishing";
 
+export const pubPrivacyHead = () => ({
+  meta: [
+    { title: `Privacy Policy — ${IMPRINT}` },
+    { name: "description", content: `How ${IMPRINT} handles your information.` },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/privacy")({
-  head: () => ({
-    meta: [
-      { title: `Privacy Policy — ${IMPRINT}` },
-      { name: "description", content: `How ${IMPRINT} handles your information.` },
-    ],
-  }),
-  component: () => (
+  head: pubPrivacyHead,
+  component: PubPrivacy,
+});
+
+export function PubPrivacy() {
+  return (
     <section className="mx-auto max-w-3xl space-y-5 px-4 py-14 leading-relaxed [&_h2]:mt-8 [&_h2]:font-display [&_h2]:text-2xl">
       <p className="eyebrow">— Legal</p>
       <h1 className="display-lg">Privacy Policy</h1>
@@ -54,5 +60,5 @@ export const Route = createFileRoute("/publishing/privacy")({
         treat you differently for using them.
       </p>
     </section>
-  ),
-});
+  );
+}

@@ -16,14 +16,16 @@ import {
 import { IMPRINT } from "@/lib/publishing";
 import { notifyInquiry } from "@/lib/inquiries.functions";
 
+export const pubContactHead = () => ({
+  meta: [
+    { title: `Contact — ${IMPRINT}` },
+    { name: "description", content: `Get in touch with ${IMPRINT}.` },
+    { property: "og:type", content: "website" },
+  ],
+});
+
 export const Route = createFileRoute("/publishing/contact")({
-  head: () => ({
-    meta: [
-      { title: `Contact — ${IMPRINT}` },
-      { name: "description", content: `Get in touch with ${IMPRINT}.` },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: pubContactHead,
   component: PubContact,
 });
 
@@ -36,7 +38,7 @@ const TOPICS = [
   { v: "publishing-general", l: "General" },
 ];
 
-function PubContact() {
+export function PubContact() {
   const [f, setF] = useState({ name: "", email: "", organization: "", message: "" });
   const [topic, setTopic] = useState(TOPICS[3]!.v);
   const [busy, setBusy] = useState(false);
