@@ -1,4 +1,5 @@
 import { TapingUpdates } from "@/components/taping-updates";
+import { KidsRoom } from "@/components/kids-room";
 import { ShowFeedback } from "@/components/show-feedback";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -366,6 +367,7 @@ function TicketCard({
           </AlertDialogContent>
         </AlertDialog>
       </div>
+      <KidsRoom tapingId={t.id} reservationId={r.id} />
     </div>
   );
 }

@@ -29,6 +29,7 @@ import { StaffAdmin } from "@/components/crew/staff";
 import { DoorSign } from "@/components/crew/door-sign";
 import { FeedbackList } from "@/components/crew/feedback";
 import { PrayerInbox } from "@/components/crew/prayer";
+import { KidsAdmin } from "@/components/crew/kids";
 import { WaitlistAdmin } from "@/components/crew/waitlist-admin";
 import { PrelaunchSettings } from "@/components/crew/prelaunch-settings";
 import { PartnerInbox } from "@/components/crew/partner-inbox";
@@ -111,6 +112,7 @@ function Crew() {
           <TabsTrigger value="episodes">Episodes</TabsTrigger>
           <TabsTrigger value="volunteers">Volunteers</TabsTrigger>
           <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsTrigger value="kids">Kids' Room</TabsTrigger>
           <TabsTrigger value="door">Door QR</TabsTrigger>
           <TabsTrigger value="feedback">Feedback</TabsTrigger>
           <TabsTrigger value="prayer">Prayer</TabsTrigger>
@@ -144,6 +146,7 @@ function Crew() {
           )}
         </TabsContent>
         <TabsContent value="messages">{taping && <Messages taping={taping} />}</TabsContent>
+        <TabsContent value="kids">{taping && <KidsAdmin taping={taping} />}</TabsContent>
         <TabsContent value="door">{taping && <DoorSign taping={taping} />}</TabsContent>
         <TabsContent value="feedback">{taping && <FeedbackList taping={taping} />}</TabsContent>
         <TabsContent value="prayer">

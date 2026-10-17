@@ -559,6 +559,124 @@ export type Database = {
         };
         Relationships: [];
       };
+      kids_registrations: {
+        Row: {
+          age_years: number;
+          allergies: string | null;
+          cancelled_at: string | null;
+          checked_in_at: string | null;
+          checked_out_at: string | null;
+          child_first_name: string;
+          child_last_name: string | null;
+          created_at: string;
+          guardian_name: string;
+          guardian_phone: string;
+          id: string;
+          notes: string | null;
+          release_code: string;
+          released_to: string | null;
+          reservation_id: string;
+          room_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          age_years: number;
+          allergies?: string | null;
+          cancelled_at?: string | null;
+          checked_in_at?: string | null;
+          checked_out_at?: string | null;
+          child_first_name: string;
+          child_last_name?: string | null;
+          created_at?: string;
+          guardian_name: string;
+          guardian_phone: string;
+          id?: string;
+          notes?: string | null;
+          release_code: string;
+          released_to?: string | null;
+          reservation_id: string;
+          room_id: string;
+        };
+        Update: {
+          age_years?: number;
+          allergies?: string | null;
+          cancelled_at?: string | null;
+          checked_in_at?: string | null;
+          checked_out_at?: string | null;
+          child_first_name?: string;
+          child_last_name?: string | null;
+          created_at?: string;
+          guardian_name?: string;
+          guardian_phone?: string;
+          id?: string;
+          notes?: string | null;
+          release_code?: string;
+          released_to?: string | null;
+          reservation_id?: string;
+          room_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "kids_registrations_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "kids_registrations_room_id_fkey";
+            columns: ["room_id"];
+            isOneToOne: false;
+            referencedRelation: "kids_rooms";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      kids_rooms: {
+        Row: {
+          capacity: number;
+          created_at: string;
+          id: string;
+          max_age_years: number;
+          min_age_years: number;
+          name: string;
+          notes: string | null;
+          sort_order: number;
+          taping_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          capacity?: number;
+          created_at?: string;
+          id?: string;
+          max_age_years?: number;
+          min_age_years?: number;
+          name?: string;
+          notes?: string | null;
+          sort_order?: number;
+          taping_id: string;
+        };
+        Update: {
+          capacity?: number;
+          created_at?: string;
+          id?: string;
+          max_age_years?: number;
+          min_age_years?: number;
+          name?: string;
+          notes?: string | null;
+          sort_order?: number;
+          taping_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "kids_rooms_taping_id_fkey";
+            columns: ["taping_id"];
+            isOneToOne: false;
+            referencedRelation: "tapings";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       newsletter_signups: {
         Row: {
           created_at: string;
@@ -1803,6 +1921,7 @@ export type Database = {
         Returns: undefined;
       };
       buy_hour_pack: { Args: { _email: string; _name: string }; Returns: undefined };
+      cancel_child: { Args: { _registration: string }; Returns: undefined };
       cancel_my_giving: { Args: { _partner: string }; Returns: undefined };
       cancel_my_rental: { Args: { _rental: string }; Returns: number };
       cancel_reservation: { Args: { _reservation: string }; Returns: undefined };
@@ -1820,6 +1939,7 @@ export type Database = {
         }[];
       };
       gen_referral_code: { Args: Record<PropertyKey, never>; Returns: string };
+      gen_release_code: { Args: Record<PropertyKey, never>; Returns: string };
       get_release: { Args: { _token: string }; Returns: Json };
       has_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"]; _user_id: string };
@@ -1862,6 +1982,24 @@ export type Database = {
         };
         Returns: Json;
       };
+      kids_check_in: { Args: { _registration: string }; Returns: undefined };
+      kids_check_out: {
+        Args: { _code: string; _registration: string; _released_to: string };
+        Returns: undefined;
+      };
+      kids_places_left: { Args: { _room: string }; Returns: number };
+      kids_room_for_age: { Args: { _age: number; _taping: string }; Returns: string };
+      kids_rooms_for_taping: {
+        Args: { _taping: string };
+        Returns: {
+          capacity: number;
+          id: string;
+          max_age_years: number;
+          min_age_years: number;
+          name: string;
+          places_left: number;
+        }[];
+      };
       list_staff: {
         Args: Record<PropertyKey, never>;
         Returns: {
@@ -1875,6 +2013,20 @@ export type Database = {
       my_no_show_flag: { Args: Record<PropertyKey, never>; Returns: boolean };
       no_show_count: { Args: { _user: string }; Returns: number };
       offer_open_seats: { Args: { _taping: string }; Returns: undefined };
+      register_child: {
+        Args: {
+          _age: number;
+          _allergies?: string;
+          _first_name: string;
+          _guardian_name: string;
+          _guardian_phone: string;
+          _last_name: string;
+          _notes?: string;
+          _reservation: string;
+          _taping: string;
+        };
+        Returns: Json;
+      };
       release_shift: { Args: { _shift: string }; Returns: undefined };
       remove_staff: { Args: { _email: string; _user: string }; Returns: undefined };
       rental_price: {
@@ -1977,7 +2129,8 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -1999,7 +2152,8 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -2021,7 +2175,8 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -2035,7 +2190,8 @@ export type Enums<
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
