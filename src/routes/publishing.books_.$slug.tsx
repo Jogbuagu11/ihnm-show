@@ -139,13 +139,13 @@ export function BookPage({ slug }: { slug: string }) {
                 ))}
               </div>
               <p className="mt-3 text-sm text-muted-foreground">
-                Or ask your local bookstore to order it — they can, and it helps them.
+                Your local bookshop may be able to order it too — worth asking, and it helps them.
               </p>
             </>
           ) : (
             <p className="mt-9 text-sm text-muted-foreground">
-              Retail links go up closer to release. Ask your local bookstore to order it when it
-              lands — they can.
+              Retail links go up closer to release. Where each title is sold is set per book, so the
+              list here is the list.
             </p>
           )}
 

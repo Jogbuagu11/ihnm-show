@@ -52,7 +52,7 @@ export function Faq() {
     },
     {
       q: "Where will my book be sold?",
-      a: "Amazon, bookshops, libraries and Christian retailers, distributed through IngramSpark so any shop can order it.",
+      a: "That is decided book by book rather than promised up front, and it is part of the conversation before you sign. Depending on the title, the options we talk through include print-on-demand through a wholesaler so shops and libraries can order it, listings with the major online retailers, ebook and audiobook editions, Christian and independent bookshops, direct sales at IHNM Show tapings, and bulk orders for churches and groups. Whatever we agree goes into your contract.",
     },
     {
       q: "Do you do audiobooks?",
