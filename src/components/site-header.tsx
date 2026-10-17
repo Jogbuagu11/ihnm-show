@@ -1,8 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { UserMenu } from "@/components/user-menu";
 import { siteSettingsQuery } from "@/lib/settings";
 import { Button } from "@/components/ui/button";
 
@@ -22,6 +24,16 @@ export function SiteHeader() {
   const visible = links.filter((l) => isStaff || (settings?.[l.flag] ?? false));
   const isAdmin = roles.includes("admin");
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const qc = useQueryClient();
+
+  // The desktop bar uses UserMenu; the hamburger needs its own control.
+  async function signOutMobile() {
+    await qc.cancelQueries();
+    qc.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/", replace: true });
+  }
   return (
     <header className="sticky top-0 z-40 border-b border-gold/30 bg-stage/95 text-stage-foreground backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -58,6 +70,7 @@ export function SiteHeader() {
           <Button asChild variant="gold" size="sm" className="h-9 px-4">
             <Link to={user ? "/account" : "/auth"}>{user ? "My Tickets" : "Sign in"}</Link>
           </Button>
+          <UserMenu tone="dark" />
         </nav>
         <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? <X /> : <Menu />}
@@ -99,6 +112,14 @@ export function SiteHeader() {
           >
             {user ? "My Tickets" : "Sign in"}
           </Link>
+          {user && (
+            <button
+              onClick={signOutMobile}
+              className="rounded-lg px-3 py-2 text-left font-medium hover:text-gold"
+            >
+              Sign out
+            </button>
+          )}
         </nav>
       )}
     </header>

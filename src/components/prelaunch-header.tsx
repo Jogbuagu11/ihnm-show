@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
+import { UserMenu } from "@/components/user-menu";
 
 /** Header for the prelaunch home page only. The show nav (Watch, Tickets,
  *  Shuttle, Submit, Live, Rent) points at pages that stay thin until 2027, so
@@ -31,14 +32,7 @@ export function PrelaunchHeader() {
               Crew
             </Link>
           )}
-          {user && (
-            <Link
-              to="/account"
-              className="hidden font-mono text-xs uppercase tracking-[0.2em] text-walnut/70 hover:text-persimmon sm:inline"
-            >
-              Account
-            </Link>
-          )}
+          <UserMenu tone="dark" />
           <Button asChild variant="gold" size="sm" className="h-9 px-4 sm:px-5">
             {/* One flex child: Button is inline-flex with gap-2, so a bare text
                 node beside a span would be spaced like two separate items. */}
