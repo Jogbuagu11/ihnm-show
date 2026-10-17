@@ -18,8 +18,9 @@ const LABELS: Record<string, string> = {
 };
 
 const esc = (s: string) =>
-  s.replace(/[&<>"']/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c
+  s.replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c,
   );
 
 function body(label: string, row: Record<string, unknown>) {
@@ -37,9 +38,10 @@ function body(label: string, row: Record<string, unknown>) {
   ];
   const rows = fields
     .filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== "")
-    .map(([k, v]) =>
-      `<tr><td style="padding:6px 14px 6px 0;color:#8a7f72;vertical-align:top;white-space:nowrap">${k}</td>` +
-      `<td style="padding:6px 0;color:#2b2520">${esc(String(v))}</td></tr>`
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:6px 14px 6px 0;color:#8a7f72;vertical-align:top;white-space:nowrap">${k}</td>` +
+        `<td style="padding:6px 0;color:#2b2520">${esc(String(v))}</td></tr>`,
     )
     .join("");
   const email = row.email ? String(row.email) : "";
