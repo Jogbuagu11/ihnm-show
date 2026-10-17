@@ -812,6 +812,49 @@ export type Database = {
           },
         ];
       };
+      person_blocks: {
+        Row: {
+          blocked_by: string | null;
+          created_at: string;
+          dismissed_on: string | null;
+          email: string | null;
+          id: string;
+          lift_note: string | null;
+          lifted_at: string | null;
+          lifted_by: string | null;
+          reason: string;
+          scope: Database["public"]["Enums"]["block_scope"];
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          blocked_by?: string | null;
+          created_at?: string;
+          dismissed_on?: string | null;
+          email?: string | null;
+          id?: string;
+          lift_note?: string | null;
+          lifted_at?: string | null;
+          lifted_by?: string | null;
+          reason: string;
+          scope?: Database["public"]["Enums"]["block_scope"];
+          user_id?: string | null;
+        };
+        Update: {
+          blocked_by?: string | null;
+          created_at?: string;
+          dismissed_on?: string | null;
+          email?: string | null;
+          id?: string;
+          lift_note?: string | null;
+          lifted_at?: string | null;
+          lifted_by?: string | null;
+          reason?: string;
+          scope?: Database["public"]["Enums"]["block_scope"];
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       prayer_requests: {
         Row: {
           body: string;
@@ -1901,6 +1944,16 @@ export type Database = {
         Args: { _email: string; _role: Database["public"]["Enums"]["app_role"] };
         Returns: string;
       };
+      block_person: {
+        Args: {
+          _dismissed_on?: string;
+          _email: string;
+          _reason: string;
+          _scope: Database["public"]["Enums"]["block_scope"];
+          _user_id: string;
+        };
+        Returns: string;
+      };
       book_rental: {
         Args: {
           _addons: Json;
@@ -1934,7 +1987,9 @@ export type Database = {
       flagged_attendees: {
         Args: { _taping: string };
         Returns: {
+          blocked: boolean;
           no_shows: number;
+          reason: string;
           user_id: string;
         }[];
       };
@@ -1957,6 +2012,10 @@ export type Database = {
         }[];
       };
       is_admin_or_service: { Args: Record<PropertyKey, never>; Returns: boolean };
+      is_blocked: {
+        Args: { _scope: Database["public"]["Enums"]["block_scope"]; _user_id: string };
+        Returns: boolean;
+      };
       is_staff: { Args: { _user_id: string }; Returns: boolean };
       join_volunteers: {
         Args: { _availability: string; _name: string; _phone: string; _roles: string[] };
@@ -2000,6 +2059,7 @@ export type Database = {
           places_left: number;
         }[];
       };
+      lift_block: { Args: { _id: string; _note?: string }; Returns: undefined };
       list_staff: {
         Args: Record<PropertyKey, never>;
         Returns: {
@@ -2010,6 +2070,10 @@ export type Database = {
         }[];
       };
       mark_no_show: { Args: { _reservation: string; _undo?: boolean }; Returns: undefined };
+      my_block_reason: {
+        Args: { _scope: Database["public"]["Enums"]["block_scope"] };
+        Returns: string;
+      };
       my_no_show_flag: { Args: Record<PropertyKey, never>; Returns: boolean };
       no_show_count: { Args: { _user: string }; Returns: number };
       offer_open_seats: { Args: { _taping: string }; Returns: undefined };
@@ -2088,6 +2152,7 @@ export type Database = {
     };
     Enums: {
       app_role: "admin" | "crew" | "volunteer";
+      block_scope: "audience" | "volunteer" | "both";
       episode_type: "episode" | "sitdown" | "special";
       ticket_type: "general" | "vip" | "group";
       waitlist_status: "waitlist" | "invited" | "ticketed";
@@ -2207,6 +2272,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "crew", "volunteer"],
+      block_scope: ["audience", "volunteer", "both"],
       episode_type: ["episode", "sitdown", "special"],
       ticket_type: ["general", "vip", "group"],
       waitlist_status: ["waitlist", "invited", "ticketed"],
