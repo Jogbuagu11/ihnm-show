@@ -95,6 +95,7 @@ export function PrelaunchSettings() {
           giving_zelle: blank(draft.giving_zelle),
           giving_check_payable_to: blank(draft.giving_check_payable_to),
           giving_mailing_address: blank(draft.giving_mailing_address),
+          org_mailing_address: blank(draft.org_mailing_address),
         })
         .eq("id", 1);
       if (error) throw error;
@@ -264,6 +265,22 @@ export function PrelaunchSettings() {
                 onChange={(e) => set("giving_check_payable_to", e.target.value)}
               />
             </div>
+          </div>
+          <div>
+            <Label htmlFor="s-org_mailing_address">Mailing address for email footers</Label>
+            <Textarea
+              id="s-org_mailing_address"
+              className="mt-1"
+              rows={2}
+              maxLength={200}
+              value={draft.org_mailing_address ?? ""}
+              onChange={(e) => set("org_mailing_address", e.target.value)}
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              United States law requires a physical mailing address in every marketing email, and
+              the footer prints whatever is here. Use a PO box. Until this is filled in, the footer
+              goes out without one.
+            </p>
           </div>
           <div>
             <Label htmlFor="s-giving_mailing_address">Mailing address for cheques</Label>

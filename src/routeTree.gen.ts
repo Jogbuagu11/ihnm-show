@@ -30,6 +30,7 @@ import { Route as ShuttleRouteImport } from './routes/shuttle'
 import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TicketsRouteImport } from './routes/tickets'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as WatchRouteImport } from './routes/watch'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -156,6 +157,11 @@ const TermsRoute = TermsRouteImport.update({
 const TicketsRoute = TicketsRouteImport.update({
   id: '/tickets',
   path: '/tickets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WatchRoute = WatchRouteImport.update({
@@ -295,6 +301,7 @@ export interface FileRoutesByFullPath {
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/watch': typeof WatchRoute
   '/welcome': typeof WelcomeRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -339,6 +346,7 @@ export interface FileRoutesByTo {
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/watch': typeof WatchRoute
   '/welcome': typeof WelcomeRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -386,6 +394,7 @@ export interface FileRoutesById {
   '/submit': typeof SubmitRoute
   '/terms': typeof TermsRoute
   '/tickets': typeof TicketsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/watch': typeof WatchRoute
   '/welcome': typeof WelcomeRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -433,6 +442,7 @@ export interface FileRouteTypes {
     | '/submit'
     | '/terms'
     | '/tickets'
+    | '/unsubscribe'
     | '/watch'
     | '/welcome'
     | '/account'
@@ -477,6 +487,7 @@ export interface FileRouteTypes {
     | '/submit'
     | '/terms'
     | '/tickets'
+    | '/unsubscribe'
     | '/watch'
     | '/welcome'
     | '/account'
@@ -523,6 +534,7 @@ export interface FileRouteTypes {
     | '/submit'
     | '/terms'
     | '/tickets'
+    | '/unsubscribe'
     | '/watch'
     | '/welcome'
     | '/_authenticated/account'
@@ -570,6 +582,7 @@ export interface RootRouteChildren {
   SubmitRoute: typeof SubmitRoute
   TermsRoute: typeof TermsRoute
   TicketsRoute: typeof TicketsRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   WatchRoute: typeof WatchRoute
   WelcomeRoute: typeof WelcomeRoute
   ConfirmTokenRoute: typeof ConfirmTokenRoute
@@ -725,6 +738,13 @@ declare module '@tanstack/react-router' {
       path: '/tickets'
       fullPath: '/tickets'
       preLoaderRoute: typeof TicketsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/watch': {
@@ -966,6 +986,7 @@ const rootRouteChildren: RootRouteChildren = {
   SubmitRoute: SubmitRoute,
   TermsRoute: TermsRoute,
   TicketsRoute: TicketsRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   WatchRoute: WatchRoute,
   WelcomeRoute: WelcomeRoute,
   ConfirmTokenRoute: ConfirmTokenRoute,

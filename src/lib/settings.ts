@@ -41,6 +41,8 @@ export const SETTINGS_FALLBACK = {
   giving_check_payable_to: null,
   giving_mailing_address: null,
   giving_online_enabled: false,
+  // Required in the footer of every marketing email.
+  org_mailing_address: null,
 } satisfies SiteSettings;
 
 export const siteSettingsQuery = queryOptions({

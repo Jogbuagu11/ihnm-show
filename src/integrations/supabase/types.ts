@@ -1,4 +1,3 @@
-// Generated from the database schema. Do not edit by hand.
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -7,14 +6,76 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.18";
   };
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
+      admin_tasks: {
+        Row: {
+          contact_id: string | null;
+          created_at: string;
+          detail: string | null;
+          done_at: string | null;
+          due_on: string | null;
+          id: string;
+          title: string;
+        };
+        Insert: {
+          contact_id?: string | null;
+          created_at?: string;
+          detail?: string | null;
+          done_at?: string | null;
+          due_on?: string | null;
+          id?: string;
+          title: string;
+        };
+        Update: {
+          contact_id?: string | null;
+          created_at?: string;
+          detail?: string | null;
+          done_at?: string | null;
+          due_on?: string | null;
+          id?: string;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "admin_tasks_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       budgets: {
         Row: {
           category: string;
           monthly_cents: number;
         };
-        ComputedFields: never;
         Insert: {
           category: string;
           monthly_cents?: number;
@@ -34,7 +95,6 @@ export type Database = {
           id: string;
           name: string;
         };
-        ComputedFields: never;
         Insert: {
           active?: boolean;
           created_at?: string;
@@ -53,6 +113,73 @@ export type Database = {
         };
         Relationships: [];
       };
+      contact_consent: {
+        Row: {
+          brand: Database["public"]["Enums"]["contact_brand"];
+          contact_id: string;
+          reason: string | null;
+          subscribed: boolean;
+          unsubscribed_at: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          brand: Database["public"]["Enums"]["contact_brand"];
+          contact_id: string;
+          reason?: string | null;
+          subscribed?: boolean;
+          unsubscribed_at?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          brand?: Database["public"]["Enums"]["contact_brand"];
+          contact_id?: string;
+          reason?: string | null;
+          subscribed?: boolean;
+          unsubscribed_at?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "contact_consent_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      contact_events: {
+        Row: {
+          contact_id: string;
+          id: string;
+          occurred_at: string;
+          payload: Json;
+          type: string;
+        };
+        Insert: {
+          contact_id: string;
+          id?: string;
+          occurred_at?: string;
+          payload?: Json;
+          type: string;
+        };
+        Update: {
+          contact_id?: string;
+          id?: string;
+          occurred_at?: string;
+          payload?: Json;
+          type?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "contact_events_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       contact_messages: {
         Row: {
           created_at: string;
@@ -66,7 +193,6 @@ export type Database = {
           status: string;
           topic: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           email: string;
@@ -93,6 +219,78 @@ export type Database = {
         };
         Relationships: [];
       };
+      contacts: {
+        Row: {
+          created_at: string;
+          email: string;
+          first_name: string | null;
+          id: string;
+          interests: string[];
+          last_name: string | null;
+          phone: string | null;
+          sms_opt_in: boolean;
+          source: string | null;
+          tags: string[];
+          unsub_token: string;
+          updated_at: string;
+          zip: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          first_name?: string | null;
+          id?: string;
+          interests?: string[];
+          last_name?: string | null;
+          phone?: string | null;
+          sms_opt_in?: boolean;
+          source?: string | null;
+          tags?: string[];
+          unsub_token?: string;
+          updated_at?: string;
+          zip?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          first_name?: string | null;
+          id?: string;
+          interests?: string[];
+          last_name?: string | null;
+          phone?: string | null;
+          sms_opt_in?: boolean;
+          source?: string | null;
+          tags?: string[];
+          unsub_token?: string;
+          updated_at?: string;
+          zip?: string | null;
+        };
+        Relationships: [];
+      };
+      email_templates: {
+        Row: {
+          brand: Database["public"]["Enums"]["contact_brand"];
+          html: string;
+          key: string;
+          subject: string;
+          updated_at: string;
+        };
+        Insert: {
+          brand?: Database["public"]["Enums"]["contact_brand"];
+          html: string;
+          key: string;
+          subject: string;
+          updated_at?: string;
+        };
+        Update: {
+          brand?: Database["public"]["Enums"]["contact_brand"];
+          html?: string;
+          key?: string;
+          subject?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       episodes: {
         Row: {
           aired_on: string;
@@ -112,7 +310,6 @@ export type Database = {
           title: string;
           youtube_url: string | null;
         };
-        ComputedFields: never;
         Insert: {
           aired_on?: string;
           chat_url?: string | null;
@@ -162,7 +359,6 @@ export type Database = {
           spent_on: string;
           vendor: string | null;
         };
-        ComputedFields: never;
         Insert: {
           amount_cents: number;
           category: string;
@@ -202,7 +398,6 @@ export type Database = {
           status: string;
           taping_id: string;
         };
-        ComputedFields: never;
         Insert: {
           briefing?: string | null;
           briefing_sent_at?: string | null;
@@ -264,7 +459,6 @@ export type Database = {
           phone: string | null;
           topics: string | null;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           email?: string | null;
@@ -295,7 +489,6 @@ export type Database = {
           id: number;
           monthly_operating_cents: number;
         };
-        ComputedFields: never;
         Insert: {
           fundraising_goal_cents?: number;
           id?: number;
@@ -322,7 +515,6 @@ export type Database = {
           taping_id: string;
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           church_name: string;
           contact_name: string;
@@ -371,7 +563,6 @@ export type Database = {
           taping_id: string;
           token: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           email?: string | null;
@@ -416,7 +607,6 @@ export type Database = {
           status: string;
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           email: string;
@@ -454,7 +644,6 @@ export type Database = {
           sponsor_id: string | null;
           stream: string;
         };
-        ComputedFields: never;
         Insert: {
           amount_cents: number;
           campaign_id?: string | null;
@@ -526,7 +715,6 @@ export type Database = {
           pay_url: string | null;
           status: string;
         };
-        ComputedFields: never;
         Insert: {
           amount_cents?: number;
           client_name: string;
@@ -559,6 +747,200 @@ export type Database = {
         };
         Relationships: [];
       };
+      journey_runs: {
+        Row: {
+          completed_at: string | null;
+          contact_id: string;
+          context: Json;
+          current_step_id: string | null;
+          entered_at: string;
+          exit_reason: string | null;
+          id: string;
+          journey_id: string;
+          next_run_at: string;
+          status: Database["public"]["Enums"]["journey_run_status"];
+        };
+        Insert: {
+          completed_at?: string | null;
+          contact_id: string;
+          context?: Json;
+          current_step_id?: string | null;
+          entered_at?: string;
+          exit_reason?: string | null;
+          id?: string;
+          journey_id: string;
+          next_run_at?: string;
+          status?: Database["public"]["Enums"]["journey_run_status"];
+        };
+        Update: {
+          completed_at?: string | null;
+          contact_id?: string;
+          context?: Json;
+          current_step_id?: string | null;
+          entered_at?: string;
+          exit_reason?: string | null;
+          id?: string;
+          journey_id?: string;
+          next_run_at?: string;
+          status?: Database["public"]["Enums"]["journey_run_status"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "journey_runs_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "journey_runs_current_step_id_fkey";
+            columns: ["current_step_id"];
+            isOneToOne: false;
+            referencedRelation: "journey_steps";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "journey_runs_journey_id_fkey";
+            columns: ["journey_id"];
+            isOneToOne: false;
+            referencedRelation: "journeys";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      journey_step_runs: {
+        Row: {
+          done_at: string;
+          result: Json;
+          run_id: string;
+          step_id: string;
+        };
+        Insert: {
+          done_at?: string;
+          result?: Json;
+          run_id: string;
+          step_id: string;
+        };
+        Update: {
+          done_at?: string;
+          result?: Json;
+          run_id?: string;
+          step_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "journey_step_runs_run_id_fkey";
+            columns: ["run_id"];
+            isOneToOne: false;
+            referencedRelation: "journey_runs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "journey_step_runs_step_id_fkey";
+            columns: ["step_id"];
+            isOneToOne: false;
+            referencedRelation: "journey_steps";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      journey_steps: {
+        Row: {
+          alt_step_id: string | null;
+          config: Json;
+          created_at: string;
+          id: string;
+          journey_id: string;
+          next_step_id: string | null;
+          position: number;
+          type: Database["public"]["Enums"]["journey_step_type"];
+        };
+        Insert: {
+          alt_step_id?: string | null;
+          config?: Json;
+          created_at?: string;
+          id?: string;
+          journey_id: string;
+          next_step_id?: string | null;
+          position: number;
+          type: Database["public"]["Enums"]["journey_step_type"];
+        };
+        Update: {
+          alt_step_id?: string | null;
+          config?: Json;
+          created_at?: string;
+          id?: string;
+          journey_id?: string;
+          next_step_id?: string | null;
+          position?: number;
+          type?: Database["public"]["Enums"]["journey_step_type"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "journey_steps_alt_step_id_fkey";
+            columns: ["alt_step_id"];
+            isOneToOne: false;
+            referencedRelation: "journey_steps";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "journey_steps_journey_id_fkey";
+            columns: ["journey_id"];
+            isOneToOne: false;
+            referencedRelation: "journeys";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "journey_steps_next_step_id_fkey";
+            columns: ["next_step_id"];
+            isOneToOne: false;
+            referencedRelation: "journey_steps";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      journeys: {
+        Row: {
+          allow_reentry: boolean;
+          brand: Database["public"]["Enums"]["contact_brand"];
+          created_at: string;
+          description: string | null;
+          enabled: boolean;
+          goal_event: string | null;
+          id: string;
+          key: string;
+          name: string;
+          trigger_event: string;
+          trigger_filter: Json;
+        };
+        Insert: {
+          allow_reentry?: boolean;
+          brand?: Database["public"]["Enums"]["contact_brand"];
+          created_at?: string;
+          description?: string | null;
+          enabled?: boolean;
+          goal_event?: string | null;
+          id?: string;
+          key: string;
+          name: string;
+          trigger_event: string;
+          trigger_filter?: Json;
+        };
+        Update: {
+          allow_reentry?: boolean;
+          brand?: Database["public"]["Enums"]["contact_brand"];
+          created_at?: string;
+          description?: string | null;
+          enabled?: boolean;
+          goal_event?: string | null;
+          id?: string;
+          key?: string;
+          name?: string;
+          trigger_event?: string;
+          trigger_filter?: Json;
+        };
+        Relationships: [];
+      };
       kids_registrations: {
         Row: {
           age_years: number;
@@ -578,7 +960,6 @@ export type Database = {
           reservation_id: string;
           room_id: string;
         };
-        ComputedFields: never;
         Insert: {
           age_years: number;
           allergies?: string | null;
@@ -644,7 +1025,6 @@ export type Database = {
           sort_order: number;
           taping_id: string;
         };
-        ComputedFields: never;
         Insert: {
           capacity?: number;
           created_at?: string;
@@ -677,13 +1057,103 @@ export type Database = {
           },
         ];
       };
+      link_clicks: {
+        Row: {
+          clicked_at: string;
+          contact_id: string | null;
+          id: string;
+          token: string;
+        };
+        Insert: {
+          clicked_at?: string;
+          contact_id?: string | null;
+          id?: string;
+          token: string;
+        };
+        Update: {
+          clicked_at?: string;
+          contact_id?: string | null;
+          id?: string;
+          token?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "link_clicks_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "link_clicks_token_fkey";
+            columns: ["token"];
+            isOneToOne: false;
+            referencedRelation: "tracked_links";
+            referencedColumns: ["token"];
+          },
+        ];
+      };
+      message_log: {
+        Row: {
+          channel: string;
+          contact_id: string;
+          id: string;
+          journey_run_id: string | null;
+          sent_at: string;
+          step_id: string | null;
+          template_key: string | null;
+          transactional: boolean;
+        };
+        Insert: {
+          channel: string;
+          contact_id: string;
+          id?: string;
+          journey_run_id?: string | null;
+          sent_at?: string;
+          step_id?: string | null;
+          template_key?: string | null;
+          transactional?: boolean;
+        };
+        Update: {
+          channel?: string;
+          contact_id?: string;
+          id?: string;
+          journey_run_id?: string | null;
+          sent_at?: string;
+          step_id?: string | null;
+          template_key?: string | null;
+          transactional?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "message_log_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "message_log_journey_run_id_fkey";
+            columns: ["journey_run_id"];
+            isOneToOne: false;
+            referencedRelation: "journey_runs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "message_log_step_id_fkey";
+            columns: ["step_id"];
+            isOneToOne: false;
+            referencedRelation: "journey_steps";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       newsletter_signups: {
         Row: {
           created_at: string;
           email: string;
           id: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           email: string;
@@ -704,7 +1174,6 @@ export type Database = {
           session_id: string;
           source: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           id?: string;
@@ -735,7 +1204,6 @@ export type Database = {
           phone: string | null;
           status: string;
         };
-        ComputedFields: never;
         Insert: {
           admin_note?: string | null;
           business?: string | null;
@@ -777,7 +1245,6 @@ export type Database = {
           status: string;
           user_id: string | null;
         };
-        ComputedFields: never;
         Insert: {
           amount_cents?: number;
           campaign_id?: string | null;
@@ -826,7 +1293,6 @@ export type Database = {
           scope: Database["public"]["Enums"]["block_scope"];
           user_id: string | null;
         };
-        ComputedFields: never;
         Insert: {
           blocked_by?: string | null;
           created_at?: string;
@@ -866,7 +1332,6 @@ export type Database = {
           share_on_air: boolean;
           status: string;
         };
-        ComputedFields: never;
         Insert: {
           body: string;
           created_at?: string;
@@ -901,7 +1366,6 @@ export type Database = {
           website_url: string | null;
           x_url: string | null;
         };
-        ComputedFields: never;
         Insert: {
           bio?: string | null;
           created_at?: string;
@@ -932,7 +1396,6 @@ export type Database = {
           book_id: string;
           sort_order: number;
         };
-        ComputedFields: never;
         Insert: {
           author_id: string;
           book_id: string;
@@ -968,7 +1431,6 @@ export type Database = {
           isbn: string | null;
           price_cents: number | null;
         };
-        ComputedFields: never;
         Insert: {
           book_id: string;
           format: Database["public"]["Enums"]["pub_format"];
@@ -995,7 +1457,7 @@ export type Database = {
       };
       pub_books: {
         Row: {
-          buy_links: NonNullable<Json>;
+          buy_links: Json;
           category: Database["public"]["Enums"]["pub_category"];
           cover_path: string | null;
           created_at: string;
@@ -1011,9 +1473,8 @@ export type Database = {
           title: string;
           youtube_url: string | null;
         };
-        ComputedFields: never;
         Insert: {
-          buy_links?: NonNullable<Json>;
+          buy_links?: Json;
           category?: Database["public"]["Enums"]["pub_category"];
           cover_path?: string | null;
           created_at?: string;
@@ -1030,7 +1491,7 @@ export type Database = {
           youtube_url?: string | null;
         };
         Update: {
-          buy_links?: NonNullable<Json>;
+          buy_links?: Json;
           category?: Database["public"]["Enums"]["pub_category"];
           cover_path?: string | null;
           created_at?: string;
@@ -1056,7 +1517,6 @@ export type Database = {
           sort_order: number;
           source: string;
         };
-        ComputedFields: never;
         Insert: {
           book_id: string;
           id?: string;
@@ -1094,7 +1554,6 @@ export type Database = {
           url_instagram: string | null;
           url_youtube: string | null;
         };
-        ComputedFields: never;
         Insert: {
           contract_term_years?: number | null;
           created_at?: string;
@@ -1144,7 +1603,6 @@ export type Database = {
           terms_confirmed: boolean;
           word_count: number | null;
         };
-        ComputedFields: never;
         Insert: {
           admin_notes?: string | null;
           author_bio?: string | null;
@@ -1209,7 +1667,6 @@ export type Database = {
           status: string;
           user_id: string | null;
         };
-        ComputedFields: never;
         Insert: {
           admin_note?: string | null;
           created_at?: string;
@@ -1263,7 +1720,6 @@ export type Database = {
           setup_hourly_cents: number;
           shuttle_cents: number;
         };
-        ComputedFields: never;
         Insert: {
           deposit_pct?: number;
           edited_video_cents?: number;
@@ -1300,7 +1756,7 @@ export type Database = {
       };
       rentals: {
         Row: {
-          addons: NonNullable<Json>;
+          addons: Json;
           agreement_name: string | null;
           agreement_path: string | null;
           agreement_signed_at: string | null;
@@ -1331,9 +1787,8 @@ export type Database = {
           status: string;
           user_id: string | null;
         };
-        ComputedFields: never;
         Insert: {
-          addons?: NonNullable<Json>;
+          addons?: Json;
           agreement_name?: string | null;
           agreement_path?: string | null;
           agreement_signed_at?: string | null;
@@ -1365,7 +1820,7 @@ export type Database = {
           user_id?: string | null;
         };
         Update: {
-          addons?: NonNullable<Json>;
+          addons?: Json;
           agreement_name?: string | null;
           agreement_path?: string | null;
           agreement_signed_at?: string | null;
@@ -1427,7 +1882,6 @@ export type Database = {
           ticket_type: Database["public"]["Enums"]["ticket_type"];
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           accessible_seating?: boolean;
           checked_in_at?: string | null;
@@ -1487,7 +1941,6 @@ export type Database = {
           status: string;
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           hours?: number | null;
@@ -1525,7 +1978,6 @@ export type Database = {
           starts_at: string;
           taping_id: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           ends_at: string;
@@ -1570,7 +2022,6 @@ export type Database = {
           taping_id: string;
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           arrived_at?: string | null;
           created_at?: string;
@@ -1627,6 +2078,7 @@ export type Database = {
           id: number;
           media_kit_path: string | null;
           merch_enabled: boolean;
+          org_mailing_address: string | null;
           require_email_confirm: boolean;
           show_live: boolean;
           show_prayer: boolean;
@@ -1648,7 +2100,6 @@ export type Database = {
           url_youtube: string | null;
           weekly_position_emails: boolean;
         };
-        ComputedFields: never;
         Insert: {
           giving_blurb?: string | null;
           giving_check_payable_to?: string | null;
@@ -1661,6 +2112,7 @@ export type Database = {
           id?: number;
           media_kit_path?: string | null;
           merch_enabled?: boolean;
+          org_mailing_address?: string | null;
           require_email_confirm?: boolean;
           show_live?: boolean;
           show_prayer?: boolean;
@@ -1694,6 +2146,7 @@ export type Database = {
           id?: number;
           media_kit_path?: string | null;
           merch_enabled?: boolean;
+          org_mailing_address?: string | null;
           require_email_confirm?: boolean;
           show_live?: boolean;
           show_prayer?: boolean;
@@ -1728,7 +2181,6 @@ export type Database = {
           notes: string | null;
           sponsor_id: string;
         };
-        ComputedFields: never;
         Insert: {
           clip_posted?: boolean;
           created_at?: string;
@@ -1780,7 +2232,6 @@ export type Database = {
           start_date: string | null;
           status: string;
         };
-        ComputedFields: never;
         Insert: {
           agreement_path?: string | null;
           business: string;
@@ -1815,7 +2266,6 @@ export type Database = {
           email: string;
           role: Database["public"]["Enums"]["app_role"];
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           email: string;
@@ -1840,7 +2290,6 @@ export type Database = {
           taping_id: string | null;
           user_id: string | null;
         };
-        ComputedFields: never;
         Insert: {
           content: string;
           created_at?: string;
@@ -1873,12 +2322,32 @@ export type Database = {
           },
         ];
       };
+      suppressions: {
+        Row: {
+          created_at: string;
+          detail: string | null;
+          email: string;
+          reason: Database["public"]["Enums"]["suppression_reason"];
+        };
+        Insert: {
+          created_at?: string;
+          detail?: string | null;
+          email: string;
+          reason: Database["public"]["Enums"]["suppression_reason"];
+        };
+        Update: {
+          created_at?: string;
+          detail?: string | null;
+          email?: string;
+          reason?: Database["public"]["Enums"]["suppression_reason"];
+        };
+        Relationships: [];
+      };
       taping_door_codes: {
         Row: {
           code: string;
           taping_id: string;
         };
-        ComputedFields: never;
         Insert: {
           code?: string;
           taping_id: string;
@@ -1908,7 +2377,6 @@ export type Database = {
           testimonial_ok: boolean;
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           comment?: string | null;
           created_at?: string;
@@ -1953,7 +2421,6 @@ export type Database = {
           id: string;
           taping_id: string;
         };
-        ComputedFields: never;
         Insert: {
           body: string;
           created_at?: string;
@@ -1997,7 +2464,6 @@ export type Database = {
           vip_price_cents: number;
           vip_seats: number;
         };
-        ComputedFields: never;
         Insert: {
           capacity?: number;
           created_at?: string;
@@ -2040,13 +2506,47 @@ export type Database = {
         };
         Relationships: [];
       };
+      tracked_links: {
+        Row: {
+          campaign: string | null;
+          contact_id: string | null;
+          created_at: string;
+          token: string;
+          topic_tags: string[];
+          url: string;
+        };
+        Insert: {
+          campaign?: string | null;
+          contact_id?: string | null;
+          created_at?: string;
+          token?: string;
+          topic_tags?: string[];
+          url: string;
+        };
+        Update: {
+          campaign?: string | null;
+          contact_id?: string | null;
+          created_at?: string;
+          token?: string;
+          topic_tags?: string[];
+          url?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tracked_links_contact_id_fkey";
+            columns: ["contact_id"];
+            isOneToOne: false;
+            referencedRelation: "contacts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       user_roles: {
         Row: {
           id: string;
           role: Database["public"]["Enums"]["app_role"];
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           id?: string;
           role: Database["public"]["Enums"]["app_role"];
@@ -2072,7 +2572,6 @@ export type Database = {
           status: string;
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           availability?: string | null;
           created_at?: string;
@@ -2110,7 +2609,6 @@ export type Database = {
           taping_id: string;
           user_id: string;
         };
-        ComputedFields: never;
         Insert: {
           created_at?: string;
           email: string;
@@ -2170,7 +2668,6 @@ export type Database = {
           utm_term: string | null;
           zip: string | null;
         };
-        ComputedFields: never;
         Insert: {
           church_group?: boolean;
           church_name?: string | null;
@@ -2183,7 +2680,7 @@ export type Database = {
           import_source?: string | null;
           invited_at?: string | null;
           last_name: string;
-          list_position?: never;
+          list_position?: number | null;
           phone?: string | null;
           referral_code: string;
           referral_count?: number;
@@ -2211,7 +2708,7 @@ export type Database = {
           import_source?: string | null;
           invited_at?: string | null;
           last_name?: string;
-          list_position?: never;
+          list_position?: number | null;
           phone?: string | null;
           referral_code?: string;
           referral_count?: number;
@@ -2246,6 +2743,16 @@ export type Database = {
         Args: { _email: string; _role: Database["public"]["Enums"]["app_role"] };
         Returns: string;
       };
+      advance_run: {
+        Args: {
+          _next: string;
+          _result?: Json;
+          _run: string;
+          _run_at?: string;
+          _step: string;
+        };
+        Returns: boolean;
+      };
       block_person: {
         Args: {
           _dismissed_on?: string;
@@ -2275,17 +2782,61 @@ export type Database = {
         Args: { _direction: string; _loop: string; _reservation: string };
         Returns: undefined;
       };
-      buy_hour_pack: { Args: { _email: string; _name: string }; Returns: undefined };
+      buy_hour_pack: {
+        Args: { _email: string; _name: string };
+        Returns: undefined;
+      };
+      can_market: {
+        Args: {
+          _brand: Database["public"]["Enums"]["contact_brand"];
+          _contact: string;
+        };
+        Returns: boolean;
+      };
       cancel_child: { Args: { _registration: string }; Returns: undefined };
       cancel_my_giving: { Args: { _partner: string }; Returns: undefined };
       cancel_my_rental: { Args: { _rental: string }; Returns: number };
       cancel_reservation: { Args: { _reservation: string }; Returns: undefined };
       check_in: { Args: { _code: string }; Returns: Json };
+      claim_due_runs: {
+        Args: { _limit?: number };
+        Returns: {
+          alt_step_id: string;
+          brand: Database["public"]["Enums"]["contact_brand"];
+          contact_id: string;
+          context: Json;
+          email: string;
+          first_name: string;
+          journey_key: string;
+          next_step_id: string;
+          run_id: string;
+          step_config: Json;
+          step_id: string;
+          step_type: Database["public"]["Enums"]["journey_step_type"];
+          unsub_token: string;
+        }[];
+      };
       claim_shift: { Args: { _shift: string }; Returns: undefined };
       confirm_waitlist: { Args: { p_token: string }; Returns: Json };
-      decide_group_request: { Args: { _approve: boolean; _req: string }; Returns: undefined };
+      consent_by_token: {
+        Args: { _token: string };
+        Returns: {
+          brand: Database["public"]["Enums"]["contact_brand"];
+          email: string;
+          subscribed: boolean;
+        }[];
+      };
+      decide_group_request: {
+        Args: { _approve: boolean; _req: string };
+        Returns: undefined;
+      };
       door_code: { Args: { _taping: string }; Returns: string };
       effective_capacity: { Args: { _taping: string }; Returns: number };
+      evaluate_condition: {
+        Args: { _config: Json; _contact: string };
+        Returns: boolean;
+      };
+      fail_run: { Args: { _reason: string; _run: string }; Returns: undefined };
       flagged_attendees: {
         Args: { _taping: string };
         Returns: {
@@ -2295,14 +2846,20 @@ export type Database = {
           user_id: string;
         }[];
       };
-      gen_referral_code: { Args: Record<PropertyKey, never>; Returns: string };
-      gen_release_code: { Args: Record<PropertyKey, never>; Returns: string };
+      gen_referral_code: { Args: never; Returns: string };
+      gen_release_code: { Args: never; Returns: string };
       get_release: { Args: { _token: string }; Returns: Json };
       has_role: {
-        Args: { _role: Database["public"]["Enums"]["app_role"]; _user_id: string };
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"];
+          _user_id: string;
+        };
         Returns: boolean;
       };
-      import_waitlist: { Args: { p_rows: Json; p_source: string }; Returns: Json };
+      import_waitlist: {
+        Args: { p_rows: Json; p_source: string };
+        Returns: Json;
+      };
       invite_top_waitlist: {
         Args: { p_count: number };
         Returns: {
@@ -2313,14 +2870,22 @@ export type Database = {
           referral_code: string;
         }[];
       };
-      is_admin_or_service: { Args: Record<PropertyKey, never>; Returns: boolean };
+      is_admin_or_service: { Args: never; Returns: boolean };
       is_blocked: {
-        Args: { _scope: Database["public"]["Enums"]["block_scope"]; _user_id: string };
+        Args: {
+          _scope: Database["public"]["Enums"]["block_scope"];
+          _user_id: string;
+        };
         Returns: boolean;
       };
       is_staff: { Args: { _user_id: string }; Returns: boolean };
       join_volunteers: {
-        Args: { _availability: string; _name: string; _phone: string; _roles: string[] };
+        Args: {
+          _availability: string;
+          _name: string;
+          _phone: string;
+          _roles: string[];
+        };
         Returns: undefined;
       };
       join_waitlist: {
@@ -2343,13 +2908,35 @@ export type Database = {
         };
         Returns: Json;
       };
+      journey_readiness: {
+        Args: { _journey: string };
+        Returns: {
+          missing_template: string;
+        }[];
+      };
+      journey_stats: {
+        Args: never;
+        Returns: {
+          active: number;
+          clicked: number;
+          completed: number;
+          entered: number;
+          exited: number;
+          failed: number;
+          journey_id: string;
+          sent: number;
+        }[];
+      };
       kids_check_in: { Args: { _registration: string }; Returns: undefined };
       kids_check_out: {
         Args: { _code: string; _registration: string; _released_to: string };
         Returns: undefined;
       };
       kids_places_left: { Args: { _room: string }; Returns: number };
-      kids_room_for_age: { Args: { _age: number; _taping: string }; Returns: string };
+      kids_room_for_age: {
+        Args: { _age: number; _taping: string };
+        Returns: string;
+      };
       kids_rooms_for_taping: {
         Args: { _taping: string };
         Returns: {
@@ -2363,7 +2950,7 @@ export type Database = {
       };
       lift_block: { Args: { _id: string; _note?: string }; Returns: undefined };
       list_staff: {
-        Args: Record<PropertyKey, never>;
+        Args: never;
         Returns: {
           email: string;
           pending: boolean;
@@ -2371,14 +2958,51 @@ export type Database = {
           user_id: string;
         }[];
       };
-      mark_no_show: { Args: { _reservation: string; _undo?: boolean }; Returns: undefined };
+      log_contact_event: {
+        Args: { _contact: string; _payload?: Json; _type: string };
+        Returns: string;
+      };
+      log_message: {
+        Args: {
+          _channel: string;
+          _contact: string;
+          _run?: string;
+          _step?: string;
+          _template: string;
+          _transactional?: boolean;
+        };
+        Returns: undefined;
+      };
+      make_tracked_link: {
+        Args: {
+          _campaign?: string;
+          _contact: string;
+          _topic_tags?: string[];
+          _url: string;
+        };
+        Returns: string;
+      };
+      mark_no_show: {
+        Args: { _reservation: string; _undo?: boolean };
+        Returns: undefined;
+      };
+      may_send_marketing: {
+        Args: {
+          _brand: Database["public"]["Enums"]["contact_brand"];
+          _contact: string;
+        };
+        Returns: boolean;
+      };
       my_block_reason: {
         Args: { _scope: Database["public"]["Enums"]["block_scope"] };
         Returns: string;
       };
-      my_no_show_flag: { Args: Record<PropertyKey, never>; Returns: boolean };
+      my_no_show_flag: { Args: never; Returns: boolean };
       no_show_count: { Args: { _user: string }; Returns: number };
       offer_open_seats: { Args: { _taping: string }; Returns: undefined };
+      pt_date: { Args: { _at?: string }; Returns: string };
+      pt_hour: { Args: { _at?: string }; Returns: number };
+      pt_now: { Args: never; Returns: string };
       register_child: {
         Args: {
           _age: number;
@@ -2394,9 +3018,18 @@ export type Database = {
         Returns: Json;
       };
       release_shift: { Args: { _shift: string }; Returns: undefined };
-      remove_staff: { Args: { _email: string; _user: string }; Returns: undefined };
+      remove_staff: {
+        Args: { _email: string; _user: string };
+        Returns: undefined;
+      };
       rental_price: {
-        Args: { _addons: Json; _end: string; _pack_hours?: number; _start: string; _type: string };
+        Args: {
+          _addons: Json;
+          _end: string;
+          _pack_hours?: number;
+          _start: string;
+          _type: string;
+        };
         Returns: Json;
       };
       reserve_seat: {
@@ -2411,14 +3044,47 @@ export type Database = {
         };
         Returns: Json;
       };
+      resubscribe_by_token: {
+        Args: {
+          _brand?: Database["public"]["Enums"]["contact_brand"];
+          _token: string;
+        };
+        Returns: {
+          brand: Database["public"]["Enums"]["contact_brand"];
+          email: string;
+        }[];
+      };
       seats_taken: { Args: { _taping: string }; Returns: number };
+      seed_journey: {
+        Args: {
+          _allow_reentry?: boolean;
+          _brand: Database["public"]["Enums"]["contact_brand"];
+          _description?: string;
+          _enabled: boolean;
+          _goal: string;
+          _key: string;
+          _name: string;
+          _steps: Json;
+          _trigger: string;
+        };
+        Returns: string;
+      };
+      seed_template: {
+        Args: {
+          _brand: Database["public"]["Enums"]["contact_brand"];
+          _html: string;
+          _key: string;
+          _subject: string;
+        };
+        Returns: undefined;
+      };
       self_check_in: { Args: { _code: string; _taping: string }; Returns: Json };
       set_sms_pref: {
         Args: { _opt: boolean; _phone: string; _reservation: string };
         Returns: undefined;
       };
       shift_openings: {
-        Args: Record<PropertyKey, never>;
+        Args: never;
         Returns: {
           claimed: number;
           shift_id: string;
@@ -2431,8 +3097,18 @@ export type Database = {
           loop_time: string;
         }[];
       };
-      shuttle_signal: { Args: { _booking: string; _signal: string }; Returns: undefined };
-      sign_release: { Args: { _signature: string; _token: string }; Returns: undefined };
+      shuttle_signal: {
+        Args: { _booking: string; _signal: string };
+        Returns: undefined;
+      };
+      sign_release: {
+        Args: { _signature: string; _token: string };
+        Returns: undefined;
+      };
+      start_journey: {
+        Args: { _contact: string; _journey_key: string };
+        Returns: string;
+      };
       studio_busy: {
         Args: { _from: string; _to: string };
         Returns: {
@@ -2441,8 +3117,17 @@ export type Database = {
           starts_at: string;
         }[];
       };
+      suppress_email: {
+        Args: {
+          _detail?: string;
+          _email: string;
+          _reason: Database["public"]["Enums"]["suppression_reason"];
+        };
+        Returns: undefined;
+      };
+      sweep_quiet_contacts: { Args: { _days?: number }; Returns: number };
       taping_availability: {
-        Args: Record<PropertyKey, never>;
+        Args: never;
         Returns: {
           seats_left: number;
           taping_id: string;
@@ -2450,23 +3135,67 @@ export type Database = {
           waitlist_count: number;
         }[];
       };
-      waitlist_stats: { Args: Record<PropertyKey, never>; Returns: Json };
+      unsubscribe_by_token: {
+        Args: {
+          _brand?: Database["public"]["Enums"]["contact_brand"];
+          _reason?: string;
+          _token: string;
+        };
+        Returns: {
+          brand: Database["public"]["Enums"]["contact_brand"];
+          email: string;
+        }[];
+      };
+      unsubscribe_contact: {
+        Args: {
+          _brand: Database["public"]["Enums"]["contact_brand"];
+          _contact: string;
+          _reason?: string;
+        };
+        Returns: undefined;
+      };
+      upsert_contact: {
+        Args: {
+          _brand: Database["public"]["Enums"]["contact_brand"];
+          _email: string;
+          _first_name?: string;
+          _interests?: string[];
+          _last_name?: string;
+          _phone?: string;
+          _sms_opt_in?: boolean;
+          _source?: string;
+          _tags?: string[];
+          _zip?: string;
+        };
+        Returns: string;
+      };
+      waitlist_stats: { Args: never; Returns: Json };
+      within_sms_hours: { Args: { _at?: string }; Returns: boolean };
     };
     Enums: {
       app_role: "admin" | "crew" | "volunteer";
       block_scope: "audience" | "volunteer" | "both";
+      contact_brand: "show" | "publishing";
       episode_type: "episode" | "sitdown" | "special";
+      journey_run_status: "active" | "completed" | "exited" | "failed";
+      journey_step_type:
+        | "send_email"
+        | "send_sms"
+        | "wait"
+        | "condition"
+        | "add_tag"
+        | "remove_tag"
+        | "start_journey"
+        | "admin_task"
+        | "notify_admin"
+        | "unsubscribe";
       pub_book_status: "coming_soon" | "published";
       pub_category: "faith" | "history" | "christian_living";
       pub_format: "paperback" | "hardcover" | "ebook" | "audiobook";
       pub_manuscript_status: "complete" | "in_progress";
       pub_submission_status:
-        | "new"
-        | "reading"
-        | "request_full"
-        | "offer_made"
-        | "declined"
-        | "signed";
+        "new" | "reading" | "request_full" | "offer_made" | "declined" | "signed";
+      suppression_reason: "bounce" | "complaint" | "manual";
       ticket_type: "general" | "vip" | "group";
       waitlist_status: "waitlist" | "invited" | "ticketed";
     };
@@ -2490,7 +3219,9 @@ export type Tables<
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never) = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R;
@@ -2507,14 +3238,15 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I;
     }
@@ -2530,14 +3262,15 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U;
     }
@@ -2553,14 +3286,15 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never) = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
@@ -2568,30 +3302,49 @@ export type Enums<
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never) = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       app_role: ["admin", "crew", "volunteer"],
       block_scope: ["audience", "volunteer", "both"],
+      contact_brand: ["show", "publishing"],
       episode_type: ["episode", "sitdown", "special"],
+      journey_run_status: ["active", "completed", "exited", "failed"],
+      journey_step_type: [
+        "send_email",
+        "send_sms",
+        "wait",
+        "condition",
+        "add_tag",
+        "remove_tag",
+        "start_journey",
+        "admin_task",
+        "notify_admin",
+        "unsubscribe",
+      ],
       pub_book_status: ["coming_soon", "published"],
       pub_category: ["faith", "history", "christian_living"],
       pub_format: ["paperback", "hardcover", "ebook", "audiobook"],
       pub_manuscript_status: ["complete", "in_progress"],
       pub_submission_status: ["new", "reading", "request_full", "offer_made", "declined", "signed"],
+      suppression_reason: ["bounce", "complaint", "manual"],
       ticket_type: ["general", "vip", "group"],
       waitlist_status: ["waitlist", "invited", "ticketed"],
     },

@@ -31,6 +31,7 @@ import { FeedbackList } from "@/components/crew/feedback";
 import { PrayerInbox } from "@/components/crew/prayer";
 import { KidsAdmin } from "@/components/crew/kids";
 import { BlocksAdmin } from "@/components/crew/blocks";
+import { JourneysAdmin } from "@/components/crew/journeys";
 import { WaitlistAdmin } from "@/components/crew/waitlist-admin";
 import { PrelaunchSettings } from "@/components/crew/prelaunch-settings";
 import { PartnerInbox } from "@/components/crew/partner-inbox";
@@ -123,6 +124,7 @@ function Crew() {
           {roles.includes("admin") && <TabsTrigger value="guests">Guest Hub</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="inbox">Inbox</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
+          {roles.includes("admin") && <TabsTrigger value="journeys">Journeys</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="blocks">Blocked</TabsTrigger>}
           {roles.includes("admin") && <TabsTrigger value="team">Team</TabsTrigger>}
         </TabsList>
@@ -182,6 +184,16 @@ function Crew() {
         {roles.includes("admin") && (
           <TabsContent value="analytics">
             <Analytics />
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="journeys">
+            <JourneysAdmin />
+          </TabsContent>
+        )}
+        {roles.includes("admin") && (
+          <TabsContent value="blocks">
+            <BlocksAdmin />
           </TabsContent>
         )}
         {roles.includes("admin") && (
