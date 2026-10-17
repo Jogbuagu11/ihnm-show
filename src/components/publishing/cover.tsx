@@ -26,10 +26,11 @@ export function BookCover({
   }
 
   const hue = [...book.slug].reduce((a, ch) => a + ch.charCodeAt(0), 0) % 3;
+  // Navy boards with gold lettering, the way a cloth hardback is bound.
   const grounds = [
-    "from-[#2b2520] to-[#4a3b2a]",
-    "from-[#3a2a24] to-[#7a5a36]",
-    "from-[#241e1a] to-[#5c4630]",
+    "from-[#111a2e] to-[#24396b]",
+    "from-[#16213a] to-[#32518f]",
+    "from-[#0e1526] to-[#1d325c]",
   ];
   return (
     <div
@@ -40,7 +41,7 @@ export function BookCover({
       <span className="font-mono text-[0.55rem] uppercase tracking-[0.3em] text-gold/80">
         IHNM Publishing
       </span>
-      <span className="font-display text-xl leading-tight text-[#faf6ec] sm:text-2xl">
+      <span className="font-display text-xl leading-tight text-[#f4f7fd] sm:text-2xl">
         {book.title}
       </span>
       <span className="h-px w-10 bg-gold/70" />

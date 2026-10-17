@@ -19,7 +19,7 @@ export const Route = createFileRoute("/publishing")({
 
 function PublishingLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="pub-theme flex min-h-screen flex-col bg-background">
       <PubCanonical />
       <PubHeader />
       <main className="flex-1">

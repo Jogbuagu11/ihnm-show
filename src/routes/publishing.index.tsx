@@ -63,22 +63,27 @@ export function PubHome() {
 
   return (
     <>
-      <section className="border-b border-gold/20 bg-daylight">
-        <div className="mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
-          <p className="eyebrow">— {IMPRINT}</p>
-          <h1 className="display-xl mt-5 text-walnut">
+      <section className="border-b border-gold/25 bg-pub-hero text-stage-foreground">
+        <div className="mx-auto max-w-6xl px-4 py-24 text-center md:py-32">
+          <p className="eyebrow text-gold">— {IMPRINT}</p>
+          <h1 className="display-xl mt-5">
             Timeless truth.
             <br />
             <span className="italic-gold">Today's world.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-stage-foreground/75">
             An independent Christian publisher of faith, history and Christian living.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <Button asChild variant="gold" size="lg">
               <Link to={pubPath("/submit")}>Submit your manuscript</Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-gold/50 bg-transparent text-stage-foreground hover:bg-gold/15 hover:text-stage-foreground"
+            >
               <Link to={pubPath("/books")}>Browse our books</Link>
             </Button>
           </div>
@@ -118,7 +123,7 @@ export function PubHome() {
           <ul className="mt-8 grid gap-6 md:grid-cols-3">
             {WHY.map(({ icon: Icon, t, b }) => (
               <li key={t} className="rounded-3xl border bg-white p-6">
-                <span className="flex size-11 items-center justify-center rounded-full bg-gold/15 text-gold">
+                <span className="flex size-11 items-center justify-center rounded-full bg-primary text-gold">
                   <Icon className="size-5" aria-hidden />
                 </span>
                 <h3 className="mt-5 font-display text-2xl">{t}</h3>
@@ -167,7 +172,7 @@ export function PubHome() {
                 loading="lazy"
               />
             ) : (
-              <span className="flex size-32 shrink-0 items-center justify-center rounded-full bg-gold/15 font-display text-4xl text-gold">
+              <span className="flex size-32 shrink-0 items-center justify-center rounded-full bg-primary font-display text-4xl text-gold">
                 {spotlight.name.charAt(0)}
               </span>
             )}

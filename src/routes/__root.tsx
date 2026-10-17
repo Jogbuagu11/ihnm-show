@@ -152,7 +152,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         {booksSite && !pathname.startsWith("/publishing") ? (
-          <div className="flex min-h-screen flex-col bg-background">
+          <div className="pub-theme flex min-h-screen flex-col bg-background">
             <PageTracker />
             <PubCanonical />
             <PubHeader />

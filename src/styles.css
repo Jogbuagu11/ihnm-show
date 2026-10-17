@@ -199,6 +199,55 @@
   outline: 1px solid color-mix(in oklab, var(--color-gold) 70%, transparent);
   outline-offset: 6px;
 }
+/* The publishing house reads as its own imprint: white paper, navy ink, gold
+   leaf. Scoped to its shell, so overriding the tokens re-skins every page,
+   card, button and gradient underneath without touching the show. */
+.pub-theme {
+  --ivory: oklch(1 0 0);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.17 0.021 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.17 0.021 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.17 0.021 260);
+  --primary: oklch(0.27 0.088 262);
+  --primary-foreground: oklch(0.99 0.004 250);
+  --secondary: oklch(0.966 0.014 250);
+  --secondary-foreground: oklch(0.27 0.088 262);
+  --muted: oklch(0.962 0.012 250);
+  --muted-foreground: oklch(0.48 0.032 258);
+  --accent: oklch(0.93 0.035 250);
+  --accent-foreground: oklch(0.27 0.088 262);
+  /* Gold is the one thing both sites share. */
+  --gold: oklch(0.76 0.11 80);
+  --gold-foreground: oklch(0.2 0.05 262);
+  /* The show's warm hover colour becomes a blue on this side. */
+  --persimmon: oklch(0.52 0.15 256);
+  --persimmon-foreground: oklch(0.99 0.004 250);
+  --walnut: oklch(0.21 0.055 262);
+  --walnut-foreground: oklch(0.99 0.004 250);
+  --blush: oklch(0.93 0.035 250);
+  --blush-foreground: oklch(0.27 0.088 262);
+  --stage: oklch(0.145 0.038 262);
+  --stage-foreground: oklch(0.96 0.01 250);
+  --border: oklch(0.9 0.016 250);
+  --input: oklch(0.88 0.02 250);
+  --ring: oklch(0.76 0.11 80);
+  --shadow-soft: 0 10px 30px -12px oklch(0.27 0.088 262 / 0.28);
+  --shadow-glow:
+    0 0 0 1px oklch(0.76 0.11 80 / 0.4), 0 12px 40px -12px oklch(0.27 0.088 262 / 0.35);
+  --chart-1: oklch(0.76 0.11 80);
+  --chart-2: oklch(0.27 0.088 262);
+  --chart-3: oklch(0.52 0.15 256);
+}
+
+@utility bg-pub-hero {
+  background:
+    radial-gradient(ellipse 55% 45% at 50% -10%, color-mix(in oklab, var(--gold) 15%, transparent), transparent 70%),
+    radial-gradient(ellipse 75% 75% at 85% 112%, oklch(0.34 0.11 258), transparent 66%),
+    linear-gradient(170deg, oklch(0.2 0.055 262) 0%, oklch(0.13 0.035 262) 100%);
+}
+
 @utility bg-daylight {
   background:
     radial-gradient(ellipse 70% 55% at 15% 0%, color-mix(in oklab, var(--gold) 30%, transparent), transparent 65%),
