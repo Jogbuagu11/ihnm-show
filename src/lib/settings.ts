@@ -35,6 +35,12 @@ export const SETTINGS_FALLBACK = {
   show_rent: true,
   show_serve: true,
   show_prayer: true,
+  // Giving. Online card giving waits on Stripe; the rest works today.
+  giving_blurb: null,
+  giving_zelle: null,
+  giving_check_payable_to: null,
+  giving_mailing_address: null,
+  giving_online_enabled: false,
 } satisfies SiteSettings;
 
 export const siteSettingsQuery = queryOptions({

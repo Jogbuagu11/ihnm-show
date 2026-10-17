@@ -1153,7 +1153,12 @@ export type Database = {
       };
       site_settings: {
         Row: {
+          giving_blurb: string | null;
+          giving_check_payable_to: string | null;
           giving_enabled: boolean;
+          giving_mailing_address: string | null;
+          giving_online_enabled: boolean;
+          giving_zelle: string | null;
           hero_headline: string;
           hero_subline: string;
           id: number;
@@ -1182,7 +1187,12 @@ export type Database = {
         };
         ComputedFields: never;
         Insert: {
+          giving_blurb?: string | null;
+          giving_check_payable_to?: string | null;
           giving_enabled?: boolean;
+          giving_mailing_address?: string | null;
+          giving_online_enabled?: boolean;
+          giving_zelle?: string | null;
           hero_headline?: string;
           hero_subline?: string;
           id?: number;
@@ -1210,7 +1220,12 @@ export type Database = {
           weekly_position_emails?: boolean;
         };
         Update: {
+          giving_blurb?: string | null;
+          giving_check_payable_to?: string | null;
           giving_enabled?: boolean;
+          giving_mailing_address?: string | null;
+          giving_online_enabled?: boolean;
+          giving_zelle?: string | null;
           hero_headline?: string;
           hero_subline?: string;
           id?: number;

@@ -90,6 +90,11 @@ export function PrelaunchSettings() {
           show_rent: draft.show_rent ?? true,
           show_serve: draft.show_serve ?? true,
           show_prayer: draft.show_prayer ?? true,
+          giving_enabled: draft.giving_enabled ?? false,
+          giving_blurb: blank(draft.giving_blurb),
+          giving_zelle: blank(draft.giving_zelle),
+          giving_check_payable_to: blank(draft.giving_check_payable_to),
+          giving_mailing_address: blank(draft.giving_mailing_address),
         })
         .eq("id", 1);
       if (error) throw error;
@@ -218,6 +223,78 @@ export function PrelaunchSettings() {
             e.target.value = "";
           }}
         />
+      </section>
+
+      <section className="rounded-2xl border bg-card p-4">
+        <p className="eyebrow">— Giving</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Fill in at least one method or the Give page shows "giving opens soon". Online card giving
+          stays off until Stripe is connected.
+        </p>
+        <div className="mt-3 grid gap-3">
+          <div>
+            <Label htmlFor="s-giving_blurb">What gifts pay for</Label>
+            <Textarea
+              id="s-giving_blurb"
+              className="mt-1"
+              rows={3}
+              maxLength={600}
+              value={draft.giving_blurb ?? ""}
+              onChange={(e) => set("giving_blurb", e.target.value)}
+            />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="s-giving_zelle">Zelle email or phone</Label>
+              <Input
+                id="s-giving_zelle"
+                className="mt-1"
+                maxLength={120}
+                value={draft.giving_zelle ?? ""}
+                onChange={(e) => set("giving_zelle", e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="s-giving_check_payable_to">Cheques payable to</Label>
+              <Input
+                id="s-giving_check_payable_to"
+                className="mt-1"
+                maxLength={120}
+                value={draft.giving_check_payable_to ?? ""}
+                onChange={(e) => set("giving_check_payable_to", e.target.value)}
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="s-giving_mailing_address">Mailing address for cheques</Label>
+            <Textarea
+              id="s-giving_mailing_address"
+              className="mt-1"
+              rows={3}
+              maxLength={300}
+              value={draft.giving_mailing_address ?? ""}
+              onChange={(e) => set("giving_mailing_address", e.target.value)}
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              This is published. Use a PO box rather than a home address.
+            </p>
+          </div>
+          <Toggle
+            id="s-giving_online"
+            label="Online card giving"
+            hint="Needs Stripe. Leave off until it is connected, or the page shows a button that cannot take a payment."
+            checked={draft.giving_online_enabled ?? false}
+            onChange={(v) => set("giving_online_enabled", v)}
+            disabled
+          />
+          <Toggle
+            id="s-giving_enabled"
+            label="Show Give in the footer"
+            hint="Links the Give page from the site footer."
+            checked={draft.giving_enabled ?? false}
+            onChange={(v) => set("giving_enabled", v)}
+          />
+        </div>
       </section>
 
       <section className="rounded-2xl border bg-card p-4">
