@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bus, MapPin } from "lucide-react";
@@ -26,8 +27,16 @@ export const Route = createFileRoute("/shuttle")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Shuttle,
+  component: GatedShuttle,
 });
+
+function GatedShuttle() {
+  return (
+    <PageGate page="show_shuttle" title="Shuttle">
+      <Shuttle />
+    </PageGate>
+  );
+}
 
 function LoopTable({
   tapingId,

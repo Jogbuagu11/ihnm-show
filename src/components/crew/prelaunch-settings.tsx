@@ -12,6 +12,29 @@ import { siteSettingsQuery, type SiteSettings } from "@/lib/settings";
 
 type Draft = Partial<SiteSettings>;
 
+const PAGE_FLAGS: { k: keyof SiteSettings; label: string; hint: string }[] = [
+  {
+    k: "show_watch",
+    label: "Watch / episodes",
+    hint: "Currently showing seeded sample episodes — keep hidden until real ones exist.",
+  },
+  {
+    k: "show_tickets",
+    label: "Tickets",
+    hint: "Currently offers Reserve on seeded sample tapings — keep hidden until real dates are set.",
+  },
+  { k: "show_shuttle", label: "Shuttle", hint: "Shuttle booking for a taping." },
+  { k: "show_live", label: "Live", hint: "The live stream page." },
+  { k: "show_submit", label: "Submit a question", hint: "Audience question submissions." },
+  {
+    k: "show_rent",
+    label: "Studio A hire",
+    hint: "Studio rental enquiries — a real revenue line today.",
+  },
+  { k: "show_serve", label: "Serve with us", hint: "Volunteer signup." },
+  { k: "show_prayer", label: "Prayer & testimony", hint: "Prayer request form." },
+];
+
 const TEXT_FIELDS: { k: keyof SiteSettings; label: string; hint?: string }[] = [
   { k: "sms_keyword", label: "SMS keyword", hint: 'Shown as "Text KEYWORD to …"' },
   { k: "sms_number", label: "SMS number", hint: "Leave blank to show “number coming soon”" },
@@ -59,6 +82,14 @@ export function PrelaunchSettings() {
           url_nextdoor: blank(draft.url_nextdoor),
           weekly_position_emails: draft.weekly_position_emails ?? false,
           require_email_confirm: draft.require_email_confirm ?? false,
+          show_watch: draft.show_watch ?? false,
+          show_tickets: draft.show_tickets ?? false,
+          show_shuttle: draft.show_shuttle ?? false,
+          show_live: draft.show_live ?? false,
+          show_submit: draft.show_submit ?? false,
+          show_rent: draft.show_rent ?? true,
+          show_serve: draft.show_serve ?? true,
+          show_prayer: draft.show_prayer ?? true,
         })
         .eq("id", 1);
       if (error) throw error;
@@ -187,6 +218,27 @@ export function PrelaunchSettings() {
             e.target.value = "";
           }}
         />
+      </section>
+
+      <section className="rounded-2xl border bg-card p-4">
+        <p className="eyebrow">— Pages visible to the public</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Hidden pages stay fully working for you when signed in as staff, so they can be built
+          before anyone else sees them. Visitors get a "coming soon" page instead, and the page
+          drops out of the menu and the sitemap.
+        </p>
+        <div className="mt-4 space-y-3">
+          {PAGE_FLAGS.map(({ k, label, hint }) => (
+            <Toggle
+              key={k}
+              id={`s-${k}`}
+              label={label}
+              hint={hint}
+              checked={(draft[k] as boolean) ?? false}
+              onChange={(v) => set(k, v as SiteSettings[typeof k])}
+            />
+          ))}
+        </div>
       </section>
 
       <section className="rounded-2xl border bg-card p-4">

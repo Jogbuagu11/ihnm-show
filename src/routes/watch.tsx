@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -25,8 +26,16 @@ export const Route = createFileRoute("/watch")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Watch,
+  component: GatedWatch,
 });
+
+function GatedWatch() {
+  return (
+    <PageGate page="show_watch" title="Episodes">
+      <Watch />
+    </PageGate>
+  );
+}
 
 const filters = [
   { v: "all", l: "All" },

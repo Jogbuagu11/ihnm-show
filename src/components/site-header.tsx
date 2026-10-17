@@ -1,20 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
+import { siteSettingsQuery } from "@/lib/settings";
 import { Button } from "@/components/ui/button";
 
 const links = [
-  { to: "/watch", label: "Watch" },
-  { to: "/tickets", label: "Tickets" },
-  { to: "/shuttle", label: "Shuttle" },
-  { to: "/submit", label: "Submit" },
-  { to: "/live", label: "Live" },
-  { to: "/rent", label: "Rent Studio" },
+  { to: "/watch", label: "Watch", flag: "show_watch" },
+  { to: "/tickets", label: "Tickets", flag: "show_tickets" },
+  { to: "/shuttle", label: "Shuttle", flag: "show_shuttle" },
+  { to: "/submit", label: "Submit", flag: "show_submit" },
+  { to: "/live", label: "Live", flag: "show_live" },
+  { to: "/rent", label: "Rent Studio", flag: "show_rent" },
 ] as const;
 
 export function SiteHeader() {
   const { user, isStaff, roles } = useAuth();
+  const { data: settings } = useQuery(siteSettingsQuery);
+  // Staff keep every link so hidden pages stay reachable while being built.
+  const visible = links.filter((l) => isStaff || (settings?.[l.flag] ?? false));
   const isAdmin = roles.includes("admin");
   const [open, setOpen] = useState(false);
   return (
@@ -24,7 +29,7 @@ export function SiteHeader() {
           IHNM <span className="italic-gold">Show</span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
-          {links.map((l) => (
+          {visible.map((l) => (
             <Link
               key={l.to}
               to={l.to}
@@ -63,7 +68,7 @@ export function SiteHeader() {
           className="flex flex-col gap-1 border-t border-gold/30 px-4 py-3 font-display text-2xl md:hidden"
           onClick={() => setOpen(false)}
         >
-          {links.map((l) => (
+          {visible.map((l) => (
             <Link key={l.to} to={l.to} className="rounded-lg px-3 py-2 font-medium hover:text-gold">
               {l.label}
             </Link>

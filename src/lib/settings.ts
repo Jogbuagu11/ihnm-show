@@ -26,6 +26,15 @@ export const SETTINGS_FALLBACK = {
     "A live talk show where Scripture, history and today's headlines meet. Studio A, San Jose · Launching March 2027.",
   weekly_position_emails: false,
   require_email_confirm: false,
+  // Prelaunch: show pages are hidden until there is real content behind them.
+  show_watch: false,
+  show_tickets: false,
+  show_shuttle: false,
+  show_live: false,
+  show_submit: false,
+  show_rent: true,
+  show_serve: true,
+  show_prayer: true,
 } satisfies SiteSettings;
 
 export const siteSettingsQuery = queryOptions({

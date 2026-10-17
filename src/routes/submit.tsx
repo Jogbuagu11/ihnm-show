@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -29,8 +30,16 @@ export const Route = createFileRoute("/submit")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Submit,
+  component: GatedSubmit,
 });
+
+function GatedSubmit() {
+  return (
+    <PageGate page="show_submit" title="Submit a question">
+      <Submit />
+    </PageGate>
+  );
+}
 
 const kinds = [
   { v: "question", l: "Audience question", p: "What question should we tackle on the show?" },

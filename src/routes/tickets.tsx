@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import audience from "@/assets/audience.jpg";
@@ -23,8 +24,16 @@ export const Route = createFileRoute("/tickets")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Tickets,
+  component: GatedTickets,
 });
+
+function GatedTickets() {
+  return (
+    <PageGate page="show_tickets" title="Tickets">
+      <Tickets />
+    </PageGate>
+  );
+}
 
 function Tickets() {
   const { data, isLoading } = useQuery(upcomingTapingsQuery);

@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -26,8 +27,16 @@ export const Route = createFileRoute("/prayer")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: Prayer,
+  component: GatedPrayer,
 });
+
+function GatedPrayer() {
+  return (
+    <PageGate page="show_prayer" title="Prayer & testimony">
+      <Prayer />
+    </PageGate>
+  );
+}
 
 function Prayer() {
   const [kind, setKind] = useState<"prayer" | "testimony">("prayer");

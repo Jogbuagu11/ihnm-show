@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -29,8 +30,16 @@ export const Route = createFileRoute("/live")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Live,
+  component: GatedLive,
 });
+
+function GatedLive() {
+  return (
+    <PageGate page="show_live" title="Live">
+      <Live />
+    </PageGate>
+  );
+}
 
 function useNow() {
   const [n, setN] = useState(() => Date.now());

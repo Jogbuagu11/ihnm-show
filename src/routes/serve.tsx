@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -30,8 +31,16 @@ export const Route = createFileRoute("/serve")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Serve,
+  component: GatedServe,
 });
+
+function GatedServe() {
+  return (
+    <PageGate page="show_serve" title="Serve with us">
+      <Serve />
+    </PageGate>
+  );
+}
 
 const blurbs: Record<VolunteerRole, string> = {
   camera: "Run a camera during tapings — we'll train you.",

@@ -63,12 +63,16 @@ export function SiteFooter() {
         <Link to="/faq" className="hover:text-gold">
           Audience FAQ
         </Link>
-        <Link to="/serve" className="hover:text-gold">
-          Serve With Us
-        </Link>
-        <Link to="/prayer" className="hover:text-gold">
-          Prayer &amp; Testimony
-        </Link>
+        {settings?.show_serve && (
+          <Link to="/serve" className="hover:text-gold">
+            Serve With Us
+          </Link>
+        )}
+        {settings?.show_prayer && (
+          <Link to="/prayer" className="hover:text-gold">
+            Prayer &amp; Testimony
+          </Link>
+        )}
         <Link to="/partner" className="hover:text-gold">
           Partner With Us
         </Link>

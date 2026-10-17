@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -41,8 +42,16 @@ export const Route = createFileRoute("/rent")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Rent,
+  component: GatedRent,
 });
+
+function GatedRent() {
+  return (
+    <PageGate page="show_rent" title="Studio A hire">
+      <Rent />
+    </PageGate>
+  );
+}
 
 const gallery = [
   {
