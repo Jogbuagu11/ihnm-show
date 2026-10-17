@@ -8,6 +8,8 @@ import PDFDocument from "pdfkit";
 import { createWriteStream } from "node:fs";
 
 const LAUNCH = "March 2027";
+// Update this line once the 501(c)(3) determination letter arrives.
+const NONPROFIT_STATUS = "501(c)(3) status pending";
 const OUT = process.argv[2] ?? "public/ihnm-media-kit.pdf";
 
 const INK = "#2b2520";
@@ -137,7 +139,7 @@ table(
   ],
 );
 doc.font("Helvetica-Oblique").fontSize(8.5).fillColor(MUTED)
-  .text("As a nonprofit ministry, IHNM can provide an in-kind donation receipt for gifted items.", { width: W });
+  .text("IHNM is a nonprofit ministry with 501(c)(3) status pending. We provide receipts for in-kind gifts; whether a gift is tax-deductible depends on the IRS granting exemption.", { width: W });
 footer();
 
 // ---------------------------------------------------------------- page 3
