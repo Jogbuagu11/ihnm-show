@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { TapingCard } from "@/components/taping-card";
@@ -31,8 +32,16 @@ export const Route = createFileRoute("/tapings/$id")({
         ]
       : [{ title: "Taping — IHNM Show" }, { name: "robots", content: "noindex" }],
   }),
-  component: TapingPage,
+  component: GatedTapingPage,
 });
+
+function GatedTapingPage() {
+  return (
+    <PageGate page="show_tickets" title="Tickets">
+      <TapingPage />
+    </PageGate>
+  );
+}
 
 function TapingPage() {
   const { id } = Route.useParams();

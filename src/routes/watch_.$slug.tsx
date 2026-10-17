@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/page-gate";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { EpisodeCard } from "@/components/episode-card";
@@ -37,8 +38,16 @@ export const Route = createFileRoute("/watch_/$slug")({
         ]
       : [{ title: "Episode — IHNM Show" }, { name: "robots", content: "noindex" }],
   }),
-  component: EpisodePage,
+  component: GatedEpisodePage,
 });
+
+function GatedEpisodePage() {
+  return (
+    <PageGate page="show_watch" title="Episodes">
+      <EpisodePage />
+    </PageGate>
+  );
+}
 
 function EpisodePage() {
   const { slug } = Route.useParams();

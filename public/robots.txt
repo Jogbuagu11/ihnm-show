@@ -1,6 +1,16 @@
 User-agent: *
 Allow: /
 
+# Hidden during prelaunch. The page body shows "coming soon", but its <head>
+# still describes the real content, so keep crawlers off entirely.
+# Remove the matching line when a page is switched public in admin.
+Disallow: /watch
+Disallow: /tickets
+Disallow: /shuttle
+Disallow: /live
+Disallow: /submit
+Disallow: /tapings/
+
 # Signed-in and token-gated areas have nothing for a crawler.
 Disallow: /crew
 Disallow: /finance
