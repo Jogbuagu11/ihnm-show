@@ -56,6 +56,27 @@ const fill = (text: string) => text.replace(/\{(\w+)\}/g, (_m, k: string) => SAM
 
 export function TemplatesAdmin() {
   const qc = useQueryClient();
+
+  // Sends to whoever is signed in, decided server-side from the JWT. There is
+  // deliberately no address field: this cannot be pointed at anyone else.
+  const sendTest = useMutation({
+    mutationFn: async (key: string) => {
+      const { data, error } = await supabase.functions.invoke<{ sent_to: string }>(
+        "send-test-email",
+        { body: { template: key } },
+      );
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (d) => toast.success(`Sent to ${d?.sent_to ?? "you"}.`),
+    onError: (e: unknown) => {
+      const raw =
+        typeof e === "object" && e !== null && "message" in e
+          ? String((e as { message: unknown }).message)
+          : "";
+      toast.error(raw || "Could not send that.");
+    },
+  });
   const [editing, setEditing] = useState<string | null>(null);
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("");
@@ -241,20 +262,36 @@ export function TemplatesAdmin() {
             </div>
           </div>
 
-          <Button
-            variant="gold"
-            disabled={save.isPending || !subject.trim()}
-            onClick={() =>
-              save.mutate({
-                key: editing,
-                subject,
-                html,
-                ...(isNew ? { brand: "show" } : {}),
-              })
-            }
-          >
-            <span>{save.isPending ? "Saving…" : isNew ? "Create" : "Save"}</span>
-          </Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="gold"
+              disabled={save.isPending || !subject.trim()}
+              onClick={() =>
+                save.mutate({
+                  key: editing,
+                  subject,
+                  html,
+                  ...(isNew ? { brand: "show" } : {}),
+                })
+              }
+            >
+              <span>{save.isPending ? "Saving…" : isNew ? "Create" : "Save"}</span>
+            </Button>
+            {!isNew && (
+              <Button
+                variant="outline"
+                disabled={sendTest.isPending}
+                onClick={() => sendTest.mutate(editing)}
+              >
+                <span>{sendTest.isPending ? "Sending…" : "Send it to me"}</span>
+              </Button>
+            )}
+            {!isNew && (
+              <span className="text-xs text-ink/50">
+                Sends the saved version, not unsaved edits.
+              </span>
+            )}
+          </div>
         </div>
       )}
 
@@ -270,9 +307,19 @@ export function TemplatesAdmin() {
                 {t.key} · {t.brand === "publishing" ? "Publishing" : "Show"}
               </p>
             </div>
-            <Button size="sm" variant="outline" onClick={() => open(t)}>
-              <span>Edit</span>
-            </Button>
+            <div className="flex shrink-0 gap-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={sendTest.isPending}
+                onClick={() => sendTest.mutate(t.key)}
+              >
+                <span>Send to me</span>
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => open(t)}>
+                <span>Edit</span>
+              </Button>
+            </div>
           </li>
         ))}
       </ul>
