@@ -3154,6 +3154,14 @@ export type Database = {
         };
         Returns: undefined;
       };
+      unwritten_templates: {
+        Args: never;
+        Returns: {
+          journey_key: string;
+          journey_name: string;
+          template_key: string;
+        }[];
+      };
       upsert_contact: {
         Args: {
           _brand: Database["public"]["Enums"]["contact_brand"];
